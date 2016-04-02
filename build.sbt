@@ -6,10 +6,12 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 scalaVersion := "2.11.8"
 
-val slickV = "1.1.1"
+val playSlickV = "1.1.1"
+val slickV = "3.1.1"
 val dbDependencies = Seq(
   "org.postgresql" % "postgresql" % "9.4.1208.jre7",
-  "com.typesafe.play" %% "play-slick" % slickV
+  "com.typesafe.play" %% "play-slick" % playSlickV,
+  "com.typesafe.slick" %% "slick-codegen" % slickV
 )
 
 val scalatestplusV = "1.5.0-RC1"
@@ -20,5 +22,29 @@ val testDependencies = Seq(
 libraryDependencies ++= Seq(
   cache, ws
 ) ++ dbDependencies ++ testDependencies
+
+val consoleCmds =
+  """
+    | import scala.concurrent.duration.DurationInt
+    | import scala.concurrent.{ Await, Future }
+    | import play.api.libs.json._
+    | import play.api.{ Environment, ApplicationLoader, Play, Mode }
+    | import slick.driver._
+    | import play.api.db.slick._
+    | import models.schema._
+    | val env = Environment(new java.io.File("."), this.getClass.getClassLoader, Mode.Dev)
+    | val context = ApplicationLoader.createContext(env)
+    | val loader = ApplicationLoader(context)
+    | val app = loader.load(context)
+    | Play.start(app)
+    | import Play.current
+    | implicit val ec = scala.concurrent.ExecutionContext.global
+    | import Tables._
+    | val dbConfig = DatabaseConfigProvider.get[JdbcProfile]
+    | import dbConfig.driver.api._
+    | val db = dbConfig.db
+  """.stripMargin
+
+initialCommands in console := consoleCmds
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
