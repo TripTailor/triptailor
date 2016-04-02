@@ -2,7 +2,7 @@ package models.schema
 // AUTO-GENERATED Slick data model
 /** Stand-alone Slick data model for immediate use */
 object Tables extends {
-  val profile = slick.driver.PostgresDriver
+  val profile = db.drivers.ExtendedPostgresDriver
 } with Tables
 
 /** Slick data model trait for extension, choice of backend or usage in the cake pattern. (Make sure to initialize this late.) */
