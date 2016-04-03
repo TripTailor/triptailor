@@ -14,7 +14,8 @@ val dbDependencies = Seq(
   "org.postgresql" % "postgresql" % pgV,
   "com.typesafe.play" %% "play-slick" % playSlickV,
   "com.typesafe.slick" %% "slick-codegen" % slickV,
-  "com.github.tminglei" %% "slick-pg" % slickPGV
+  "com.github.tminglei" %% "slick-pg" % slickPGV,
+  "com.github.tminglei" %% "slick-pg_play-json" % slickPGV
 )
 
 val scalatestplusV = "1.5.0-RC1"
