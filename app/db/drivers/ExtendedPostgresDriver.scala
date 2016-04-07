@@ -8,7 +8,7 @@ trait ExtendedPostgresDriver extends ExPostgresDriver with PgArraySupport with P
 
   override val api = ExtendedAPI
 
-  object ExtendedAPI extends API with ArrayImplicits with JsonImplicits
+  object ExtendedAPI extends API with ArrayImplicits with JsonImplicits with PlayJsonPlainImplicits
 }
 
 object ExtendedPostgresDriver extends ExtendedPostgresDriver
