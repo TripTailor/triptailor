@@ -1,4 +1,4 @@
-package models.schema
+package models.db.schema
 
 import play.api.libs.json.JsValue
 
