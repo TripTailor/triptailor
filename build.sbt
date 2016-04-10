@@ -35,7 +35,7 @@ val consoleCmds =
     | import play.api.{ Environment, ApplicationLoader, Play, Mode }
     | import slick.driver.JdbcProfile
     | import play.api.db.slick._
-    | import models.schema._
+    | import models.db.schema._
     | val env = Environment(new java.io.File("."), this.getClass.getClassLoader, Mode.Dev)
     | val context = ApplicationLoader.createContext(env)
     | val loader = ApplicationLoader(context)
@@ -50,5 +50,7 @@ val consoleCmds =
   """.stripMargin
 
 initialCommands in console := consoleCmds
+
+triggeredMessage in ThisBuild := Watched.clearWhenTriggered
 
 resolvers += "scalaz-bintray" at "http://dl.bintray.com/scalaz/releases"
