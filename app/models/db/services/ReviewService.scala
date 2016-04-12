@@ -41,7 +41,7 @@ class ReviewServiceImpl(dbConfigProvider: DatabaseConfigProvider) extends Review
           ) _
         GROUP BY id) max_sentiments ON review.id = max_sentiments.id
         WHERE review.hostel_id = ANY('{#${hostelIds.mkString(",")}}')
-        ORDER BY (review.sentiments->>max_sentence_nbr)::int desc;
+        ORDER BY review.hostel_id, (review.sentiments->>max_sentence_nbr)::int DESC;
       """.as[ReviewRow]
     println(action.statements mkString "\n")
     action

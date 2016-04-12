@@ -9,8 +9,6 @@ import play.api.mvc.{Action, Controller}
 
 import scala.concurrent.ExecutionContext
 
-
-
 // TODO: Inject ReviewsServiceImpl
 @Singleton
 class ReviewsController @Inject()(dbConfig: DatabaseConfigProvider)(implicit ec: ExecutionContext) extends Controller {
@@ -20,7 +18,7 @@ class ReviewsController @Inject()(dbConfig: DatabaseConfigProvider)(implicit ec:
     val params = reviewServiceParams.bindFromRequest().get
 
     val service: ReviewService = new ReviewServiceImpl(dbConfig)
-    service.retrieveRelevantReviews(params.hostelIds.toSeq, params.tags.toSeq).map(Json.toJson(_)).map(Ok(_))
+    service.retrieveRelevantReviews(params.hostelIds, params.tags).map(Json.toJson(_)).map(Ok(_))
   }
 
 }
