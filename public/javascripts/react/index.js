@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import $ from 'jquery';
 
-ReactDOM.render(
-  React.createElement('h1', null, 'Hello, TripTailor'),
-  document.body
-);
+const Index = (props) => {
+  return <h1>Hello {props.message}</h1>
+};
+
+ReactDOM.render(<Index message="TripTailor" />, $("#content")[0]);
