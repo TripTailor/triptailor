@@ -19374,15 +19374,18 @@ var _reactDom2 = _interopRequireDefault(_reactDom);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Index = function Index(props) {
+var Header = function Header() {
   return _react2.default.createElement(
-    'h1',
+    'div',
     null,
-    'Hello ',
-    props.message
+    _react2.default.createElement(
+      'span',
+      { className: 'brand' },
+      'TripTailor Hostels'
+    )
   );
 };
 
-_reactDom2.default.render(_react2.default.createElement(Index, { message: 'TripTailor' }), document.getElementById("content"));
+_reactDom2.default.render(_react2.default.createElement(Header, null), document.getElementById("header"));
 
 },{"react":165,"react-dom":2}]},{},[166]);

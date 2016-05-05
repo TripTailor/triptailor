@@ -3,13 +3,18 @@ var browserify = require('browserify');
 var babelify = require('babelify');
 var source = require('vinyl-source-stream');
 
-gulp.task('build', function () {
+gulp.task('header', function () {
+  return transform('header.js');
+});
+gulp.task('index', function () {
   return transform('index.js');
 });
 
-gulp.task('watch', ['build'], function () {
-  gulp.watch('public/javascripts/react/*.js', ['build']);
+gulp.task('watch', ['header', 'index'], function () {
+  gulp.watch('public/javascripts/react/*.js', ['header', 'index']);
 });
+
+
 
 gulp.task('default', ['watch']);
 
