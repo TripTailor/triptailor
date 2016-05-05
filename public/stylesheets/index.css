@@ -1,0 +1,22 @@
+.search-form {
+  margin: 0 auto;
+  width: 460px;
+  text-align: center;
+}
+input {
+  height: 42px;
+  border-radius: 2px;
+  border: 1px solid #e3e3e3;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  padding: 13px;
+}
+.auto-complete-input {
+  width: 100%;
+}
+.check-in-input {
+  width: 50%;
+}
+.check-out-input {
+  width: 50%;
+  border-left: none;
+}

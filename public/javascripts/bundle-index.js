@@ -19374,15 +19374,56 @@ var _reactDom2 = _interopRequireDefault(_reactDom);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Index = function Index(props) {
+var Index = function Index() {
+  return _react2.default.createElement(SearchForm, null);
+};
+
+var SearchForm = function SearchForm() {
   return _react2.default.createElement(
-    'h1',
-    null,
-    'Hello ',
-    props.message
+    'form',
+    { action: '/tags', method: 'get', className: 'search-form' },
+    _react2.default.createElement(
+      'div',
+      { className: 'title' },
+      'TripTailor Hostels'
+    ),
+    _react2.default.createElement(
+      'div',
+      { className: 'subtitle' },
+      'Imagine staying at the hostel you\'ve been looking for'
+    ),
+    _react2.default.createElement(
+      'div',
+      { className: 'hint-copy' },
+      'Where and when do you want to go?'
+    ),
+    _react2.default.createElement(AutoCompleteInput, null),
+    _react2.default.createElement(DateInput, null),
+    _react2.default.createElement(
+      'button',
+      { type: 'submit', className: 'next-button' },
+      'Next'
+    )
   );
 };
 
-_reactDom2.default.render(_react2.default.createElement(Index, { message: 'TripTailor' }), document.getElementById("content"));
+var AutoCompleteInput = function AutoCompleteInput(props) {
+  return _react2.default.createElement(
+    'div',
+    { className: 'auto-complete-container' },
+    _react2.default.createElement('input', { type: 'text', className: 'auto-complete-input', autocomplete: 'off', placeholder: 'Pick a city' })
+  );
+};
+
+var DateInput = function DateInput(props) {
+  return _react2.default.createElement(
+    'div',
+    { className: 'date-input-container' },
+    _react2.default.createElement('input', { type: 'text', className: 'check-in-input', placeholder: 'Check in', readonly: true }),
+    _react2.default.createElement('input', { type: 'text', className: 'check-out-input', placeholder: 'Check out', readonly: true })
+  );
+};
+
+_reactDom2.default.render(_react2.default.createElement(Index, null), document.getElementById("content"));
 
 },{"react":165,"react-dom":2}]},{},[166]);
