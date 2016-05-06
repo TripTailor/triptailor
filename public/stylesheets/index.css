@@ -9,6 +9,9 @@ body {
 .brand {
   color: #fff;
 }
+.brand:visited, .brand:hover, .brand:active {
+  color: #fff;
+}
 #content {
   position: absolute;
   top: 70px;

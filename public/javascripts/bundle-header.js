@@ -19379,8 +19379,8 @@ var Header = function Header() {
     'div',
     { className: 'navbar' },
     _react2.default.createElement(
-      'span',
-      { className: 'brand' },
+      'a',
+      { href: '/', className: 'brand' },
       'TripTailor Hostels'
     )
   );
