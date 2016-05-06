@@ -23,6 +23,10 @@ var transform = function(entry) {
   return browserify({entries: 'public/javascripts/react/' + entry})
   .transform(babelify, {presets: ['es2015', 'react']})
   .bundle()
+  .on('error', function(e) {
+    console.log(e.message);
+    this.emit("end")
+  })
   .pipe(source('bundle-' + entry))
   .pipe(gulp.dest('public/javascripts/'));
 };

@@ -3,6 +3,9 @@ body {
   background-size: cover;
   position: relative;
 }
+.navbar {
+  background-color: transparent;
+}
 .brand {
   color: #fff;
 }

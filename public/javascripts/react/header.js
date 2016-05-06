@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 const Header = () => (
-  <div>
+  <div className="navbar">
     <span className="brand">TripTailor Hostels</span>
   </div>
 );

@@ -19377,7 +19377,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var Header = function Header() {
   return _react2.default.createElement(
     'div',
-    null,
+    { className: 'navbar' },
     _react2.default.createElement(
       'span',
       { className: 'brand' },
