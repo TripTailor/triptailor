@@ -19375,7 +19375,12 @@ var _reactDom2 = _interopRequireDefault(_reactDom);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var Index = function Index() {
-  return _react2.default.createElement(SearchForm, null);
+  return _react2.default.createElement(
+    'div',
+    { className: 'index-container' },
+    _react2.default.createElement(SearchForm, null),
+    _react2.default.createElement(Footer, null)
+  );
 };
 
 var SearchForm = function SearchForm() {
@@ -19411,16 +19416,28 @@ var AutoCompleteInput = function AutoCompleteInput(props) {
   return _react2.default.createElement(
     'div',
     { className: 'auto-complete-container' },
-    _react2.default.createElement('input', { type: 'text', className: 'auto-complete-input', autocomplete: 'off', placeholder: 'Pick a city' })
+    _react2.default.createElement('input', { name: 'city', type: 'text', className: 'auto-complete-input', autocomplete: 'off', placeholder: 'Pick a city' })
   );
 };
 
 var DateInput = function DateInput(props) {
   return _react2.default.createElement(
     'div',
-    { className: 'date-input-container' },
-    _react2.default.createElement('input', { type: 'text', className: 'check-in-input', placeholder: 'Check in', readonly: true }),
-    _react2.default.createElement('input', { type: 'text', className: 'check-out-input', placeholder: 'Check out', readonly: true })
+    { className: 'dates-container' },
+    _react2.default.createElement('input', { name: 'checkIn', type: 'text', className: 'check-in-input', placeholder: 'Check in', readOnly: true }),
+    _react2.default.createElement('input', { name: 'checkOut', type: 'text', className: 'check-out-input', placeholder: 'Check out', readOnly: true })
+  );
+};
+
+var Footer = function Footer() {
+  return _react2.default.createElement(
+    'div',
+    { className: 'footer' },
+    _react2.default.createElement(
+      'a',
+      { className: 'about-us' },
+      'About Us'
+    )
   );
 };
 

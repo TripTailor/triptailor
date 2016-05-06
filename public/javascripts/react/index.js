@@ -2,7 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 const Index = () => (
-  <SearchForm />
+  <div className="index-container">
+    <SearchForm />
+    <Footer />
+</div>
 );
 
 const SearchForm = () => (
@@ -18,14 +21,20 @@ const SearchForm = () => (
 
 const AutoCompleteInput = (props) => (
   <div className="auto-complete-container">
-    <input type="text" className="auto-complete-input" autocomplete="off" placeholder="Pick a city" />
+    <input name="city" type="text" className="auto-complete-input" autocomplete="off" placeholder="Pick a city" />
   </div>
 );
 
 const DateInput = (props) => (
-  <div className="date-input-container">
-    <input type="text" className="check-in-input" placeholder="Check in" readonly />
-    <input type="text" className="check-out-input" placeholder="Check out" readonly />
+  <div className="dates-container">
+    <input name="checkIn" type="text" className="check-in-input" placeholder="Check in" readOnly />
+    <input name="checkOut" type="text" className="check-out-input" placeholder="Check out" readOnly />
+  </div>
+);
+
+const Footer = () => (
+  <div className="footer">
+    <a className="about-us">About Us</a>
   </div>
 );
 
