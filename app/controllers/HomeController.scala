@@ -21,4 +21,8 @@ class HomeController @Inject() extends Controller {
     Ok(views.html.index())
   }
 
+  def tags = Action {
+    Ok(views.html.tags())
+  }
+
 }

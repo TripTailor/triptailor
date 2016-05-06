@@ -2,21 +2,22 @@ var gulp = require('gulp');
 var browserify = require('browserify');
 var babelify = require('babelify');
 var source = require('vinyl-source-stream');
+var $ = require('jquery');
 
-gulp.task('header', function () {
-  return transform('header.js');
-});
-gulp.task('index', function () {
-  return transform('index.js');
-});
+var tasks = ['header', 'index', 'tags'];
 
-gulp.task('watch', ['header', 'index'], function () {
-  gulp.watch('public/javascripts/react/*.js', ['header', 'index']);
+tasks.forEach(function(task, i, arr) {
+  gulp.task(task, function() {
+    return transform(task + '.js');
+  });
 });
 
-
+gulp.task('watch', tasks, function () {
+  gulp.watch('public/javascripts/react/*.js', tasks);
+});
 
 gulp.task('default', ['watch']);
+
 
 var transform = function(entry) {
   return browserify({entries: 'public/javascripts/react/' + entry})
