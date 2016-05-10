@@ -3,6 +3,14 @@ import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import datepicker from 'jquery-ui';
 
+var dateToString = function(date) {
+  var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  return date.getDate() + " " +  months[date.getMonth()] + " " + date.getFullYear();
+};
+var dateToSubmit = function(date) {
+  return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+};
+
 const Index = () => (
   <div className="index-container">
     <SearchForm />
@@ -13,6 +21,28 @@ const Index = () => (
 class SearchForm extends React.Component {
   constructor() {
     super();
+
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    var toDate = new Date();
+    toDate.setDate(toDate.getDate() + 4);
+
+    this.state = {
+      city: "",
+      checkIn: dateToString(tomorrow),
+      checkOut: dateToString(toDate),
+      submitCheckIn: dateToSubmit(tomorrow),
+      submitCheckOut: dateToSubmit(toDate)
+    };
+  }
+  updateCity(e) {
+    this.setState({city: e.target.value});
+  }
+  updateCheckIn(date) {
+    this.setState({checkIn: date, submitCheckIn: dateToSubmit(new Date(date))});
+  }
+  updateCheckOut(date) {
+    this.setState({checkOut: date, submitCheckOut: dateToSubmit(new Date(date))});
   }
   render() {
     return (
@@ -20,8 +50,8 @@ class SearchForm extends React.Component {
         <div className="title">TripTailor Hostels</div>
         <div className="subtitle">Imagine staying at the hostel you've been looking for</div>
         <div className="hint-copy">Where and when do you want to go?</div>
-        <AutoCompleteInput />
-        <DateInput />
+        <AutoCompleteInput city={this.state.city} updateCity={this.updateCity.bind(this)} />
+        <DateInput checkIn={this.state.checkIn} updateCheckIn={this.updateCheckIn.bind(this)} checkOut={this.state.checkOut} updateCheckOut={this.updateCheckOut.bind(this)} submitCheckIn={this.state.submitCheckIn} submitCheckOut={this.state.submitCheckOut} />
         <button type="submit" className="next-button">Next</button>
       </form>
     );
@@ -30,19 +60,13 @@ class SearchForm extends React.Component {
 
 const AutoCompleteInput = (props) => (
   <div className="auto-complete-container">
-    <input name="city" type="text" className="auto-complete-input" autocomplete="off" placeholder="Pick a city" />
+    <input name="city" type="text" className="auto-complete-input" autoComplete="off" placeholder="Pick a city" value={props.city} onChange={props.updateCity} />
   </div>
 );
 
 class DateInput extends React.Component {
-  constructor() {
-    super();
-  }
-  fromDatepicker(input) {
-    this.fromInput = input;
-  }
-  toDatepicker(input) {
-    this.toInput = input;
+  constructor(props) {
+    super(props);
   }
   componentDidMount() {
     $(this.fromInput).datepicker({
@@ -50,13 +74,16 @@ class DateInput extends React.Component {
       onSelect: function(date, inst) {
         var fromDate = new Date(date);
         var toDate = new Date($(this.toInput).datepicker("getDate"));
-        var limitDate = new Date(fromDate.getDate() + 1);
+        var minDate = new Date(fromDate);
+        minDate.setDate(fromDate.getDate() + 1);
 
         if(fromDate >= toDate)
-          $(this.toInput).datepicker("setDate", toDate);
+          this.props.updateCheckOut(dateToString(minDate));
 
-        $(this.toInput).datepicker("option", "minDate", limitDate);
-      }
+        $(this.toInput).datepicker("option", "minDate", minDate);
+
+        this.props.updateCheckIn(date);
+      }.bind(this)
     });
 
     $(this.toInput).datepicker({
@@ -64,27 +91,25 @@ class DateInput extends React.Component {
       onSelect: function(date, inst) {
         var fromDate = new Date($(this.fromInput).datepicker("getDate"));
         var toDate = new Date(date);
-      }
+
+        this.props.updateCheckOut(date);
+      }.bind(this)
     });
 
-    var tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    $(this.fromInput).datepicker("setDate", tomorrow);
-    var today = new Date();
+    var today = new Date(this.props.checkIn);
+    today.setDate(today.getDate() - 1);
     $(this.fromInput).datepicker("option", "minDate", today);
 
-    var toDate = new Date();
-    toDate.setDate(toDate.getDate() + 4);
-    $(this.toInput).datepicker("setDate", toDate);
-    var minDate = new Date();
-    minDate.setDate(minDate.getDate() + 2);
+    var minDate = new Date(this.props.checkIn);
     $(this.toInput).datepicker("option", "minDate", minDate);
   }
   render() {
     return (
       <div className="dates-container">
-        <input ref={this.fromDatepicker.bind(this)} name="checkIn" type="text" className="check-in-input" placeholder="Check in" readOnly />
-        <input ref={this.toDatepicker.bind(this)} name="checkOut" type="text" className="check-out-input" placeholder="Check out" readOnly />
+        <input ref={(input) => this.fromInput = input} type="text" className="check-in-input" placeholder="Check in" readOnly value={this.props.checkIn} />
+        <input ref={(input) => this.toInput = input} type="text" className="check-out-input" placeholder="Check out" readOnly value={this.props.checkOut} />
+        <input name="check-in" type="hidden" value={this.props.submitCheckIn} />
+        <input name="check-out" type="hidden" value={this.props.submitCheckOut} />
       </div>
     );
   }

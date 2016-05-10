@@ -44241,6 +44241,14 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var dateToString = function dateToString(date) {
+  var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  return date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
+};
+var dateToSubmit = function dateToSubmit(date) {
+  return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+};
+
 var Index = function Index() {
   return _react2.default.createElement(
     'div',
@@ -44256,10 +44264,39 @@ var SearchForm = function (_React$Component) {
   function SearchForm() {
     _classCallCheck(this, SearchForm);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(SearchForm).call(this));
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SearchForm).call(this));
+
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    var toDate = new Date();
+    toDate.setDate(toDate.getDate() + 4);
+
+    _this.state = {
+      city: "",
+      checkIn: dateToString(tomorrow),
+      checkOut: dateToString(toDate),
+      submitCheckIn: dateToSubmit(tomorrow),
+      submitCheckOut: dateToSubmit(toDate)
+    };
+    return _this;
   }
 
   _createClass(SearchForm, [{
+    key: 'updateCity',
+    value: function updateCity(e) {
+      this.setState({ city: e.target.value });
+    }
+  }, {
+    key: 'updateCheckIn',
+    value: function updateCheckIn(date) {
+      this.setState({ checkIn: date, submitCheckIn: dateToSubmit(new Date(date)) });
+    }
+  }, {
+    key: 'updateCheckOut',
+    value: function updateCheckOut(date) {
+      this.setState({ checkOut: date, submitCheckOut: dateToSubmit(new Date(date)) });
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
@@ -44280,8 +44317,8 @@ var SearchForm = function (_React$Component) {
           { className: 'hint-copy' },
           'Where and when do you want to go?'
         ),
-        _react2.default.createElement(AutoCompleteInput, null),
-        _react2.default.createElement(DateInput, null),
+        _react2.default.createElement(AutoCompleteInput, { city: this.state.city, updateCity: this.updateCity.bind(this) }),
+        _react2.default.createElement(DateInput, { checkIn: this.state.checkIn, updateCheckIn: this.updateCheckIn.bind(this), checkOut: this.state.checkOut, updateCheckOut: this.updateCheckOut.bind(this), submitCheckIn: this.state.submitCheckIn, submitCheckOut: this.state.submitCheckOut }),
         _react2.default.createElement(
           'button',
           { type: 'submit', className: 'next-button' },
@@ -44298,74 +44335,71 @@ var AutoCompleteInput = function AutoCompleteInput(props) {
   return _react2.default.createElement(
     'div',
     { className: 'auto-complete-container' },
-    _react2.default.createElement('input', { name: 'city', type: 'text', className: 'auto-complete-input', autocomplete: 'off', placeholder: 'Pick a city' })
+    _react2.default.createElement('input', { name: 'city', type: 'text', className: 'auto-complete-input', autoComplete: 'off', placeholder: 'Pick a city', value: props.city, onChange: props.updateCity })
   );
 };
 
 var DateInput = function (_React$Component2) {
   _inherits(DateInput, _React$Component2);
 
-  function DateInput() {
+  function DateInput(props) {
     _classCallCheck(this, DateInput);
 
-    return _possibleConstructorReturn(this, Object.getPrototypeOf(DateInput).call(this));
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(DateInput).call(this, props));
   }
 
   _createClass(DateInput, [{
-    key: 'fromDatepicker',
-    value: function fromDatepicker(input) {
-      this.fromInput = input;
-    }
-  }, {
-    key: 'toDatepicker',
-    value: function toDatepicker(input) {
-      this.toInput = input;
-    }
-  }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
       (0, _jquery2.default)(this.fromInput).datepicker({
         dateFormat: "dd M yy",
-        onSelect: function onSelect(date, inst) {
+        onSelect: function (date, inst) {
           var fromDate = new Date(date);
           var toDate = new Date((0, _jquery2.default)(this.toInput).datepicker("getDate"));
-          var limitDate = new Date(fromDate.getDate() + 1);
+          var minDate = new Date(fromDate);
+          minDate.setDate(fromDate.getDate() + 1);
 
-          if (fromDate >= toDate) (0, _jquery2.default)(this.toInput).datepicker("setDate", toDate);
+          if (fromDate >= toDate) this.props.updateCheckOut(dateToString(minDate));
 
-          (0, _jquery2.default)(this.toInput).datepicker("option", "minDate", limitDate);
-        }
+          (0, _jquery2.default)(this.toInput).datepicker("option", "minDate", minDate);
+
+          this.props.updateCheckIn(date);
+        }.bind(this)
       });
 
       (0, _jquery2.default)(this.toInput).datepicker({
         dateFormat: "dd M yy",
-        onSelect: function onSelect(date, inst) {
+        onSelect: function (date, inst) {
           var fromDate = new Date((0, _jquery2.default)(this.fromInput).datepicker("getDate"));
           var toDate = new Date(date);
-        }
+
+          this.props.updateCheckOut(date);
+        }.bind(this)
       });
 
-      var tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      (0, _jquery2.default)(this.fromInput).datepicker("setDate", tomorrow);
-      var today = new Date();
+      var today = new Date(this.props.checkIn);
+      today.setDate(today.getDate() - 1);
       (0, _jquery2.default)(this.fromInput).datepicker("option", "minDate", today);
 
-      var toDate = new Date();
-      toDate.setDate(toDate.getDate() + 4);
-      (0, _jquery2.default)(this.toInput).datepicker("setDate", toDate);
-      var minDate = new Date();
-      minDate.setDate(minDate.getDate() + 2);
+      var minDate = new Date(this.props.checkIn);
       (0, _jquery2.default)(this.toInput).datepicker("option", "minDate", minDate);
     }
   }, {
     key: 'render',
     value: function render() {
+      var _this3 = this;
+
       return _react2.default.createElement(
         'div',
         { className: 'dates-container' },
-        _react2.default.createElement('input', { ref: this.fromDatepicker.bind(this), name: 'checkIn', type: 'text', className: 'check-in-input', placeholder: 'Check in', readOnly: true }),
-        _react2.default.createElement('input', { ref: this.toDatepicker.bind(this), name: 'checkOut', type: 'text', className: 'check-out-input', placeholder: 'Check out', readOnly: true })
+        _react2.default.createElement('input', { ref: function ref(input) {
+            return _this3.fromInput = input;
+          }, type: 'text', className: 'check-in-input', placeholder: 'Check in', readOnly: true, value: this.props.checkIn }),
+        _react2.default.createElement('input', { ref: function ref(input) {
+            return _this3.toInput = input;
+          }, type: 'text', className: 'check-out-input', placeholder: 'Check out', readOnly: true, value: this.props.checkOut }),
+        _react2.default.createElement('input', { name: 'check-in', type: 'hidden', value: this.props.submitCheckIn }),
+        _react2.default.createElement('input', { name: 'check-out', type: 'hidden', value: this.props.submitCheckOut })
       );
     }
   }]);
