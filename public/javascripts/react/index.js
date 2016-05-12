@@ -33,13 +33,14 @@ class SearchForm extends React.Component {
       city: "",
       checkIn: dateToString(tomorrow),
       checkOut: dateToString(toDate),
+      submitCity: "",
       submitCheckIn: dateToSubmit(tomorrow),
       submitCheckOut: dateToSubmit(toDate),
       cityHints: []
     };
   }
   updateCity(e) {
-    this.setState({city: e.target.value}, this.getCityHints.bind(this, e.target));
+    this.setState({city: e.target.value, submitCity: encodeURIComponent(e.target.value)}, this.getCityHints.bind(this, e.target));
   }
   updateCheckIn(date) {
     this.setState({checkIn: date, submitCheckIn: dateToSubmit(new Date(date))});
@@ -48,7 +49,7 @@ class SearchForm extends React.Component {
     this.setState({checkOut: date, submitCheckOut: dateToSubmit(new Date(date))});
   }
   selectHint(e) {
-    this.setState({city: $(e.target).text(), cityHints: []});
+    this.setState({city: $(e.target).text(), submitCity: encodeURIComponent($(e.target).text()), cityHints: []});
   }
   handleBlur(e) {
     this.setState({cityHints: []});
@@ -57,6 +58,7 @@ class SearchForm extends React.Component {
     if(e.keyCode == 27)
       this.setState({cityHints: []});
   }
+  
   getCityHints(input) {
     var value = input.value;
     var url = jsRoutes.controllers.Assets.versioned("test/autocomplete.json").absoluteURL();
@@ -84,8 +86,8 @@ class SearchForm extends React.Component {
         <div className="title">TripTailor Hostels</div>
         <div className="subtitle">Imagine staying at the hostel you've been looking for</div>
         <div className="hint-copy">Where and when do you want to go?</div>
-        <AutoCompleteInput city={this.state.city} updateCity={this.updateCity.bind(this)} hints={this.state.cityHints} selectHint={this.selectHint.bind(this)} handleBlur={this.handleBlur.bind(this)} handleKeyUp={this.handleKeyUp.bind(this)} />
-        <DateInput checkIn={this.state.checkIn} updateCheckIn={this.updateCheckIn.bind(this)} checkOut={this.state.checkOut} updateCheckOut={this.updateCheckOut.bind(this)} submitCheckIn={this.state.submitCheckIn} submitCheckOut={this.state.submitCheckOut} />
+        <AutoCompleteInput city={this.state.city} updateCity={this.updateCity.bind(this)} submitCity={this.state.submitCity} hints={this.state.cityHints} selectHint={this.selectHint.bind(this)} handleBlur={this.handleBlur.bind(this)} handleKeyUp={this.handleKeyUp.bind(this)} />
+        <DateInput checkIn={this.state.checkIn} updateCheckIn={this.updateCheckIn.bind(this)} checkOut={this.state.checkOut} updateCheckOut={this.updateCheckOut.bind(this)} submitCheckIn={this.state.submitCheckIn} submitCheckOut={this.state.submitCheckOut} cancelBlur={this.cancelBlur} />
         <button type="submit" className="next-button">Next</button>
       </form>
     );
@@ -94,13 +96,17 @@ class SearchForm extends React.Component {
 
 const AutoCompleteInput = (props) => (
   <div className="auto-complete-input-container">
-    <input name="city" type="text" className="auto-complete-input" autoComplete="off" placeholder="Pick a city" value={props.city} onChange={props.updateCity} onBlur={props.handleBlur} onKeyUp={props.handleKeyUp} />
-    <AutoComplete hints={props.hints} selectHint={props.selectHint} />
+    <input type="text" className="auto-complete-input" autoComplete="off" placeholder="Pick a city" value={props.city} onChange={props.updateCity} onBlur={props.handleBlur}  onKeyUp={props.handleKeyUp} />
+    <AutoComplete hints={props.hints} selectHint={props.selectHint} cancelBlur={props.cancelBlur} />
+    <input name="city" type="hidden" value={props.submitCity} />
   </div>
 );
 
 const AutoComplete = (props) => {
-  var hints = $.map(props.hints, (hint, i) => <div key={i} className="auto-complete-row" onClick={props.selectHint}>{hint}</div>);
+  var cancelBlur = (e) => {
+    e.preventDefault();
+  }
+  var hints = $.map(props.hints, (hint, i) => <div key={i} className="auto-complete-row" onClick={props.selectHint} onMouseDown={cancelBlur}>{hint}</div>);
   return (
     <div className="auto-complete-container">
       <div className="auto-complete">{hints}</div>

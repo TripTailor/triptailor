@@ -44277,6 +44277,7 @@ var SearchForm = function (_React$Component) {
       city: "",
       checkIn: dateToString(tomorrow),
       checkOut: dateToString(toDate),
+      submitCity: "",
       submitCheckIn: dateToSubmit(tomorrow),
       submitCheckOut: dateToSubmit(toDate),
       cityHints: []
@@ -44287,7 +44288,7 @@ var SearchForm = function (_React$Component) {
   _createClass(SearchForm, [{
     key: 'updateCity',
     value: function updateCity(e) {
-      this.setState({ city: e.target.value }, this.getCityHints.bind(this, e.target));
+      this.setState({ city: e.target.value, submitCity: encodeURIComponent(e.target.value) }, this.getCityHints.bind(this, e.target));
     }
   }, {
     key: 'updateCheckIn',
@@ -44302,7 +44303,7 @@ var SearchForm = function (_React$Component) {
   }, {
     key: 'selectHint',
     value: function selectHint(e) {
-      this.setState({ city: (0, _jquery2.default)(e.target).text(), cityHints: [] });
+      this.setState({ city: (0, _jquery2.default)(e.target).text(), submitCity: encodeURIComponent((0, _jquery2.default)(e.target).text()), cityHints: [] });
     }
   }, {
     key: 'handleBlur',
@@ -44356,8 +44357,8 @@ var SearchForm = function (_React$Component) {
           { className: 'hint-copy' },
           'Where and when do you want to go?'
         ),
-        _react2.default.createElement(AutoCompleteInput, { city: this.state.city, updateCity: this.updateCity.bind(this), hints: this.state.cityHints, selectHint: this.selectHint.bind(this), handleBlur: this.handleBlur.bind(this), handleKeyUp: this.handleKeyUp.bind(this) }),
-        _react2.default.createElement(DateInput, { checkIn: this.state.checkIn, updateCheckIn: this.updateCheckIn.bind(this), checkOut: this.state.checkOut, updateCheckOut: this.updateCheckOut.bind(this), submitCheckIn: this.state.submitCheckIn, submitCheckOut: this.state.submitCheckOut }),
+        _react2.default.createElement(AutoCompleteInput, { city: this.state.city, updateCity: this.updateCity.bind(this), submitCity: this.state.submitCity, hints: this.state.cityHints, selectHint: this.selectHint.bind(this), handleBlur: this.handleBlur.bind(this), handleKeyUp: this.handleKeyUp.bind(this) }),
+        _react2.default.createElement(DateInput, { checkIn: this.state.checkIn, updateCheckIn: this.updateCheckIn.bind(this), checkOut: this.state.checkOut, updateCheckOut: this.updateCheckOut.bind(this), submitCheckIn: this.state.submitCheckIn, submitCheckOut: this.state.submitCheckOut, cancelBlur: this.cancelBlur }),
         _react2.default.createElement(
           'button',
           { type: 'submit', className: 'next-button' },
@@ -44374,16 +44375,20 @@ var AutoCompleteInput = function AutoCompleteInput(props) {
   return _react2.default.createElement(
     'div',
     { className: 'auto-complete-input-container' },
-    _react2.default.createElement('input', { name: 'city', type: 'text', className: 'auto-complete-input', autoComplete: 'off', placeholder: 'Pick a city', value: props.city, onChange: props.updateCity, onBlur: props.handleBlur, onKeyUp: props.handleKeyUp }),
-    _react2.default.createElement(AutoComplete, { hints: props.hints, selectHint: props.selectHint })
+    _react2.default.createElement('input', { type: 'text', className: 'auto-complete-input', autoComplete: 'off', placeholder: 'Pick a city', value: props.city, onChange: props.updateCity, onBlur: props.handleBlur, onKeyUp: props.handleKeyUp }),
+    _react2.default.createElement(AutoComplete, { hints: props.hints, selectHint: props.selectHint, cancelBlur: props.cancelBlur }),
+    _react2.default.createElement('input', { name: 'city', type: 'hidden', value: props.submitCity })
   );
 };
 
 var AutoComplete = function AutoComplete(props) {
+  var cancelBlur = function cancelBlur(e) {
+    e.preventDefault();
+  };
   var hints = _jquery2.default.map(props.hints, function (hint, i) {
     return _react2.default.createElement(
       'div',
-      { key: i, className: 'auto-complete-row', onClick: props.selectHint },
+      { key: i, className: 'auto-complete-row', onClick: props.selectHint, onMouseDown: cancelBlur },
       hint
     );
   });
