@@ -50,12 +50,6 @@ body {
   font-weight: 700;
   color: #fff;
 }
-.auto-complete-container {
-  margin-top: 25px;
-}
-.dates-container {
-  margin-top: 15px;
-}
 input {
   height: 42px;
   border: 1px solid #e3e3e3;
@@ -63,8 +57,34 @@ input {
   padding: 13px;
   outline: none;
 }
+.auto-complete-input-container {
+  margin-top: 25px;
+}
 .auto-complete-input {
   width: 100%;
+}
+.auto-complete-container {
+  position: relative;
+}
+.auto-complete {
+  margin-top: 3px;
+  width: 100%;
+  position: absolute;
+}
+.auto-complete-row {
+  font-size: 14px;
+  color: #404040;
+  padding: 13px;
+  text-align: left;
+  background-color: #fff;
+  cursor: pointer;
+}
+.auto-complete-row:hover {
+  background-color: #686c9e;
+  color: #fff;
+}
+.dates-container {
+  margin-top: 15px;
 }
 .check-in-input {
   width: 50%;

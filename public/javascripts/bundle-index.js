@@ -44241,6 +44241,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var TIMEOUT = 200;
+
 var dateToString = function dateToString(date) {
   var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   return date.getDate() + " " + months[date.getMonth()] + " " + date.getFullYear();
@@ -44276,7 +44278,8 @@ var SearchForm = function (_React$Component) {
       checkIn: dateToString(tomorrow),
       checkOut: dateToString(toDate),
       submitCheckIn: dateToSubmit(tomorrow),
-      submitCheckOut: dateToSubmit(toDate)
+      submitCheckOut: dateToSubmit(toDate),
+      cityHints: []
     };
     return _this;
   }
@@ -44284,7 +44287,7 @@ var SearchForm = function (_React$Component) {
   _createClass(SearchForm, [{
     key: 'updateCity',
     value: function updateCity(e) {
-      this.setState({ city: e.target.value });
+      this.setState({ city: e.target.value }, this.getCityHints.bind(this, e.target));
     }
   }, {
     key: 'updateCheckIn',
@@ -44295,6 +44298,32 @@ var SearchForm = function (_React$Component) {
     key: 'updateCheckOut',
     value: function updateCheckOut(date) {
       this.setState({ checkOut: date, submitCheckOut: dateToSubmit(new Date(date)) });
+    }
+  }, {
+    key: 'selectHint',
+    value: function selectHint(e) {
+      this.setState({ city: (0, _jquery2.default)(e.target).text(), cityHints: [] });
+    }
+  }, {
+    key: 'getCityHints',
+    value: function getCityHints(input) {
+      var value = input.value;
+      var url = jsRoutes.controllers.Assets.versioned("test/autocomplete.json").absoluteURL();
+      setTimeout(function () {
+        if (value.trim().length > 0 && (0, _jquery2.default)(input).is(":focus") && value == input.value) {
+          _jquery2.default.ajax({
+            url: url,
+            dataType: "json",
+            type: "GET",
+            success: function (data) {
+              this.setState({ cityHints: data });
+            }.bind(this),
+            error: function error(xhr, status, err) {
+              console.error(url, status, err);
+            }
+          });
+        } else this.setState({ cityHints: [] });
+      }.bind(this), TIMEOUT);
     }
   }, {
     key: 'render',
@@ -44317,7 +44346,7 @@ var SearchForm = function (_React$Component) {
           { className: 'hint-copy' },
           'Where and when do you want to go?'
         ),
-        _react2.default.createElement(AutoCompleteInput, { city: this.state.city, updateCity: this.updateCity.bind(this) }),
+        _react2.default.createElement(AutoCompleteInput, { city: this.state.city, updateCity: this.updateCity.bind(this), hints: this.state.cityHints, selectHint: this.selectHint.bind(this) }),
         _react2.default.createElement(DateInput, { checkIn: this.state.checkIn, updateCheckIn: this.updateCheckIn.bind(this), checkOut: this.state.checkOut, updateCheckOut: this.updateCheckOut.bind(this), submitCheckIn: this.state.submitCheckIn, submitCheckOut: this.state.submitCheckOut }),
         _react2.default.createElement(
           'button',
@@ -44334,8 +44363,28 @@ var SearchForm = function (_React$Component) {
 var AutoCompleteInput = function AutoCompleteInput(props) {
   return _react2.default.createElement(
     'div',
+    { className: 'auto-complete-input-container' },
+    _react2.default.createElement('input', { name: 'city', type: 'text', className: 'auto-complete-input', autoComplete: 'off', placeholder: 'Pick a city', value: props.city, onChange: props.updateCity }),
+    _react2.default.createElement(AutoComplete, { hints: props.hints, selectHint: props.selectHint })
+  );
+};
+
+var AutoComplete = function AutoComplete(props) {
+  var hints = _jquery2.default.map(props.hints, function (hint, i) {
+    return _react2.default.createElement(
+      'div',
+      { key: i, className: 'auto-complete-row', onClick: props.selectHint },
+      hint
+    );
+  });
+  return _react2.default.createElement(
+    'div',
     { className: 'auto-complete-container' },
-    _react2.default.createElement('input', { name: 'city', type: 'text', className: 'auto-complete-input', autoComplete: 'off', placeholder: 'Pick a city', value: props.city, onChange: props.updateCity })
+    _react2.default.createElement(
+      'div',
+      { className: 'auto-complete' },
+      hints
+    )
   );
 };
 
