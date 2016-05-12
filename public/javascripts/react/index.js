@@ -50,6 +50,13 @@ class SearchForm extends React.Component {
   selectHint(e) {
     this.setState({city: $(e.target).text(), cityHints: []});
   }
+  handleBlur(e) {
+    this.setState({cityHints: []});
+  }
+  handleKeyUp(e) {
+    if(e.keyCode == 27)
+      this.setState({cityHints: []});
+  }
   getCityHints(input) {
     var value = input.value;
     var url = jsRoutes.controllers.Assets.versioned("test/autocomplete.json").absoluteURL();
@@ -77,7 +84,7 @@ class SearchForm extends React.Component {
         <div className="title">TripTailor Hostels</div>
         <div className="subtitle">Imagine staying at the hostel you've been looking for</div>
         <div className="hint-copy">Where and when do you want to go?</div>
-        <AutoCompleteInput city={this.state.city} updateCity={this.updateCity.bind(this)} hints={this.state.cityHints} selectHint={this.selectHint.bind(this)} />
+        <AutoCompleteInput city={this.state.city} updateCity={this.updateCity.bind(this)} hints={this.state.cityHints} selectHint={this.selectHint.bind(this)} handleBlur={this.handleBlur.bind(this)} handleKeyUp={this.handleKeyUp.bind(this)} />
         <DateInput checkIn={this.state.checkIn} updateCheckIn={this.updateCheckIn.bind(this)} checkOut={this.state.checkOut} updateCheckOut={this.updateCheckOut.bind(this)} submitCheckIn={this.state.submitCheckIn} submitCheckOut={this.state.submitCheckOut} />
         <button type="submit" className="next-button">Next</button>
       </form>
@@ -87,7 +94,7 @@ class SearchForm extends React.Component {
 
 const AutoCompleteInput = (props) => (
   <div className="auto-complete-input-container">
-    <input name="city" type="text" className="auto-complete-input" autoComplete="off" placeholder="Pick a city" value={props.city} onChange={props.updateCity} />
+    <input name="city" type="text" className="auto-complete-input" autoComplete="off" placeholder="Pick a city" value={props.city} onChange={props.updateCity} onBlur={props.handleBlur} onKeyUp={props.handleKeyUp} />
     <AutoComplete hints={props.hints} selectHint={props.selectHint} />
   </div>
 );

@@ -44305,6 +44305,16 @@ var SearchForm = function (_React$Component) {
       this.setState({ city: (0, _jquery2.default)(e.target).text(), cityHints: [] });
     }
   }, {
+    key: 'handleBlur',
+    value: function handleBlur(e) {
+      this.setState({ cityHints: [] });
+    }
+  }, {
+    key: 'handleKeyUp',
+    value: function handleKeyUp(e) {
+      if (e.keyCode == 27) this.setState({ cityHints: [] });
+    }
+  }, {
     key: 'getCityHints',
     value: function getCityHints(input) {
       var value = input.value;
@@ -44346,7 +44356,7 @@ var SearchForm = function (_React$Component) {
           { className: 'hint-copy' },
           'Where and when do you want to go?'
         ),
-        _react2.default.createElement(AutoCompleteInput, { city: this.state.city, updateCity: this.updateCity.bind(this), hints: this.state.cityHints, selectHint: this.selectHint.bind(this) }),
+        _react2.default.createElement(AutoCompleteInput, { city: this.state.city, updateCity: this.updateCity.bind(this), hints: this.state.cityHints, selectHint: this.selectHint.bind(this), handleBlur: this.handleBlur.bind(this), handleKeyUp: this.handleKeyUp.bind(this) }),
         _react2.default.createElement(DateInput, { checkIn: this.state.checkIn, updateCheckIn: this.updateCheckIn.bind(this), checkOut: this.state.checkOut, updateCheckOut: this.updateCheckOut.bind(this), submitCheckIn: this.state.submitCheckIn, submitCheckOut: this.state.submitCheckOut }),
         _react2.default.createElement(
           'button',
@@ -44364,7 +44374,7 @@ var AutoCompleteInput = function AutoCompleteInput(props) {
   return _react2.default.createElement(
     'div',
     { className: 'auto-complete-input-container' },
-    _react2.default.createElement('input', { name: 'city', type: 'text', className: 'auto-complete-input', autoComplete: 'off', placeholder: 'Pick a city', value: props.city, onChange: props.updateCity }),
+    _react2.default.createElement('input', { name: 'city', type: 'text', className: 'auto-complete-input', autoComplete: 'off', placeholder: 'Pick a city', value: props.city, onChange: props.updateCity, onBlur: props.handleBlur, onKeyUp: props.handleKeyUp }),
     _react2.default.createElement(AutoComplete, { hints: props.hints, selectHint: props.selectHint })
   );
 };
