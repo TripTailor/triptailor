@@ -12,6 +12,9 @@ var dateToString = function(date) {
 var dateToSubmit = function(date) {
   return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 };
+var formatComponent = function(component) {
+  return component.replace(", ", ",");
+}
 
 const Index = () => (
   <div className="index-container">
@@ -40,7 +43,7 @@ class SearchForm extends React.Component {
     };
   }
   updateCity(e) {
-    this.setState({city: e.target.value, submitCity: encodeURIComponent(e.target.value)}, this.getCityHints.bind(this, e.target));
+    this.setState({city: e.target.value, submitCity: formatComponent(e.target.value)}, this.getCityHints.bind(this, e.target));
   }
   updateCheckIn(date) {
     this.setState({checkIn: date, submitCheckIn: dateToSubmit(new Date(date))});
@@ -49,7 +52,7 @@ class SearchForm extends React.Component {
     this.setState({checkOut: date, submitCheckOut: dateToSubmit(new Date(date))});
   }
   selectHint(e) {
-    this.setState({city: $(e.target).text(), submitCity: encodeURIComponent($(e.target).text()), cityHints: []});
+    this.setState({city: $(e.target).text(), submitCity: formatComponent($(e.target).text()), cityHints: []});
   }
   handleBlur(e) {
     this.setState({cityHints: []});

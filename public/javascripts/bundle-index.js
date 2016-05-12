@@ -44250,6 +44250,9 @@ var dateToString = function dateToString(date) {
 var dateToSubmit = function dateToSubmit(date) {
   return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 };
+var formatComponent = function formatComponent(component) {
+  return component.replace(", ", ",");
+};
 
 var Index = function Index() {
   return _react2.default.createElement(
@@ -44288,7 +44291,7 @@ var SearchForm = function (_React$Component) {
   _createClass(SearchForm, [{
     key: 'updateCity',
     value: function updateCity(e) {
-      this.setState({ city: e.target.value, submitCity: encodeURIComponent(e.target.value) }, this.getCityHints.bind(this, e.target));
+      this.setState({ city: e.target.value, submitCity: formatComponent(e.target.value) }, this.getCityHints.bind(this, e.target));
     }
   }, {
     key: 'updateCheckIn',
@@ -44303,7 +44306,7 @@ var SearchForm = function (_React$Component) {
   }, {
     key: 'selectHint',
     value: function selectHint(e) {
-      this.setState({ city: (0, _jquery2.default)(e.target).text(), submitCity: encodeURIComponent((0, _jquery2.default)(e.target).text()), cityHints: [] });
+      this.setState({ city: (0, _jquery2.default)(e.target).text(), submitCity: formatComponent((0, _jquery2.default)(e.target).text()), cityHints: [] });
     }
   }, {
     key: 'handleBlur',
