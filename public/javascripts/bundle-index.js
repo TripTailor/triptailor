@@ -44389,9 +44389,16 @@ var AutoComplete = function AutoComplete(props) {
     e.preventDefault();
   };
   var hints = _jquery2.default.map(props.hints, function (hint, i) {
+    var className = "auto-complete-row";
+    switch (i) {
+      case 0:
+        className += " first-row";break;
+      case props.hints.length - 1:
+        className += " last-row";break;
+    };
     return _react2.default.createElement(
       'div',
-      { key: i, className: 'auto-complete-row', onClick: props.selectHint, onMouseDown: cancelBlur },
+      { key: i, className: className, onClick: props.selectHint, onMouseDown: cancelBlur },
       hint
     );
   });

@@ -99,7 +99,7 @@ class SearchForm extends React.Component {
 
 const AutoCompleteInput = (props) => (
   <div className="auto-complete-input-container">
-    <input type="text" className="auto-complete-input" autoComplete="off" placeholder="Pick a city" value={props.city} onChange={props.updateCity} onBlur={props.handleBlur}  onKeyUp={props.handleKeyUp} />
+    <input type="text" className="auto-complete-input" autoComplete="off" placeholder="Pick a city" value={props.city} onChange={props.updateCity} onBlur={props.handleBlur} onKeyUp={props.handleKeyUp} />
     <AutoComplete hints={props.hints} selectHint={props.selectHint} cancelBlur={props.cancelBlur} />
     <input name="city" type="hidden" value={props.submitCity} />
   </div>
@@ -109,7 +109,14 @@ const AutoComplete = (props) => {
   var cancelBlur = (e) => {
     e.preventDefault();
   }
-  var hints = $.map(props.hints, (hint, i) => <div key={i} className="auto-complete-row" onClick={props.selectHint} onMouseDown={cancelBlur}>{hint}</div>);
+  var hints = $.map(props.hints, (hint, i) => {
+    var className = "auto-complete-row";
+    switch(i) {
+      case 0: className += " first-row"; break;
+      case props.hints.length - 1: className += " last-row"; break;
+    };
+    return <div key={i} className={className} onClick={props.selectHint} onMouseDown={cancelBlur}>{hint}</div>;
+  });
   return (
     <div className="auto-complete-container">
       <div className="auto-complete">{hints}</div>

@@ -62,6 +62,7 @@ input {
 }
 .auto-complete-input {
   width: 100%;
+  border-radius: 2px;
 }
 .auto-complete-container {
   position: relative;
@@ -78,6 +79,16 @@ input {
   text-align: left;
   background-color: #fff;
   cursor: pointer;
+  border-left: solid 1px #e3e3e3;
+  border-right: solid 1px #e3e3e3;
+}
+.first-row {
+  border-radius: 2px 2px 0 0;
+  border-top: solid 1px #e3e3e3;
+}
+.last-row {
+  border-radius: 0 0 2px 2px;
+  border-bottom: solid 1px #e3e3e3;
 }
 .auto-complete-row:hover {
   background-color: #686c9e;
