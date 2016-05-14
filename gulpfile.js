@@ -16,7 +16,12 @@ gulp.task('watch', tasks, function () {
   gulp.watch('public/javascripts/react/*.js', tasks);
 });
 
-gulp.task('default', ['watch']);
+gulp.task('jquery-ui', function() {
+  return gulp.src(['node_modules/jquery-ui/themes/redmond/*/*', "!node_modules/jquery-ui/themes/redmond/jquery-ui.css", "!node_modules/jquery-ui/themes/redmond/jquery.ui.theme.css"])
+  .pipe(gulp.dest('public/stylesheets/jquery-ui/'));
+});
+
+gulp.task('default', ['watch', 'jquery-ui']);
 
 
 var transform = function(entry) {
