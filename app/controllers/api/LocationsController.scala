@@ -3,25 +3,25 @@ package controllers.api
 import javax.inject.{Inject, Singleton}
 
 import models.db.services.{LocationHintsService, LocationHintsServiceImpl}
-import play.api.data.Form
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.json.Json
-import play.api.mvc.{Action, Controller}
+import play.api.mvc.Action
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
-class LocationsController @Inject()(dbConfig: DatabaseConfigProvider)(implicit ec: ExecutionContext) extends Controller {
+// TODO: Inject LocationHintsServiceImpl
+class LocationsController @Inject()(dbConfig: DatabaseConfigProvider)(implicit ec: ExecutionContext)
+    extends BaseApiController {
   private val service: LocationHintsService = new LocationHintsServiceImpl(dbConfig)
 
   def retrieveLocationHints = Action.async { implicit request =>
     queryTextParams.bindFromRequest.fold(
       hasErrors = incorrectServiceCall,
-      success   = callLocationService
+      success   = invokeService
     )
   }
 
-  private def incorrectServiceCall(f: Form[_]) = Future.successful(BadRequest)
-  private def callLocationService(query: QueryTextParams) =
+  private def invokeService(query: QueryTextParams) =
     service.retrieveLocationHints(query.q).map(Json.toJson(_)).map(Ok(_))
 }
