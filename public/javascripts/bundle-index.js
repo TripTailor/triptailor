@@ -44251,7 +44251,7 @@ var dateToSubmit = function dateToSubmit(date) {
   return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 };
 var formatComponent = function formatComponent(component) {
-  return component.replace(", ", ",");
+  return component.trim().replace(", ", ",");
 };
 
 var Index = function Index() {
@@ -44283,7 +44283,8 @@ var SearchForm = function (_React$Component) {
       submitCity: "",
       submitCheckIn: dateToSubmit(tomorrow),
       submitCheckOut: dateToSubmit(toDate),
-      cityHints: []
+      cityHints: [],
+      error: false
     };
     return _this;
   }
@@ -44291,7 +44292,7 @@ var SearchForm = function (_React$Component) {
   _createClass(SearchForm, [{
     key: 'updateCity',
     value: function updateCity(e) {
-      this.setState({ city: e.target.value, submitCity: formatComponent(e.target.value) }, this.getCityHints.bind(this, e.target));
+      this.setState({ city: e.target.value, submitCity: formatComponent(e.target.value), error: false }, this.getCityHints.bind(this, e.target));
     }
   }, {
     key: 'updateCheckIn',
@@ -44306,7 +44307,7 @@ var SearchForm = function (_React$Component) {
   }, {
     key: 'selectHint',
     value: function selectHint(e) {
-      this.setState({ city: (0, _jquery2.default)(e.target).text(), submitCity: formatComponent((0, _jquery2.default)(e.target).text()), cityHints: [] });
+      this.setState({ city: (0, _jquery2.default)(e.target).text(), submitCity: formatComponent((0, _jquery2.default)(e.target).text()), cityHints: [], error: false });
     }
   }, {
     key: 'handleBlur',
@@ -44317,6 +44318,14 @@ var SearchForm = function (_React$Component) {
     key: 'handleKeyUp',
     value: function handleKeyUp(e) {
       if (e.keyCode == 27) this.setState({ cityHints: [] });
+    }
+  }, {
+    key: 'validateForm',
+    value: function validateForm(e) {
+      if (this.state.submitCity == "") {
+        this.setState({ error: true });
+        e.preventDefault();
+      }
     }
   }, {
     key: 'getCityHints',
@@ -44344,7 +44353,7 @@ var SearchForm = function (_React$Component) {
     value: function render() {
       return _react2.default.createElement(
         'form',
-        { action: '/tags', method: 'get', className: 'search-form' },
+        { action: '/tags', method: 'get', className: 'search-form', onSubmit: this.validateForm.bind(this) },
         _react2.default.createElement(
           'div',
           { className: 'title' },
@@ -44360,7 +44369,7 @@ var SearchForm = function (_React$Component) {
           { className: 'hint-copy' },
           'Where and when do you want to go?'
         ),
-        _react2.default.createElement(AutoCompleteInput, { city: this.state.city, updateCity: this.updateCity.bind(this), submitCity: this.state.submitCity, hints: this.state.cityHints, selectHint: this.selectHint.bind(this), handleBlur: this.handleBlur.bind(this), handleKeyUp: this.handleKeyUp.bind(this) }),
+        _react2.default.createElement(AutoCompleteInput, { city: this.state.city, updateCity: this.updateCity.bind(this), submitCity: this.state.submitCity, hints: this.state.cityHints, selectHint: this.selectHint.bind(this), handleBlur: this.handleBlur.bind(this), handleKeyUp: this.handleKeyUp.bind(this), error: this.state.error }),
         _react2.default.createElement(DateInput, { checkIn: this.state.checkIn, updateCheckIn: this.updateCheckIn.bind(this), checkOut: this.state.checkOut, updateCheckOut: this.updateCheckOut.bind(this), submitCheckIn: this.state.submitCheckIn, submitCheckOut: this.state.submitCheckOut, cancelBlur: this.cancelBlur }),
         _react2.default.createElement(
           'button',
@@ -44378,7 +44387,7 @@ var AutoCompleteInput = function AutoCompleteInput(props) {
   return _react2.default.createElement(
     'div',
     { className: 'auto-complete-input-container' },
-    _react2.default.createElement('input', { type: 'text', className: 'auto-complete-input', autoComplete: 'off', placeholder: 'Pick a city', value: props.city, onChange: props.updateCity, onBlur: props.handleBlur, onKeyUp: props.handleKeyUp }),
+    _react2.default.createElement('input', { type: 'text', className: "auto-complete-input" + (props.error ? " error" : ""), autoComplete: 'off', placeholder: 'Pick a city', value: props.city, onChange: props.updateCity, onBlur: props.handleBlur, onKeyUp: props.handleKeyUp }),
     _react2.default.createElement(AutoComplete, { hints: props.hints, selectHint: props.selectHint, cancelBlur: props.cancelBlur }),
     _react2.default.createElement('input', { name: 'city', type: 'hidden', value: props.submitCity })
   );

@@ -13,7 +13,7 @@ var dateToSubmit = function(date) {
   return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 };
 var formatComponent = function(component) {
-  return component.replace(", ", ",");
+  return component.trim().replace(", ", ",");
 }
 
 const Index = () => (
@@ -39,11 +39,12 @@ class SearchForm extends React.Component {
       submitCity: "",
       submitCheckIn: dateToSubmit(tomorrow),
       submitCheckOut: dateToSubmit(toDate),
-      cityHints: []
+      cityHints: [],
+      error: false
     };
   }
   updateCity(e) {
-    this.setState({city: e.target.value, submitCity: formatComponent(e.target.value)}, this.getCityHints.bind(this, e.target));
+    this.setState({city: e.target.value, submitCity: formatComponent(e.target.value), error: false}, this.getCityHints.bind(this, e.target));
   }
   updateCheckIn(date) {
     this.setState({checkIn: date, submitCheckIn: dateToSubmit(new Date(date))});
@@ -52,7 +53,7 @@ class SearchForm extends React.Component {
     this.setState({checkOut: date, submitCheckOut: dateToSubmit(new Date(date))});
   }
   selectHint(e) {
-    this.setState({city: $(e.target).text(), submitCity: formatComponent($(e.target).text()), cityHints: []});
+    this.setState({city: $(e.target).text(), submitCity: formatComponent($(e.target).text()), cityHints: [], error: false});
   }
   handleBlur(e) {
     this.setState({cityHints: []});
@@ -61,7 +62,12 @@ class SearchForm extends React.Component {
     if(e.keyCode == 27)
       this.setState({cityHints: []});
   }
-  
+  validateForm(e) {
+    if(this.state.submitCity == "") {
+      this.setState({error: true});
+      e.preventDefault();
+    }
+  }
   getCityHints(input) {
     var value = input.value;
     var url = jsRoutes.controllers.Assets.versioned("test/autocomplete.json").absoluteURL();
@@ -85,11 +91,11 @@ class SearchForm extends React.Component {
   }
   render() {
     return (
-      <form action="/tags" method="get" className="search-form">
+      <form action="/tags" method="get" className="search-form" onSubmit={this.validateForm.bind(this)}>
         <div className="title">TripTailor Hostels</div>
         <div className="subtitle">Imagine staying at the hostel you've been looking for</div>
         <div className="hint-copy">Where and when do you want to go?</div>
-        <AutoCompleteInput city={this.state.city} updateCity={this.updateCity.bind(this)} submitCity={this.state.submitCity} hints={this.state.cityHints} selectHint={this.selectHint.bind(this)} handleBlur={this.handleBlur.bind(this)} handleKeyUp={this.handleKeyUp.bind(this)} />
+        <AutoCompleteInput city={this.state.city} updateCity={this.updateCity.bind(this)} submitCity={this.state.submitCity} hints={this.state.cityHints} selectHint={this.selectHint.bind(this)} handleBlur={this.handleBlur.bind(this)} handleKeyUp={this.handleKeyUp.bind(this)} error={this.state.error} />
         <DateInput checkIn={this.state.checkIn} updateCheckIn={this.updateCheckIn.bind(this)} checkOut={this.state.checkOut} updateCheckOut={this.updateCheckOut.bind(this)} submitCheckIn={this.state.submitCheckIn} submitCheckOut={this.state.submitCheckOut} cancelBlur={this.cancelBlur} />
         <button type="submit" className="next-button">Next</button>
       </form>
@@ -99,7 +105,7 @@ class SearchForm extends React.Component {
 
 const AutoCompleteInput = (props) => (
   <div className="auto-complete-input-container">
-    <input type="text" className="auto-complete-input" autoComplete="off" placeholder="Pick a city" value={props.city} onChange={props.updateCity} onBlur={props.handleBlur} onKeyUp={props.handleKeyUp} />
+    <input type="text" className={"auto-complete-input" + (props.error ? " error" : "")} autoComplete="off" placeholder="Pick a city" value={props.city} onChange={props.updateCity} onBlur={props.handleBlur} onKeyUp={props.handleKeyUp} />
     <AutoComplete hints={props.hints} selectHint={props.selectHint} cancelBlur={props.cancelBlur} />
     <input name="city" type="hidden" value={props.submitCity} />
   </div>
