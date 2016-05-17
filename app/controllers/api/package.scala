@@ -77,7 +77,9 @@ package object api {
       (__ \ "locationId").write[Int] and
       (__ \ "hostelWorldId").writeNullable[Int] and
       (__ \ "address").writeNullable[String]
-    )(unlift(HostelRow.unapply))
+    )(unlift(HostelRow.unapply)).transform { (json: JsObject) =>
+      json + ("images" -> JsArray((json \ "images").as[String].split(",").map(JsString(_))))
+    }
 
   private[api] implicit val ratingMetricsWrite: Writes[RatingMetrics] =
     (
