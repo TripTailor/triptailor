@@ -33,12 +33,12 @@ var Tags = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tags).call(this));
 
-    util.getQueryValue("city");
+    var location = decodeURIComponent(util.getQueryValue("city")).split(",");
     _this.state = {
-      city: "New York City",
-      country: "USA",
-      checkIn: new Date(2016, 11, 30),
-      checkOut: new Date(2017, 0, 1),
+      city: location[0],
+      country: location.length > 1 ? location[1] : "",
+      checkIn: new Date(util.getQueryValue("check-in")),
+      checkOut: new Date(util.getQueryValue("check-out")),
       tags: ""
     };
     return _this;
