@@ -4,16 +4,16 @@ var babelify = require('babelify');
 var source = require('vinyl-source-stream');
 var $ = require('jquery');
 
-var tasks = ['header', 'index', 'tags'];
+var reactTasks = ['header', 'index', 'tags'];
 
-tasks.forEach(function(task, i, arr) {
+reactTasks.forEach(function(task, i, arr) {
   gulp.task(task, function() {
     return transform(task + '.js');
   });
 });
 
-gulp.task('watch', tasks, function () {
-  gulp.watch('public/javascripts/react/*.js', tasks);
+gulp.task('watch', reactTasks, function () {
+  gulp.watch(['app/scripts/react/*.js','app/scripts/*.js'], reactTasks);
 });
 
 gulp.task('jquery-ui', function() {
@@ -25,7 +25,7 @@ gulp.task('default', ['watch', 'jquery-ui']);
 
 
 var transform = function(entry) {
-  return browserify({entries: 'public/javascripts/react/' + entry})
+  return browserify({entries: 'app/scripts/react/' + entry})
   .transform(babelify, {presets: ['es2015', 'react']})
   .bundle()
   .on('error', function(e) {

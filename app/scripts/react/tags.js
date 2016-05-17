@@ -1,9 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import * as util from '../util';
 
 class Tags extends React.Component {
   constructor() {
     super();
+    util.getQueryValue("city");
     this.state = {
       city: "New York City",
       country: "USA",
