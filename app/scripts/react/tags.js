@@ -93,8 +93,8 @@ class TagsSelector extends React.Component {
 
         <div className="selector-buttons">
           <button ref={(button) => this.button1 = button} className="selector-button" onClick={this.moveSelector.bind(this)}></button>
-          <button ref={(button) => this.button2 = button} className="selector-button" onClick={this.moveSelector.bind(this)}></button>
-          <button ref={(button) => this.button3 = button} className="selector-button" onClick={this.moveSelector.bind(this)}></button>
+          {panel2.length > 0 ? <button ref={(button) => this.button2 = button} className="selector-button" onClick={this.moveSelector.bind(this)}></button> : ""}
+          {panel3.length > 0 ? <button ref={(button) => this.button3 = button} className="selector-button" onClick={this.moveSelector.bind(this)}></button> : ""}
         </div>
       </div>
     );

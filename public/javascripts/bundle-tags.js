@@ -223,12 +223,12 @@ var TagsSelector = function (_React$Component2) {
           _react2.default.createElement('button', { ref: function ref(button) {
               return _this3.button1 = button;
             }, className: 'selector-button', onClick: this.moveSelector.bind(this) }),
-          _react2.default.createElement('button', { ref: function ref(button) {
+          panel2.length > 0 ? _react2.default.createElement('button', { ref: function ref(button) {
               return _this3.button2 = button;
-            }, className: 'selector-button', onClick: this.moveSelector.bind(this) }),
-          _react2.default.createElement('button', { ref: function ref(button) {
+            }, className: 'selector-button', onClick: this.moveSelector.bind(this) }) : "",
+          panel3.length > 0 ? _react2.default.createElement('button', { ref: function ref(button) {
               return _this3.button3 = button;
-            }, className: 'selector-button', onClick: this.moveSelector.bind(this) })
+            }, className: 'selector-button', onClick: this.moveSelector.bind(this) }) : ""
         )
       );
     }
