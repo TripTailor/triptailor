@@ -14,12 +14,20 @@ class Tags extends React.Component {
       checkIn: new Date(util.getQueryValue("check-in")),
       checkOut: new Date(util.getQueryValue("check-out")),
       tags: [],
-      selectedTags: ["staff", "party"],
+      selectedTags: [],
       submitTags: ""
     };
   }
   componentWillMount() {
     this.getTagSuggestions();
+  }
+  selectTag(e) {
+    this.setState({selectedTags: this.state.selectedTags.concat([e.target.textContent])});
+  }
+  removeTag(e) {
+    var selectedTags = this.state.selectedTags.slice();
+    selectedTags.splice(selectedTags.indexOf(e.target.textContent), 1);
+    this.setState({selectedTags: selectedTags});
   }
   getTagSuggestions() {
     var url = jsRoutes.controllers.Assets.versioned("test/tags.json").absoluteURL();
@@ -41,7 +49,7 @@ class Tags extends React.Component {
         <InfoHeader city={this.state.city} country={this.state.country} checkIn={this.state.checkIn} checkOut={this.state.checkOut} />
         <div className="hint-copy">What are you looking for?</div>
         <div className="help-copy">Select one or more keywords</div>
-        <TagsSelector tags={this.state.tags} selectedTags={this.state.selectedTags} />
+        <TagsSelector tags={this.state.tags} selectedTags={this.state.selectedTags} selectTag={this.selectTag.bind(this)} removeTag={this.removeTag.bind(this)} />
         <div className="buttons-container">
           <a href="/" className="back-button">Back</a>
           <button type="submit" className="search-button">Search</button>
@@ -78,7 +86,7 @@ class TagsSelector extends React.Component {
     }
   }
   render() {
-    var buildTag = (tag, i) => <span key={i} className="tag">{tag}</span>
+    var buildTag = (tag, i) => <span key={i} className="tag" onClick={this.props.selectTag}>{tag}</span>
     var panel1 = this.props.tags.slice(0, 15).map(buildTag);
     var panel2 = this.props.tags.slice(15, 30).map(buildTag);
     var panel3 = this.props.tags.slice(30, 45).map(buildTag);
@@ -98,14 +106,16 @@ class TagsSelector extends React.Component {
           {panel3.length > 0 ? <button ref={(button) => this.button3 = button} className="selector-button" onClick={this.moveSelector.bind(this)}></button> : ""}
         </div>
 
-        <SelectedTags tags={this.props.selectedTags} />
+        <SelectedTags tags={this.props.selectedTags} removeTag={this.props.removeTag} />
       </div>
     );
   }
 };
 
 const SelectedTags = (props) => {
-  var tags = props.tags.map((tag, i) => <span key={i} className="selected-tag">{tag}</span>);
+  var tags = props.tags.map((tag, i) => (
+    <span key={i} className="selected-tag" onClick={props.removeTag}>{tag} <span className="close">X</span></span>
+  ));
   return <div className="selected-tags">{tags}</div>;
 };
 

@@ -44,7 +44,7 @@ var Tags = function (_React$Component) {
       checkIn: new Date(util.getQueryValue("check-in")),
       checkOut: new Date(util.getQueryValue("check-out")),
       tags: [],
-      selectedTags: ["staff", "party"],
+      selectedTags: [],
       submitTags: ""
     };
     return _this;
@@ -54,6 +54,18 @@ var Tags = function (_React$Component) {
     key: 'componentWillMount',
     value: function componentWillMount() {
       this.getTagSuggestions();
+    }
+  }, {
+    key: 'selectTag',
+    value: function selectTag(e) {
+      this.setState({ selectedTags: this.state.selectedTags.concat([e.target.textContent]) });
+    }
+  }, {
+    key: 'removeTag',
+    value: function removeTag(e) {
+      var selectedTags = this.state.selectedTags.slice();
+      selectedTags.splice(selectedTags.indexOf(e.target.textContent), 1);
+      this.setState({ selectedTags: selectedTags });
     }
   }, {
     key: 'getTagSuggestions',
@@ -88,7 +100,7 @@ var Tags = function (_React$Component) {
           { className: 'help-copy' },
           'Select one or more keywords'
         ),
-        _react2.default.createElement(TagsSelector, { tags: this.state.tags, selectedTags: this.state.selectedTags }),
+        _react2.default.createElement(TagsSelector, { tags: this.state.tags, selectedTags: this.state.selectedTags, selectTag: this.selectTag.bind(this), removeTag: this.removeTag.bind(this) }),
         _react2.default.createElement(
           'div',
           { className: 'buttons-container' },
@@ -183,7 +195,7 @@ var TagsSelector = function (_React$Component2) {
       var buildTag = function buildTag(tag, i) {
         return _react2.default.createElement(
           'span',
-          { key: i, className: 'tag' },
+          { key: i, className: 'tag', onClick: _this3.props.selectTag },
           tag
         );
       };
@@ -231,7 +243,7 @@ var TagsSelector = function (_React$Component2) {
               return _this3.button3 = button;
             }, className: 'selector-button', onClick: this.moveSelector.bind(this) }) : ""
         ),
-        _react2.default.createElement(SelectedTags, { tags: this.props.selectedTags })
+        _react2.default.createElement(SelectedTags, { tags: this.props.selectedTags, removeTag: this.props.removeTag })
       );
     }
   }]);
@@ -245,8 +257,14 @@ var SelectedTags = function SelectedTags(props) {
   var tags = props.tags.map(function (tag, i) {
     return _react2.default.createElement(
       'span',
-      { key: i, className: 'selected-tag' },
-      tag
+      { key: i, className: 'selected-tag', onClick: props.removeTag },
+      tag,
+      ' ',
+      _react2.default.createElement(
+        'span',
+        { className: 'close' },
+        'X'
+      )
     );
   });
   return _react2.default.createElement(

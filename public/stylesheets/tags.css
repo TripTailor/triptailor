@@ -39,7 +39,7 @@ body {
 }
 .tag-selector {
   position: relative;
-  height: 186px;
+  height: 248px;
 }
 .tag-selection-panel {
   width: 460px;
@@ -60,10 +60,10 @@ body {
   display: inline-block;
   font-family: 'Open Sans', sans-serif;
   color: #686c9e;
+  cursor: pointer;
 }
 .selector-buttons {
   text-align: center;
-  margin-top: 25px;
 }
 .selector-button {
   display: inline-block;
@@ -88,12 +88,19 @@ body {
   color: #fff;
   display: inline-block;
   margin: 3.5px;
+  cursor: pointer;
+}
+.close {
+  font-size: 12px;
+  font-family: "Helvetica Neue", sans-serif;
+  opacity: 0.5;
+  margin-left: 4px;
 }
 
 .buttons-container {
   position: absolute;
   width: 460px;
-  bottom: 65px;
+  bottom: 45px;
   left: 50%;
   margin-left: -230px;
 }
