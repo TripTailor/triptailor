@@ -24,6 +24,26 @@ body {
   color: #808080;
   font-weight: 700;
 }
+.help-copy {
+  margin-top: 25px;
+  color: #808080;
+}
+.tag-selector-container {
+  width: 460px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 25px;
+}
+.tag {
+  padding: 10px 10px 10px 6px;
+  background-color: #fff;
+  border: solid 1px #686c9e;
+  border-radius: 3px;
+  margin: 10px;
+  display: inline-block;
+  font-family: 'Open Sans', sans-serif;
+  color: #686c9e;
+}
 .buttons-container {
   position: absolute;
   width: 460px;

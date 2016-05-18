@@ -15,6 +15,10 @@ var _util = require('../util');
 
 var util = _interopRequireWildcard(_util);
 
+var _jquery = require('jquery');
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -39,12 +43,33 @@ var Tags = function (_React$Component) {
       country: location.length > 1 ? location[1] : "",
       checkIn: new Date(util.getQueryValue("check-in")),
       checkOut: new Date(util.getQueryValue("check-out")),
-      tags: ""
+      tags: []
     };
     return _this;
   }
 
   _createClass(Tags, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      this.getTagSuggestions();
+    }
+  }, {
+    key: 'getTagSuggestions',
+    value: function getTagSuggestions() {
+      var url = jsRoutes.controllers.Assets.versioned("test/tags.json").absoluteURL();
+      _jquery2.default.ajax({
+        url: url,
+        dataType: "json",
+        type: "GET",
+        success: function (data) {
+          this.setState({ tags: data });
+        }.bind(this),
+        error: function error(xhr, status, err) {
+          console.error(url, status, err);
+        }
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
@@ -56,7 +81,12 @@ var Tags = function (_React$Component) {
           { className: 'hint-copy' },
           'What are you looking for?'
         ),
-        _react2.default.createElement(TagsSelector, null),
+        _react2.default.createElement(
+          'div',
+          { className: 'help-copy' },
+          'Select one or more keywords'
+        ),
+        _react2.default.createElement(TagsSelector, { tags: this.state.tags }),
         _react2.default.createElement(
           'div',
           { className: 'buttons-container' },
@@ -120,13 +150,45 @@ var InfoHeader = function InfoHeader(props) {
   );
 };
 
-var TagsSelector = function TagsSelector() {
-  return _react2.default.createElement('div', null);
+var TagsSelector = function TagsSelector(props) {
+  var buildTag = function buildTag(tag, i) {
+    return _react2.default.createElement(
+      'span',
+      { key: i, className: 'tag' },
+      tag
+    );
+  };
+  var panel1 = props.tags.slice(0, 15).map(buildTag);
+  var panel2 = props.tags.slice(15, 30).map(buildTag);
+  var panel3 = props.tags.slice(30, 45).map(buildTag);
+  return _react2.default.createElement(
+    'div',
+    { className: 'tag-selector-container' },
+    _react2.default.createElement(
+      'div',
+      { className: 'tag-selector' },
+      _react2.default.createElement(
+        'div',
+        { className: 'tag-selection-panel' },
+        panel1
+      ),
+      panel2.length > 0 ? _react2.default.createElement(
+        'div',
+        { className: 'tag-selection-panel' },
+        panel2
+      ) : "",
+      panel3.length > 0 ? _react2.default.createElement(
+        'div',
+        { className: 'tag-selection-panel' },
+        panel3
+      ) : ""
+    )
+  );
 };
 
 _reactDom2.default.render(_react2.default.createElement(Tags, null), document.getElementById("content"));
 
-},{"../util":2,"react":168,"react-dom":5}],2:[function(require,module,exports){
+},{"../util":2,"jquery":4,"react":168,"react-dom":5}],2:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
