@@ -43,7 +43,8 @@ var Tags = function (_React$Component) {
       country: location.length > 1 ? location[1] : "",
       checkIn: new Date(util.getQueryValue("check-in")),
       checkOut: new Date(util.getQueryValue("check-out")),
-      tags: []
+      tags: [],
+      submitTags: ""
     };
     return _this;
   }
@@ -105,7 +106,7 @@ var Tags = function (_React$Component) {
         _react2.default.createElement('input', { name: 'country', type: 'hidden', value: this.state.country }),
         _react2.default.createElement('input', { name: 'checkIn', type: 'hidden', value: this.state.checkIn }),
         _react2.default.createElement('input', { name: 'checkOut', type: 'hidden', value: this.state.checkOut }),
-        _react2.default.createElement('input', { name: 'tags', type: 'hidden', value: this.state.tags })
+        _react2.default.createElement('input', { name: 'tags', type: 'hidden', value: this.state.submitTags })
       );
     }
   }]);
@@ -150,41 +151,93 @@ var InfoHeader = function InfoHeader(props) {
   );
 };
 
-var TagsSelector = function TagsSelector(props) {
-  var buildTag = function buildTag(tag, i) {
-    return _react2.default.createElement(
-      'span',
-      { key: i, className: 'tag' },
-      tag
-    );
-  };
-  var panel1 = props.tags.slice(0, 15).map(buildTag);
-  var panel2 = props.tags.slice(15, 30).map(buildTag);
-  var panel3 = props.tags.slice(30, 45).map(buildTag);
-  return _react2.default.createElement(
-    'div',
-    { className: 'tag-selector-container' },
-    _react2.default.createElement(
-      'div',
-      { className: 'tag-selector' },
-      _react2.default.createElement(
+var TagsSelector = function (_React$Component2) {
+  _inherits(TagsSelector, _React$Component2);
+
+  function TagsSelector(props) {
+    _classCallCheck(this, TagsSelector);
+
+    return _possibleConstructorReturn(this, Object.getPrototypeOf(TagsSelector).call(this, props));
+  }
+
+  _createClass(TagsSelector, [{
+    key: 'moveSelector',
+    value: function moveSelector(e) {
+      e.preventDefault();
+      var slideTime = 400;
+      switch (e.target) {
+        case this.button1:
+          (0, _jquery2.default)(this.selector).animate({ left: 0 }, slideTime);break;
+        case this.button2:
+          (0, _jquery2.default)(this.selector).animate({ left: -460 }, slideTime);break;
+        case this.button3:
+          (0, _jquery2.default)(this.selector).animate({ left: -920 }, slideTime);break;
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this3 = this;
+
+      var buildTag = function buildTag(tag, i) {
+        return _react2.default.createElement(
+          'span',
+          { key: i, className: 'tag' },
+          tag
+        );
+      };
+      var panel1 = this.props.tags.slice(0, 15).map(buildTag);
+      var panel2 = this.props.tags.slice(15, 30).map(buildTag);
+      var panel3 = this.props.tags.slice(30, 45).map(buildTag);
+      return _react2.default.createElement(
         'div',
-        { className: 'tag-selection-panel' },
-        panel1
-      ),
-      panel2.length > 0 ? _react2.default.createElement(
-        'div',
-        { className: 'tag-selection-panel' },
-        panel2
-      ) : "",
-      panel3.length > 0 ? _react2.default.createElement(
-        'div',
-        { className: 'tag-selection-panel' },
-        panel3
-      ) : ""
-    )
-  );
-};
+        { className: 'tag-selector-form' },
+        _react2.default.createElement(
+          'div',
+          { className: 'tag-selector-container' },
+          _react2.default.createElement(
+            'div',
+            { ref: function ref(selector) {
+                return _this3.selector = selector;
+              }, className: 'tag-selector' },
+            _react2.default.createElement(
+              'div',
+              { className: 'tag-selection-panel' },
+              panel1
+            ),
+            panel2.length > 0 ? _react2.default.createElement(
+              'div',
+              { className: 'tag-selection-panel panel2' },
+              panel2
+            ) : "",
+            panel3.length > 0 ? _react2.default.createElement(
+              'div',
+              { className: 'tag-selection-panel panel3' },
+              panel3
+            ) : ""
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'selector-buttons' },
+          _react2.default.createElement('button', { ref: function ref(button) {
+              return _this3.button1 = button;
+            }, className: 'selector-button', onClick: this.moveSelector.bind(this) }),
+          _react2.default.createElement('button', { ref: function ref(button) {
+              return _this3.button2 = button;
+            }, className: 'selector-button', onClick: this.moveSelector.bind(this) }),
+          _react2.default.createElement('button', { ref: function ref(button) {
+              return _this3.button3 = button;
+            }, className: 'selector-button', onClick: this.moveSelector.bind(this) })
+        )
+      );
+    }
+  }]);
+
+  return TagsSelector;
+}(_react2.default.Component);
+
+;
 
 _reactDom2.default.render(_react2.default.createElement(Tags, null), document.getElementById("content"));
 
