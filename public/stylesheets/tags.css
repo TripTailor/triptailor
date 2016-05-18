@@ -62,6 +62,10 @@ body {
   color: #686c9e;
   cursor: pointer;
 }
+.selected {
+  background-color: #686c9e;
+  color: #fff;
+}
 .selector-buttons {
   text-align: center;
 }

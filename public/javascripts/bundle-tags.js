@@ -195,7 +195,7 @@ var TagsSelector = function (_React$Component2) {
       var buildTag = function buildTag(tag, i) {
         return _react2.default.createElement(
           'span',
-          { key: i, className: 'tag', onClick: _this3.props.selectTag },
+          { key: i, className: "tag" + (_this3.props.selectedTags.indexOf(tag) != -1 ? " selected" : ""), onClick: _this3.props.selectTag },
           tag
         );
       };

@@ -86,7 +86,7 @@ class TagsSelector extends React.Component {
     }
   }
   render() {
-    var buildTag = (tag, i) => <span key={i} className="tag" onClick={this.props.selectTag}>{tag}</span>
+    var buildTag = (tag, i) => <span key={i} className={"tag" + (this.props.selectedTags.indexOf(tag) != -1 ? " selected" : "")} onClick={this.props.selectTag}>{tag}</span>
     var panel1 = this.props.tags.slice(0, 15).map(buildTag);
     var panel2 = this.props.tags.slice(15, 30).map(buildTag);
     var panel3 = this.props.tags.slice(30, 45).map(buildTag);
