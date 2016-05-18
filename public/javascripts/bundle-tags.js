@@ -56,8 +56,10 @@ var Tags = function (_React$Component) {
   }, {
     key: 'selectTag',
     value: function selectTag(e) {
-      var selectedTags = this.state.selectedTags.concat([e.target.textContent]);
-      this.setState({ selectedTags: selectedTags, submitTags: util.arrayToString(selectedTags) });
+      if (this.state.selectedTags.indexOf(e.target.textContent) == -1) {
+        var selectedTags = this.state.selectedTags.concat([e.target.textContent]);
+        this.setState({ selectedTags: selectedTags, submitTags: util.arrayToString(selectedTags) });
+      }
     }
   }, {
     key: 'removeTag',
