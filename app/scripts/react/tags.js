@@ -7,12 +7,10 @@ class Tags extends React.Component {
   constructor() {
     super();
 
-    var location = decodeURIComponent(util.getQueryValue("city")).split(",");
+    this.location = decodeURIComponent(util.getQueryValue("city")).split(",");
+    this.checkIn = util.getQueryValue("check-in");
+    this.checkOut = util.getQueryValue("check-out");
     this.state = {
-      city: location[0],
-      country: location.length > 1 ? location[1] : "",
-      checkIn: new Date(util.getQueryValue("check-in")),
-      checkOut: new Date(util.getQueryValue("check-out")),
       tags: [],
       selectedTags: [],
       submitTags: ""
@@ -22,12 +20,13 @@ class Tags extends React.Component {
     this.getTagSuggestions();
   }
   selectTag(e) {
-    this.setState({selectedTags: this.state.selectedTags.concat([e.target.textContent])});
+    var selectedTags = this.state.selectedTags.concat([e.target.textContent])
+    this.setState({selectedTags: selectedTags, submitTags: util.arrayToString(selectedTags)});
   }
   removeTag(e) {
     var selectedTags = this.state.selectedTags.slice();
     selectedTags.splice(selectedTags.indexOf(e.target.textContent), 1);
-    this.setState({selectedTags: selectedTags});
+    this.setState({selectedTags: selectedTags, submitTags: util.arrayToString(selectedTags)});
   }
   getTagSuggestions() {
     var url = jsRoutes.controllers.Assets.versioned("test/tags.json").absoluteURL();
@@ -46,7 +45,7 @@ class Tags extends React.Component {
   render() {
     return (
       <form action="/search" method="get" className="tags-form">
-        <InfoHeader city={this.state.city} country={this.state.country} checkIn={this.state.checkIn} checkOut={this.state.checkOut} />
+        <InfoHeader city={this.location[0]} country={this.location[1]} checkIn={new Date(this.checkIn)} checkOut={new Date(this.checkOut)} />
         <div className="hint-copy">What are you looking for?</div>
         <div className="help-copy">Select one or more keywords</div>
         <TagsSelector tags={this.state.tags} selectedTags={this.state.selectedTags} selectTag={this.selectTag.bind(this)} removeTag={this.removeTag.bind(this)} />
@@ -56,10 +55,10 @@ class Tags extends React.Component {
         </div>
 
 
-        <input name="city" type="hidden" value={this.state.city} />
-        <input name="country" type="hidden" value={this.state.country} />
-        <input name="checkIn" type="hidden" value={this.state.checkIn} />
-        <input name="checkOut" type="hidden" value={this.state.checkOut} />
+        <input name="city" type="hidden" value={this.location[0]} />
+        <input name="country" type="hidden" value={this.location[1]} />
+        <input name="checkIn" type="hidden" value={this.checkIn} />
+        <input name="checkOut" type="hidden" value={this.checkOut} />
         <input name="tags" type="hidden" value={this.state.submitTags} />
       </form>
     );

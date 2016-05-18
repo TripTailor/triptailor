@@ -10,6 +10,12 @@ const getQueryValue = (variable) => {
     }
   }
   return "";
+};
+
+const arrayToString = (arr) => {
+  var str = "";
+  arr.forEach((elem) => str += elem + "-");
+  return arr.length > 1 ? str.substring(0, str.length - 1) : str;
 }
 
-export { getQueryValue };
+export { getQueryValue, arrayToString };

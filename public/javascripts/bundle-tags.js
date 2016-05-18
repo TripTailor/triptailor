@@ -37,12 +37,10 @@ var Tags = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tags).call(this));
 
-    var location = decodeURIComponent(util.getQueryValue("city")).split(",");
+    _this.location = decodeURIComponent(util.getQueryValue("city")).split(",");
+    _this.checkIn = util.getQueryValue("check-in");
+    _this.checkOut = util.getQueryValue("check-out");
     _this.state = {
-      city: location[0],
-      country: location.length > 1 ? location[1] : "",
-      checkIn: new Date(util.getQueryValue("check-in")),
-      checkOut: new Date(util.getQueryValue("check-out")),
       tags: [],
       selectedTags: [],
       submitTags: ""
@@ -58,14 +56,15 @@ var Tags = function (_React$Component) {
   }, {
     key: 'selectTag',
     value: function selectTag(e) {
-      this.setState({ selectedTags: this.state.selectedTags.concat([e.target.textContent]) });
+      var selectedTags = this.state.selectedTags.concat([e.target.textContent]);
+      this.setState({ selectedTags: selectedTags, submitTags: util.arrayToString(selectedTags) });
     }
   }, {
     key: 'removeTag',
     value: function removeTag(e) {
       var selectedTags = this.state.selectedTags.slice();
       selectedTags.splice(selectedTags.indexOf(e.target.textContent), 1);
-      this.setState({ selectedTags: selectedTags });
+      this.setState({ selectedTags: selectedTags, submitTags: util.arrayToString(selectedTags) });
     }
   }, {
     key: 'getTagSuggestions',
@@ -89,7 +88,7 @@ var Tags = function (_React$Component) {
       return _react2.default.createElement(
         'form',
         { action: '/search', method: 'get', className: 'tags-form' },
-        _react2.default.createElement(InfoHeader, { city: this.state.city, country: this.state.country, checkIn: this.state.checkIn, checkOut: this.state.checkOut }),
+        _react2.default.createElement(InfoHeader, { city: this.location[0], country: this.location[1], checkIn: new Date(this.checkIn), checkOut: new Date(this.checkOut) }),
         _react2.default.createElement(
           'div',
           { className: 'hint-copy' },
@@ -115,10 +114,10 @@ var Tags = function (_React$Component) {
             'Search'
           )
         ),
-        _react2.default.createElement('input', { name: 'city', type: 'hidden', value: this.state.city }),
-        _react2.default.createElement('input', { name: 'country', type: 'hidden', value: this.state.country }),
-        _react2.default.createElement('input', { name: 'checkIn', type: 'hidden', value: this.state.checkIn }),
-        _react2.default.createElement('input', { name: 'checkOut', type: 'hidden', value: this.state.checkOut }),
+        _react2.default.createElement('input', { name: 'city', type: 'hidden', value: this.location[0] }),
+        _react2.default.createElement('input', { name: 'country', type: 'hidden', value: this.location[1] }),
+        _react2.default.createElement('input', { name: 'checkIn', type: 'hidden', value: this.checkIn }),
+        _react2.default.createElement('input', { name: 'checkOut', type: 'hidden', value: this.checkOut }),
         _react2.default.createElement('input', { name: 'tags', type: 'hidden', value: this.state.submitTags })
       );
     }
@@ -282,7 +281,7 @@ _reactDom2.default.render(_react2.default.createElement(Tags, null), document.ge
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getQueryValue = undefined;
+exports.arrayToString = exports.getQueryValue = undefined;
 
 var _jquery = require("jquery");
 
@@ -302,7 +301,16 @@ var getQueryValue = function getQueryValue(variable) {
   return "";
 };
 
+var arrayToString = function arrayToString(arr) {
+  var str = "";
+  arr.forEach(function (elem) {
+    return str += elem + "-";
+  });
+  return arr.length > 1 ? str.substring(0, str.length - 1) : str;
+};
+
 exports.getQueryValue = getQueryValue;
+exports.arrayToString = arrayToString;
 
 },{"jquery":4}],3:[function(require,module,exports){
 // shim for using process in browser
