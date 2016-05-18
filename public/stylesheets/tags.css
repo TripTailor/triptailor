@@ -28,6 +28,7 @@ body {
   margin-top: 25px;
   color: #808080;
 }
+
 .tag-selector-form {
   margin-top: 25px;
 }
@@ -51,7 +52,7 @@ body {
   left: 920px;
 }
 .tag {
-  padding: 10px 10px 10px 6px;
+  padding: 10px;
   background-color: #fff;
   border: solid 1px #686c9e;
   border-radius: 3px;
@@ -75,6 +76,20 @@ body {
   padding: 0;
   outline: none;
 }
+
+.selected-tags {
+  margin-top: 25px;
+}
+.selected-tag {
+  padding: 10px;
+  background-color: #686c9e;
+  border-radius: 3px;
+  font-family: 'Open Sans', sans-serif;
+  color: #fff;
+  display: inline-block;
+  margin: 3.5px;
+}
+
 .buttons-container {
   position: absolute;
   width: 460px;

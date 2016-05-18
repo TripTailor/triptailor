@@ -14,6 +14,7 @@ class Tags extends React.Component {
       checkIn: new Date(util.getQueryValue("check-in")),
       checkOut: new Date(util.getQueryValue("check-out")),
       tags: [],
+      selectedTags: ["staff", "party"],
       submitTags: ""
     };
   }
@@ -40,7 +41,7 @@ class Tags extends React.Component {
         <InfoHeader city={this.state.city} country={this.state.country} checkIn={this.state.checkIn} checkOut={this.state.checkOut} />
         <div className="hint-copy">What are you looking for?</div>
         <div className="help-copy">Select one or more keywords</div>
-        <TagsSelector tags={this.state.tags} />
+        <TagsSelector tags={this.state.tags} selectedTags={this.state.selectedTags} />
         <div className="buttons-container">
           <a href="/" className="back-button">Back</a>
           <button type="submit" className="search-button">Search</button>
@@ -96,9 +97,16 @@ class TagsSelector extends React.Component {
           {panel2.length > 0 ? <button ref={(button) => this.button2 = button} className="selector-button" onClick={this.moveSelector.bind(this)}></button> : ""}
           {panel3.length > 0 ? <button ref={(button) => this.button3 = button} className="selector-button" onClick={this.moveSelector.bind(this)}></button> : ""}
         </div>
+
+        <SelectedTags tags={this.props.selectedTags} />
       </div>
     );
   }
+};
+
+const SelectedTags = (props) => {
+  var tags = props.tags.map((tag, i) => <span key={i} className="selected-tag">{tag}</span>);
+  return <div className="selected-tags">{tags}</div>;
 };
 
 ReactDOM.render(<Tags />, document.getElementById("content"));

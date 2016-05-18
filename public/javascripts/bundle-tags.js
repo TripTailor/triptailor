@@ -44,6 +44,7 @@ var Tags = function (_React$Component) {
       checkIn: new Date(util.getQueryValue("check-in")),
       checkOut: new Date(util.getQueryValue("check-out")),
       tags: [],
+      selectedTags: ["staff", "party"],
       submitTags: ""
     };
     return _this;
@@ -87,7 +88,7 @@ var Tags = function (_React$Component) {
           { className: 'help-copy' },
           'Select one or more keywords'
         ),
-        _react2.default.createElement(TagsSelector, { tags: this.state.tags }),
+        _react2.default.createElement(TagsSelector, { tags: this.state.tags, selectedTags: this.state.selectedTags }),
         _react2.default.createElement(
           'div',
           { className: 'buttons-container' },
@@ -229,7 +230,8 @@ var TagsSelector = function (_React$Component2) {
           panel3.length > 0 ? _react2.default.createElement('button', { ref: function ref(button) {
               return _this3.button3 = button;
             }, className: 'selector-button', onClick: this.moveSelector.bind(this) }) : ""
-        )
+        ),
+        _react2.default.createElement(SelectedTags, { tags: this.props.selectedTags })
       );
     }
   }]);
@@ -238,6 +240,21 @@ var TagsSelector = function (_React$Component2) {
 }(_react2.default.Component);
 
 ;
+
+var SelectedTags = function SelectedTags(props) {
+  var tags = props.tags.map(function (tag, i) {
+    return _react2.default.createElement(
+      'span',
+      { key: i, className: 'selected-tag' },
+      tag
+    );
+  });
+  return _react2.default.createElement(
+    'div',
+    { className: 'selected-tags' },
+    tags
+  );
+};
 
 _reactDom2.default.render(_react2.default.createElement(Tags, null), document.getElementById("content"));
 
