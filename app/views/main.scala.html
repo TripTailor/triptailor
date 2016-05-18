@@ -1,23 +1,36 @@
-@*
- * This template is called from the `index` template. This template
- * handles the rendering of the page header and body tags. It takes
- * two arguments, a `String` for the title of the page and an `Html`
- * object to insert into the body of the page.
- *@
-@(title: String)(content: Html)
+@(title: String)(extraStylesheets: Html)(content: Html)(implicit req: play.api.mvc.RequestHeader)
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        @* Here's where we render the page title `String`. *@
-        <title>@title</title>
-        <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
-        <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
-        <script src="@routes.Assets.versioned("javascripts/hello.js")" type="text/javascript"></script>
-    </head>
-    <body>
-        @* And here's where we render the `Html` object containing
-         * the page content. *@
-        @content
-    </body>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>@title</title>
+
+  <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/bootstrap.min.css")">
+  <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/main.css")">
+  <link rel="stylesheet" media="screen" href="@routes.Assets.versioned("stylesheets/header.css")">
+  <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Ubuntu:400,700' rel='stylesheet' type='text/css'>
+
+  @extraStylesheets
+</head>
+<body>
+
+  <!-- js reverse routing -->
+  @helper.javascriptRouter("jsRoutes")(
+    routes.javascript.Assets.versioned
+  )
+
+  <div id="header"></div>
+
+  <script src="@routes.Assets.versioned("javascripts/bundle-header.js")" type="text/javascript"></script>
+
+  <div id="content"></div>
+
+  @content
+
+</body>
 </html>

@@ -1,0 +1,135 @@
+body {
+  background-color: #f4f5f7;
+}
+#content {
+  position: absolute;
+  top: 70px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.tags-form {
+  text-align: center;
+  height: 100%;
+  position: relative;
+}
+.info-header {
+  color: #808080;
+}
+.hint-copy {
+  margin-top: 35px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 20px;
+  color: #808080;
+  font-weight: 700;
+}
+.help-copy {
+  margin-top: 25px;
+  color: #808080;
+}
+
+.tag-selector-form {
+  margin-top: 25px;
+}
+.tag-selector-container {
+  width: 470px;
+  margin: 0 auto;
+  overflow-x: hidden;
+}
+.tag-selector {
+  position: relative;
+  height: 248px;
+}
+.tag-selection-panel {
+  width: 460px;
+  position: absolute;
+}
+.panel2 {
+  left: 460px;
+}
+.panel3 {
+  left: 920px;
+}
+.tag {
+  padding: 10px;
+  background-color: #fff;
+  border: solid 1px #686c9e;
+  border-radius: 3px;
+  margin: 10px;
+  display: inline-block;
+  font-family: 'Open Sans', sans-serif;
+  color: #686c9e;
+  cursor: pointer;
+}
+.selected {
+  background-color: #686c9e;
+  color: #fff;
+}
+.selector-buttons {
+  text-align: center;
+}
+.selector-button {
+  display: inline-block;
+  margin: 0 7.5px;
+  background-color: #fff;
+  border: solid 2px rgba(0, 0, 0, 0.15);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  padding: 0;
+  outline: none;
+}
+
+.selected-tags {
+  margin-top: 25px;
+}
+.selected-tag {
+  padding: 10px;
+  background-color: #686c9e;
+  border-radius: 3px;
+  font-family: 'Open Sans', sans-serif;
+  color: #fff;
+  display: inline-block;
+  margin: 3.5px;
+  cursor: pointer;
+}
+.close {
+  font-size: 12px;
+  font-family: "Helvetica Neue", sans-serif;
+  opacity: 0.5;
+  margin-left: 4px;
+}
+
+.buttons-container {
+  position: absolute;
+  width: 460px;
+  bottom: 45px;
+  left: 50%;
+  margin-left: -230px;
+}
+.back-button {
+  width: 225px;
+  height: 45px;
+  border-radius: 2px;
+  background-color: #738aa9;
+  box-shadow: 0 2px 0 0 #6a7a8f;
+  color: #fff;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 45px;
+}
+.back-button:visited, .back-button:hover, .back-button:active {
+  color: #fff;
+  text-decoration: none;
+}
+.search-button {
+  margin-left: 10px;
+  width: 225px;
+  height: 45px;
+  border-radius: 2px;
+  background-color: #48abcb;
+  box-shadow: 0 2px 0 0 #3a8ca6;
+  color: #fff;
+  border: none;
+}
