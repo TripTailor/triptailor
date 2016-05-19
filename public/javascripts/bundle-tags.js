@@ -58,7 +58,6 @@ var Tags = function (_React$Component) {
     value: function selectTag(e) {
       var tagIndex = this.state.selectedTags.indexOf(e.target.textContent);
       if (tagIndex == -1) var selectedTags = this.state.selectedTags.concat([e.target.textContent]);else var selectedTags = this.state.selectedTags.slice(0, tagIndex).concat(this.state.selectedTags.slice(tagIndex + 1, this.state.selectedTags.length));
-      console.log(selectedTags);
       this.setState({ selectedTags: selectedTags, submitTags: util.arrayToString(selectedTags) });
     }
   }, {
@@ -200,9 +199,10 @@ var TagsSelector = function (_React$Component2) {
           tag
         );
       };
-      var panel1 = this.props.tags.slice(0, 15).map(buildTag);
-      var panel2 = this.props.tags.slice(15, 30).map(buildTag);
-      var panel3 = this.props.tags.slice(30, 45).map(buildTag);
+      var offset = (0, _jquery2.default)(window).width() < 510 ? 10 : 15;
+      var panel1 = this.props.tags.slice(0, offset).map(buildTag);
+      var panel2 = this.props.tags.slice(offset, offset * 2).map(buildTag);
+      var panel3 = this.props.tags.slice(offset * 2, offset * 3).map(buildTag);
       return _react2.default.createElement(
         'div',
         { className: 'tag-selector-form' },
