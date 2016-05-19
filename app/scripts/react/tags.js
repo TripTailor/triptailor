@@ -20,10 +20,12 @@ class Tags extends React.Component {
     this.getTagSuggestions();
   }
   selectTag(e) {
-    if(this.state.selectedTags.indexOf(e.target.textContent) == -1) {
+    var tagIndex = this.state.selectedTags.indexOf(e.target.textContent);
+    if(tagIndex == -1)
       var selectedTags = this.state.selectedTags.concat([e.target.textContent])
-      this.setState({selectedTags: selectedTags, submitTags: util.arrayToString(selectedTags)});
-    }
+    else
+      var selectedTags = this.state.selectedTags.slice(0, tagIndex).concat(this.state.selectedTags.slice(tagIndex + 1, this.state.selectedTags.length));
+    this.setState({selectedTags: selectedTags, submitTags: util.arrayToString(selectedTags)});
   }
   removeTag(e) {
     var selectedTags = this.state.selectedTags.slice();

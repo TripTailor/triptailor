@@ -56,10 +56,10 @@ var Tags = function (_React$Component) {
   }, {
     key: 'selectTag',
     value: function selectTag(e) {
-      if (this.state.selectedTags.indexOf(e.target.textContent) == -1) {
-        var selectedTags = this.state.selectedTags.concat([e.target.textContent]);
-        this.setState({ selectedTags: selectedTags, submitTags: util.arrayToString(selectedTags) });
-      }
+      var tagIndex = this.state.selectedTags.indexOf(e.target.textContent);
+      if (tagIndex == -1) var selectedTags = this.state.selectedTags.concat([e.target.textContent]);else var selectedTags = this.state.selectedTags.slice(0, tagIndex).concat(this.state.selectedTags.slice(tagIndex + 1, this.state.selectedTags.length));
+      console.log(selectedTags);
+      this.setState({ selectedTags: selectedTags, submitTags: util.arrayToString(selectedTags) });
     }
   }, {
     key: 'removeTag',
