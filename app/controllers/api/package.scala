@@ -67,7 +67,7 @@ package object api {
 
   private[api] implicit val hostelWrites: Writes[HostelRow] =
     (
-      (__ \ "hotelId").write[Int] and
+      (__ \ "hostelId").write[Int] and
       (__ \ "name").write[String] and
       (__ \ "description").writeNullable[String] and
       (__ \ "price").writeNullable[Double] and
