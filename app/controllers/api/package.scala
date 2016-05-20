@@ -31,7 +31,7 @@ package object api {
   private[api] case class ClassificationParams(locationId: Int, tags: List[String])
   private[api] val classificationParams = Form(
     mapping(
-      "locationId" -> number,
+      "location_id" -> number,
       "tags"       -> list(nonEmptyText)
     )(ClassificationParams.apply)(ClassificationParams.unapply)
   )
