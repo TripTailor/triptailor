@@ -25,11 +25,55 @@ var Results = function Results() {
 };
 
 var Header = function Header() {
-  return _react2.default.createElement('div', null);
+  return _react2.default.createElement(
+    'div',
+    { className: 'container-fluid header' },
+    _react2.default.createElement(
+      'div',
+      { className: 'row' },
+      _react2.default.createElement(
+        'div',
+        { className: 'col-md-7' },
+        _react2.default.createElement(
+          'div',
+          { className: 'row' },
+          _react2.default.createElement(
+            'div',
+            { className: 'col-md-4 col-md-offset-3' },
+            _react2.default.createElement('input', { type: 'text', className: 'city-input', readOnly: true })
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'col-md-5' },
+            _react2.default.createElement('input', { type: 'text', className: 'check-in', readOnly: true }),
+            _react2.default.createElement('input', { type: 'text', className: 'check-out', readOnly: true })
+          )
+        )
+      )
+    ),
+    _react2.default.createElement(
+      'div',
+      { className: 'row tags-row' },
+      _react2.default.createElement(
+        'div',
+        { className: 'col-md-7' },
+        _react2.default.createElement('div', { className: 'tags' })
+      )
+    )
+  );
 };
 
 var Hostels = function Hostels() {
-  return _react2.default.createElement('div', null);
+  return _react2.default.createElement(
+    'div',
+    { className: 'container-fluid hostels' },
+    _react2.default.createElement(
+      'div',
+      { className: 'row' },
+      _react2.default.createElement('div', { className: 'col-md-6' }),
+      _react2.default.createElement('div', { className: 'col-md-6' })
+    )
+  );
 };
 
 _reactDom2.default.render(_react2.default.createElement(Results, null), (0, _jquery2.default)("#content")[0]);

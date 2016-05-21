@@ -73,11 +73,7 @@ body {
   color: #fff;
 }
 input {
-  height: 42px;
-  border: 1px solid #e3e3e3;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
-  padding: 13px;
-  outline: none;
 }
 .auto-complete-input-container {
   margin-top: 25px;
@@ -143,6 +139,7 @@ input {
   font-size: 16px;
   color: #fff;
   border: none;
+  outline: none;
 }
 
 .footer {

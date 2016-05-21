@@ -1,0 +1,31 @@
+.header {
+  margin-top: -70px;
+  padding-top: 14px;
+}
+.city-input {
+  width: 100%;
+  border-radius: 2px;
+}
+.check-in {
+  width: 50%;
+  border-radius: 2px 0 0 2px;
+}
+.check-out {
+  width: 50%;
+  border-left: none;
+  border-radius: 0 2px 2px 0;
+}
+.tags-row {
+  margin-top: 15px;
+}
+.tags {
+  height: 42px;
+  background-color: #fff;
+  border-radius: 2px;
+  border: solid 1px #e3e3e3;
+  margin-left: 10px;
+}
+
+.hostels {
+  margin-top: 15px;
+}
