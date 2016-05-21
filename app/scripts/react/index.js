@@ -2,13 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import datepicker from 'jquery-ui';
+import * as util from '../util';
 
 var TIMEOUT = 200;
 
-var dateToString = function(date) {
-  var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  return date.getDate() + " " +  months[date.getMonth()] + " " + date.getFullYear();
-};
 var dateToSubmit = function(date) {
   return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 };
@@ -34,8 +31,8 @@ class SearchForm extends React.Component {
 
     this.state = {
       city: "",
-      checkIn: dateToString(tomorrow),
-      checkOut: dateToString(toDate),
+      checkIn: util.dateToString(tomorrow),
+      checkOut: util.dateToString(toDate),
       submitCity: "",
       submitCheckIn: dateToSubmit(tomorrow),
       submitCheckOut: dateToSubmit(toDate),
@@ -144,7 +141,7 @@ class DateInput extends React.Component {
         minDate.setDate(fromDate.getDate() + 1);
 
         if(fromDate >= toDate)
-          this.props.updateCheckOut(dateToString(minDate));
+          this.props.updateCheckOut(util.dateToString(minDate));
 
         $(this.toInput).datepicker("option", "minDate", minDate);
 

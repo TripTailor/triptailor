@@ -117,8 +117,8 @@ var Tags = function (_React$Component) {
         ),
         _react2.default.createElement('input', { name: 'city', type: 'hidden', value: this.location[0] }),
         _react2.default.createElement('input', { name: 'country', type: 'hidden', value: this.location[1] }),
-        _react2.default.createElement('input', { name: 'checkIn', type: 'hidden', value: this.checkIn }),
-        _react2.default.createElement('input', { name: 'checkOut', type: 'hidden', value: this.checkOut }),
+        _react2.default.createElement('input', { name: 'check-in', type: 'hidden', value: this.checkIn }),
+        _react2.default.createElement('input', { name: 'check-out', type: 'hidden', value: this.checkOut }),
         _react2.default.createElement('input', { name: 'tags', type: 'hidden', value: this.state.submitTags })
       );
     }
@@ -128,8 +128,6 @@ var Tags = function (_React$Component) {
 }(_react2.default.Component);
 
 var InfoHeader = function InfoHeader(props) {
-  var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
   return _react2.default.createElement(
     'div',
     { className: 'info-header' },
@@ -145,21 +143,13 @@ var InfoHeader = function InfoHeader(props) {
     _react2.default.createElement(
       'strong',
       null,
-      months[props.checkIn.getMonth()],
-      ' ',
-      props.checkIn.getDate(),
-      ', ',
-      props.checkIn.getFullYear()
+      util.dateToString(props.checkIn)
     ),
     ' to ',
     _react2.default.createElement(
       'strong',
       null,
-      months[props.checkOut.getMonth()],
-      ' ',
-      props.checkOut.getDate(),
-      ', ',
-      props.checkOut.getFullYear()
+      util.dateToString(props.checkOut)
     )
   );
 };
@@ -283,7 +273,7 @@ _reactDom2.default.render(_react2.default.createElement(Tags, null), document.ge
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.arrayToString = exports.getQueryValue = undefined;
+exports.dateToString = exports.arrayToString = exports.getQueryValue = undefined;
 
 var _jquery = require("jquery");
 
@@ -311,8 +301,14 @@ var arrayToString = function arrayToString(arr) {
   return arr.length > 1 ? str.substring(0, str.length - 1) : str;
 };
 
+var dateToString = function dateToString(date) {
+  var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  return months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
+};
+
 exports.getQueryValue = getQueryValue;
 exports.arrayToString = arrayToString;
+exports.dateToString = dateToString;
 
 },{"jquery":4}],3:[function(require,module,exports){
 // shim for using process in browser

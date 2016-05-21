@@ -61,19 +61,17 @@ class Tags extends React.Component {
 
         <input name="city" type="hidden" value={this.location[0]} />
         <input name="country" type="hidden" value={this.location[1]} />
-        <input name="checkIn" type="hidden" value={this.checkIn} />
-        <input name="checkOut" type="hidden" value={this.checkOut} />
+        <input name="check-in" type="hidden" value={this.checkIn} />
+        <input name="check-out" type="hidden" value={this.checkOut} />
         <input name="tags" type="hidden" value={this.state.submitTags} />
       </form>
     );
   }
 }
 
-const InfoHeader = (props) => {
-  var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-  return <div className="info-header">Great, you're going to <strong>{props.city}, {props.country}</strong>, from <strong>{months[props.checkIn.getMonth()]} {props.checkIn.getDate()}, {props.checkIn.getFullYear()}</strong> to <strong>{months[props.checkOut.getMonth()]} {props.checkOut.getDate()}, {props.checkOut.getFullYear()}</strong></div>
-};
+const InfoHeader = (props) => (
+  <div className="info-header">Great, you're going to <strong>{props.city}, {props.country}</strong>, from <strong>{util.dateToString(props.checkIn)}</strong> to <strong>{util.dateToString(props.checkOut)}</strong></div>
+);
 
 class TagsSelector extends React.Component {
   constructor(props) {
