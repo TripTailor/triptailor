@@ -65,6 +65,12 @@ package object api {
       (__ \ "continent").writeNullable[String]
     )(unlift(LocationRow.unapply))
 
+  private[api] implicit val attributeWrites: Writes[AttributeRow] =
+    (
+      (__ \ "id").write[Int] and
+      (__ \ "name").write[String]
+    )(unlift(AttributeRow.unapply))
+
   private[api] implicit val hostelWrites: Writes[HostelRow] =
     (
       (__ \ "hostelId").write[Int] and

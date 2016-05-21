@@ -25,7 +25,6 @@ class HostelsController @Inject()(dbConfig: DatabaseConfigProvider, conf: Config
     )
   }
 
-  // TODO: Remove hardcoded b classification input param
   private def invokeService(params: ClassificationParams) = {
     import Tables._
     val classifiedDocs =

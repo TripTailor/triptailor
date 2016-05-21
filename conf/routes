@@ -11,6 +11,7 @@ GET     /message                    controllers.AsyncController.message
 
 # API Services
 GET   /api/locations              controllers.api.LocationsController.retrieveLocationHints
+GET   /api/tags                   controllers.api.TagsController.mostFrequentTags
 GET   /api/reviews                controllers.api.ReviewsController.retrieveReviews
 GET   /api/classification         controllers.api.HostelsController.classify
 
