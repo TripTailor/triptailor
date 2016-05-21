@@ -10,11 +10,12 @@ class Results extends React.Component {
     this.country = decodeURIComponent(util.getQueryValue("country"));
     this.checkIn = util.getQueryValue("check-in");
     this.checkOut = util.getQueryValue("check-out");
+    this.tags = util.getQueryValue("tags").split("-");
   }
   render() {
     return(
       <div>
-        <Header city={this.city} country={this.country} checkIn={new Date(this.checkIn)} checkOut={new Date(this.checkOut)} />
+        <Header city={this.city} country={this.country} checkIn={new Date(this.checkIn)} checkOut={new Date(this.checkOut)} tags={this.tags} />
         <Hostels />
       </div>
     );
@@ -38,15 +39,16 @@ const Header = (props) => (
     </div>
     <div className="row tags-row">
       <div className="col-md-7">
-        <TagsInput />
+        <TagsInput tags={props.tags} />
       </div>
     </div>
   </div>
 );
 
 const TagsInput = (props) => {
+  var tags = props.tags.map((tag, i) => <span key={i} className="tag">{tag}</span>);
   return (
-    <div className="tags"></div>
+    <div className="tags">{tags}</div>
   );
 };
 

@@ -19,11 +19,21 @@
   margin-top: 15px;
 }
 .tags {
-  height: 42px;
   background-color: #fff;
   border-radius: 2px;
   border: solid 1px #e3e3e3;
   margin-left: 10px;
+  padding: 6px 9.5px;
+}
+.tag {
+  padding: 6px 9px;
+  background-color: #686c9e;
+  color: #fff;
+  border-radius: 3px;
+  margin: 0 3.5px;
+  display: inline-block;
+  font-family: 'Open Sans', sans-serif;
+  cursor: default;
 }
 
 .hostels {

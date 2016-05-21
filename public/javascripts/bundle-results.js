@@ -41,6 +41,7 @@ var Results = function (_React$Component) {
     _this.country = decodeURIComponent(util.getQueryValue("country"));
     _this.checkIn = util.getQueryValue("check-in");
     _this.checkOut = util.getQueryValue("check-out");
+    _this.tags = util.getQueryValue("tags").split("-");
     return _this;
   }
 
@@ -50,7 +51,7 @@ var Results = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(Header, { city: this.city, country: this.country, checkIn: new Date(this.checkIn), checkOut: new Date(this.checkOut) }),
+        _react2.default.createElement(Header, { city: this.city, country: this.country, checkIn: new Date(this.checkIn), checkOut: new Date(this.checkOut), tags: this.tags }),
         _react2.default.createElement(Hostels, null)
       );
     }
@@ -92,14 +93,25 @@ var Header = function Header(props) {
       _react2.default.createElement(
         'div',
         { className: 'col-md-7' },
-        _react2.default.createElement(TagsInput, null)
+        _react2.default.createElement(TagsInput, { tags: props.tags })
       )
     )
   );
 };
 
 var TagsInput = function TagsInput(props) {
-  return _react2.default.createElement('div', { className: 'tags' });
+  var tags = props.tags.map(function (tag, i) {
+    return _react2.default.createElement(
+      'span',
+      { key: i, className: 'tag' },
+      tag
+    );
+  });
+  return _react2.default.createElement(
+    'div',
+    { className: 'tags' },
+    tags
+  );
 };
 
 var Hostels = function Hostels() {
