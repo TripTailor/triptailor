@@ -42,17 +42,41 @@ var Results = function (_React$Component) {
     _this.checkIn = util.getQueryValue("check-in");
     _this.checkOut = util.getQueryValue("check-out");
     _this.tags = util.getQueryValue("tags").split("-");
+    _this.state = {
+      results: []
+    };
     return _this;
   }
 
   _createClass(Results, [{
+    key: 'componentWillMount',
+    value: function componentWillMount() {
+      this.getHostels();
+    }
+  }, {
+    key: 'getHostels',
+    value: function getHostels() {
+      var url = jsRoutes.controllers.Assets.versioned("test/hostels.json").absoluteURL();
+      _jquery2.default.ajax({
+        url: url,
+        dataType: "json",
+        type: "GET",
+        success: function (data) {
+          this.setState({ results: data });
+        }.bind(this),
+        error: function error(xhr, status, err) {
+          console.error(url, status, err);
+        }
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
         'div',
         null,
         _react2.default.createElement(Header, { city: this.city, country: this.country, checkIn: new Date(this.checkIn), checkOut: new Date(this.checkOut), tags: this.tags }),
-        _react2.default.createElement(Hostels, null)
+        _react2.default.createElement(Hostels, { results: this.state.results })
       );
     }
   }]);
@@ -114,15 +138,42 @@ var TagsInput = function TagsInput(props) {
   );
 };
 
-var Hostels = function Hostels() {
-  return _react2.default.createElement(
+var Hostels = function Hostels(props) {
+  var rows = [];
+  for (var i = 0; i < props.results.length; i += 2) {
+    rows.push(_react2.default.createElement(HostelsRow, { key: i / 2, col1: props.results[i].document.model, col2: i + 1 < props.results.length ? props.results[i + 1].document.model : null }));
+  }return _react2.default.createElement(
     'div',
     { className: 'container-fluid hostels' },
+    rows
+  );
+};
+
+var HostelsRow = function HostelsRow(props) {
+  return _react2.default.createElement(
+    'div',
+    { className: 'row' },
     _react2.default.createElement(
       'div',
-      { className: 'row' },
-      _react2.default.createElement('div', { className: 'col-md-6' }),
-      _react2.default.createElement('div', { className: 'col-md-6' })
+      { className: 'col-md-6 hostel-col-left' },
+      _react2.default.createElement(Hostel, { name: props.col1.name, image: props.col1.images[0] })
+    ),
+    props.col2 ? _react2.default.createElement(
+      'div',
+      { className: 'col-md-6 hostel-col-right' },
+      _react2.default.createElement(Hostel, { name: props.col2.name, image: props.col2.images[0] })
+    ) : ""
+  );
+};
+
+var Hostel = function Hostel(props) {
+  return _react2.default.createElement(
+    'div',
+    { className: 'hostel', style: { backgroundImage: "url('" + props.image + "')" } },
+    _react2.default.createElement(
+      'div',
+      { className: 'hostel-name' },
+      props.name
     )
   );
 };

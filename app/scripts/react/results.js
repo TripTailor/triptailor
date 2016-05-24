@@ -11,12 +11,32 @@ class Results extends React.Component {
     this.checkIn = util.getQueryValue("check-in");
     this.checkOut = util.getQueryValue("check-out");
     this.tags = util.getQueryValue("tags").split("-");
+    this.state = {
+      results: []
+    };
+  }
+  componentWillMount() {
+    this.getHostels();
+  }
+  getHostels() {
+    var url = jsRoutes.controllers.Assets.versioned("test/hostels.json").absoluteURL();
+    $.ajax({
+      url: url,
+      dataType: "json",
+      type: "GET",
+      success: function(data) {
+        this.setState({results: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(url, status, err);
+      }
+    });
   }
   render() {
     return(
       <div>
         <Header city={this.city} country={this.country} checkIn={new Date(this.checkIn)} checkOut={new Date(this.checkOut)} tags={this.tags} />
-        <Hostels />
+        <Hostels results={this.state.results} />
       </div>
     );
   }
@@ -52,12 +72,25 @@ const TagsInput = (props) => {
   );
 };
 
-const Hostels = () => (
-  <div className="container-fluid hostels">
-    <div className="row">
-      <div className="col-md-6"></div>
-      <div className="col-md-6"></div>
-    </div>
+const Hostels = (props) => {
+  var rows = [];
+  for(var i = 0; i < props.results.length; i+=2)
+  rows.push(<HostelsRow key={i / 2} col1={props.results[i].document.model} col2={i + 1 < props.results.length ? props.results[i + 1].document.model : null} />);
+  return(
+    <div className="container-fluid hostels">{rows}</div>
+  );
+};
+
+const HostelsRow = (props) => (
+  <div className="row">
+    <div className="col-md-6 hostel-col-left"><Hostel name={props.col1.name} image={props.col1.images[0]} /></div>
+    {props.col2 ? <div className="col-md-6 hostel-col-right"><Hostel name={props.col2.name} image={props.col2.images[0]} /></div> : ""}
+  </div>
+);
+
+const Hostel = (props) => (
+  <div className="hostel" style={{backgroundImage: "url('" + props.image + "')"}}>
+    <div className="hostel-name">{props.name}</div>
   </div>
 );
 

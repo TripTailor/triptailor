@@ -39,3 +39,29 @@
 .hostels {
   margin-top: 15px;
 }
+.hostel-col-left {
+  padding-left: 0;
+  padding-right: 5px;
+}
+.hostel-col-right {
+  padding-right: 0;
+  padding-left: 5px;
+}
+.hostel {
+  position: relative;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  height: 220px;
+  margin-bottom: 10px;
+}
+.hostel-name {
+  position: absolute;
+  left: 28px;
+  bottom: 15px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
