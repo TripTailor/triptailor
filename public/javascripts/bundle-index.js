@@ -224,6 +224,7 @@ var DateInput = function (_React$Component2) {
     value: function componentDidMount() {
       (0, _jquery2.default)(this.fromInput).datepicker({
         dateFormat: "dd M yy",
+        minDate: 0,
         onSelect: function (date, inst) {
           var fromDate = new Date(date);
           var toDate = new Date((0, _jquery2.default)(this.toInput).datepicker("getDate"));
@@ -240,6 +241,7 @@ var DateInput = function (_React$Component2) {
 
       (0, _jquery2.default)(this.toInput).datepicker({
         dateFormat: "dd M yy",
+        minDate: 2,
         onSelect: function (date, inst) {
           var fromDate = new Date((0, _jquery2.default)(this.fromInput).datepicker("getDate"));
           var toDate = new Date(date);
@@ -247,13 +249,6 @@ var DateInput = function (_React$Component2) {
           this.props.updateCheckOut(date);
         }.bind(this)
       });
-
-      var today = new Date(this.props.checkIn);
-      today.setDate(today.getDate() - 1);
-      (0, _jquery2.default)(this.fromInput).datepicker("option", "minDate", today);
-
-      var minDate = new Date(this.props.checkIn);
-      (0, _jquery2.default)(this.toInput).datepicker("option", "minDate", minDate);
     }
   }, {
     key: 'render',

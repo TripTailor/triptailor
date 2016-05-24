@@ -134,6 +134,7 @@ class DateInput extends React.Component {
   componentDidMount() {
     $(this.fromInput).datepicker({
       dateFormat: "dd M yy",
+      minDate: 0,
       onSelect: function(date, inst) {
         var fromDate = new Date(date);
         var toDate = new Date($(this.toInput).datepicker("getDate"));
@@ -151,6 +152,7 @@ class DateInput extends React.Component {
 
     $(this.toInput).datepicker({
       dateFormat: "dd M yy",
+      minDate: 2,
       onSelect: function(date, inst) {
         var fromDate = new Date($(this.fromInput).datepicker("getDate"));
         var toDate = new Date(date);
@@ -158,13 +160,6 @@ class DateInput extends React.Component {
         this.props.updateCheckOut(date);
       }.bind(this)
     });
-
-    var today = new Date(this.props.checkIn);
-    today.setDate(today.getDate() - 1);
-    $(this.fromInput).datepicker("option", "minDate", today);
-
-    var minDate = new Date(this.props.checkIn);
-    $(this.toInput).datepicker("option", "minDate", minDate);
   }
   render() {
     return (
