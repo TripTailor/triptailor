@@ -178,77 +178,123 @@ var HostelsRow = function HostelsRow(props) {
     _react2.default.createElement(
       'div',
       { className: 'col-md-6 hostel-col-left' },
-      _react2.default.createElement(Hostel, { name: props.col1.name, image: props.col1.images[0] })
+      _react2.default.createElement(Hostel, { name: props.col1.name, images: props.col1.images })
     ),
     props.col2 ? _react2.default.createElement(
       'div',
       { className: 'col-md-6 hostel-col-right' },
-      _react2.default.createElement(Hostel, { name: props.col2.name, image: props.col2.images[0] })
+      _react2.default.createElement(Hostel, { name: props.col2.name, images: props.col2.images })
     ) : ""
   );
 };
 
-var Hostel = function Hostel(props) {
-  return _react2.default.createElement(
-    'div',
-    { className: 'hostel' },
-    _react2.default.createElement(
-      'div',
-      { className: 'hostel-image', style: { backgroundImage: "url('" + props.image + "')" } },
-      _react2.default.createElement(
+var Hostel = function (_React$Component2) {
+  _inherits(Hostel, _React$Component2);
+
+  function Hostel(props) {
+    _classCallCheck(this, Hostel);
+
+    var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(Hostel).call(this, props));
+
+    _this2.state = {
+      selectedImage: 0
+    };
+    return _this2;
+  }
+
+  _createClass(Hostel, [{
+    key: 'moveImage',
+    value: function moveImage(e) {
+      switch (e.target) {
+        case this.controllerLeft:
+          this.setState({ selectedImage: this.state.selectedImage - 1 >= 0 ? this.state.selectedImage - 1 : this.props.images.length - 1 });break;
+        case this.controllerRight:
+          this.setState({ selectedImage: this.state.selectedImage + 1 < this.props.images.length ? this.state.selectedImage + 1 : 0 });break;
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _this3 = this;
+
+      return _react2.default.createElement(
         'div',
-        { className: 'hostel-name' },
-        props.name
-      )
-    ),
-    _react2.default.createElement(
-      'div',
-      { className: 'container-fluid hostel-tags' },
-      _react2.default.createElement(
-        'div',
-        { className: 'hostel-tags-copy' },
-        'See what people are saying:'
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'row' },
+        { className: 'hostel' },
         _react2.default.createElement(
           'div',
-          { className: 'col-md-6' },
-          'location'
+          { className: 'hostel-image', style: this.props.images.length > 0 ? { backgroundImage: "url('" + this.props.images[this.state.selectedImage] + "')" } : "" },
+          this.props.images.length > 1 ? _react2.default.createElement(
+            'div',
+            { ref: function ref(button) {
+                return _this3.controllerLeft = button;
+              }, className: 'image-controller-left', onClick: this.moveImage.bind(this) },
+            "<"
+          ) : "",
+          this.props.images.length > 1 ? _react2.default.createElement(
+            'div',
+            { ref: function ref(button) {
+                return _this3.controllerRight = button;
+              }, className: 'image-controller-right', onClick: this.moveImage.bind(this) },
+            ">"
+          ) : "",
+          _react2.default.createElement(
+            'div',
+            { className: 'hostel-name' },
+            this.props.name
+          )
         ),
         _react2.default.createElement(
           'div',
-          { className: 'col-md-6' },
-          'party'
-        )
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'row' },
+          { className: 'container-fluid hostel-tags' },
+          _react2.default.createElement(
+            'div',
+            { className: 'hostel-tags-copy' },
+            'See what people are saying:'
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'row' },
+            _react2.default.createElement(
+              'div',
+              { className: 'col-md-6' },
+              'location'
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'col-md-6' },
+              'party'
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'row' },
+            _react2.default.createElement(
+              'div',
+              { className: 'col-md-6' },
+              'food'
+            )
+          )
+        ),
         _react2.default.createElement(
           'div',
-          { className: 'col-md-6' },
-          'food'
+          { className: 'hostel-reviews' },
+          _react2.default.createElement(
+            'div',
+            { className: 'hostel-reviews-text' },
+            'The  location  of this hostel is the best; just 3 blocks walking from Empire State and other stuff.'
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'hostel-reviews-author' },
+            '— Thomas Bangalter'
+          )
         )
-      )
-    ),
-    _react2.default.createElement(
-      'div',
-      { className: 'hostel-reviews' },
-      _react2.default.createElement(
-        'div',
-        { className: 'hostel-reviews-text' },
-        'The  location  of this hostel is the best; just 3 blocks walking from Empire State and other stuff.'
-      ),
-      _react2.default.createElement(
-        'div',
-        { className: 'hostel-reviews-author' },
-        '— Thomas Bangalter'
-      )
-    )
-  );
-};
+      );
+    }
+  }]);
+
+  return Hostel;
+}(_react2.default.Component);
 
 _reactDom2.default.render(_react2.default.createElement(Results, null), (0, _jquery2.default)("#content")[0]);
 

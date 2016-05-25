@@ -63,6 +63,19 @@
   background-size: cover;
   height: 220px;
 }
+.image-controller-left {
+  float: left;
+}
+.image-controller-right {
+  float: right;
+}
+.image-controller-left, .image-controller-right {
+  font-weight: 700;
+  line-height: 190px;
+  font-size: 42px;
+  padding: 15px;
+  cursor: pointer;
+}
 .hostel-name {
   position: absolute;
   left: 28px;

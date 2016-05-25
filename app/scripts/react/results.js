@@ -89,31 +89,49 @@ const Hostels = (props) => {
 
 const HostelsRow = (props) => (
   <div className="row">
-    <div className="col-md-6 hostel-col-left"><Hostel name={props.col1.name} image={props.col1.images[0]} /></div>
-    {props.col2 ? <div className="col-md-6 hostel-col-right"><Hostel name={props.col2.name} image={props.col2.images[0]} /></div> : ""}
+    <div className="col-md-6 hostel-col-left"><Hostel name={props.col1.name} images={props.col1.images} /></div>
+    {props.col2 ? <div className="col-md-6 hostel-col-right"><Hostel name={props.col2.name} images={props.col2.images} /></div> : ""}
   </div>
 );
 
-const Hostel = (props) => (
-  <div className="hostel">
-    <div className="hostel-image" style={{backgroundImage: "url('" + props.image + "')"}}>
-      <div className="hostel-name">{props.name}</div>
-    </div>
-    <div className="container-fluid hostel-tags">
-      <div className="hostel-tags-copy">See what people are saying:</div>
-      <div className="row">
-        <div className="col-md-6">location</div>
-        <div className="col-md-6">party</div>
+class Hostel extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedImage: 0
+    };
+  }
+  moveImage(e) {
+    switch(e.target) {
+      case this.controllerLeft: this.setState({selectedImage: this.state.selectedImage - 1 >= 0 ? this.state.selectedImage - 1 : this.props.images.length - 1}); break;
+      case this.controllerRight: this.setState({selectedImage: this.state.selectedImage + 1 < this.props.images.length ? this.state.selectedImage + 1 : 0}); break;
+    }
+  }
+  render() {
+    return (
+      <div className="hostel">
+        <div className="hostel-image" style={this.props.images.length > 0 ? {backgroundImage: "url('" + this.props.images[this.state.selectedImage] + "')"} : ""}>
+          {this.props.images.length > 1 ? <div ref={(button) => this.controllerLeft = button} className="image-controller-left" onClick={this.moveImage.bind(this)}>{"<"}</div> : ""}
+          {this.props.images.length > 1 ? <div ref={(button) => this.controllerRight = button} className="image-controller-right" onClick={this.moveImage.bind(this)}>{">"}</div> : ""}
+          <div className="hostel-name">{this.props.name}</div>
+        </div>
+        <div className="container-fluid hostel-tags">
+          <div className="hostel-tags-copy">See what people are saying:</div>
+          <div className="row">
+            <div className="col-md-6">location</div>
+            <div className="col-md-6">party</div>
+          </div>
+          <div className="row">
+            <div className="col-md-6">food</div>
+          </div>
+        </div>
+        <div className="hostel-reviews">
+          <div className="hostel-reviews-text">The  location  of this hostel is the best; just 3 blocks walking from Empire State and other stuff.</div>
+          <div className="hostel-reviews-author">— Thomas Bangalter</div>
+        </div>
       </div>
-      <div className="row">
-        <div className="col-md-6">food</div>
-      </div>
-    </div>
-    <div className="hostel-reviews">
-      <div className="hostel-reviews-text">The  location  of this hostel is the best; just 3 blocks walking from Empire State and other stuff.</div>
-      <div className="hostel-reviews-author">— Thomas Bangalter</div>
-    </div>
-  </div>
-);
+    );
+  }
+}
 
 ReactDOM.render(<Results />, $("#content")[0]);
