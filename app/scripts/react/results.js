@@ -95,8 +95,24 @@ const HostelsRow = (props) => (
 );
 
 const Hostel = (props) => (
-  <div className="hostel" style={{backgroundImage: "url('" + props.image + "')"}}>
-    <div className="hostel-name">{props.name}</div>
+  <div className="hostel">
+    <div className="hostel-image" style={{backgroundImage: "url('" + props.image + "')"}}>
+      <div className="hostel-name">{props.name}</div>
+    </div>
+    <div className="container-fluid hostel-tags">
+      <div className="hostel-tags-copy">See what people are saying:</div>
+      <div className="row">
+        <div className="col-md-6">location</div>
+        <div className="col-md-6">party</div>
+      </div>
+      <div className="row">
+        <div className="col-md-6">food</div>
+      </div>
+    </div>
+    <div className="hostel-reviews">
+      <div className="hostel-reviews-text">The  location  of this hostel is the best; just 3 blocks walking from Empire State and other stuff.</div>
+      <div className="hostel-reviews-author">— Thomas Bangalter</div>
+    </div>
   </div>
 );
 

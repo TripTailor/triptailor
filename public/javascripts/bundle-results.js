@@ -191,11 +191,61 @@ var HostelsRow = function HostelsRow(props) {
 var Hostel = function Hostel(props) {
   return _react2.default.createElement(
     'div',
-    { className: 'hostel', style: { backgroundImage: "url('" + props.image + "')" } },
+    { className: 'hostel' },
     _react2.default.createElement(
       'div',
-      { className: 'hostel-name' },
-      props.name
+      { className: 'hostel-image', style: { backgroundImage: "url('" + props.image + "')" } },
+      _react2.default.createElement(
+        'div',
+        { className: 'hostel-name' },
+        props.name
+      )
+    ),
+    _react2.default.createElement(
+      'div',
+      { className: 'container-fluid hostel-tags' },
+      _react2.default.createElement(
+        'div',
+        { className: 'hostel-tags-copy' },
+        'See what people are saying:'
+      ),
+      _react2.default.createElement(
+        'div',
+        { className: 'row' },
+        _react2.default.createElement(
+          'div',
+          { className: 'col-md-6' },
+          'location'
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'col-md-6' },
+          'party'
+        )
+      ),
+      _react2.default.createElement(
+        'div',
+        { className: 'row' },
+        _react2.default.createElement(
+          'div',
+          { className: 'col-md-6' },
+          'food'
+        )
+      )
+    ),
+    _react2.default.createElement(
+      'div',
+      { className: 'hostel-reviews' },
+      _react2.default.createElement(
+        'div',
+        { className: 'hostel-reviews-text' },
+        'The  location  of this hostel is the best; just 3 blocks walking from Empire State and other stuff.'
+      ),
+      _react2.default.createElement(
+        'div',
+        { className: 'hostel-reviews-author' },
+        '— Thomas Bangalter'
+      )
     )
   );
 };

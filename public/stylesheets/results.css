@@ -50,19 +50,18 @@
 }
 .hostel-col-left {
   padding-left: 0;
-  padding-right: 5px;
+  padding-right: 0;
 }
 .hostel-col-right {
   padding-right: 0;
-  padding-left: 5px;
+  padding-left: 0;
 }
-.hostel {
+.hostel-image {
   position: relative;
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
   height: 220px;
-  margin-bottom: 10px;
 }
 .hostel-name {
   position: absolute;
@@ -74,4 +73,19 @@
   color: #fff;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   text-decoration: underline;
+}
+.hostel-tags {
+  padding: 15px 15px 15px 25px;
+  background-color: #f4f5f7;
+}
+.hostel-tags-copy {
+  margin-bottom: 25px;
+}
+.hostel-reviews {
+  height: 200px;
+  background-color: #fff;
+  padding: 30px;
+}
+.hostel-reviews-author {
+  text-align: right;
 }
