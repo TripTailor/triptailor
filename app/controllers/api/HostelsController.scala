@@ -2,7 +2,6 @@ package controllers.api
 
 import javax.inject.{Inject, Singleton}
 
-import models.db.schema.Tables
 import models.db.services.{HostelsRetrievalService, HostelsRetrievalServiceImpl}
 import play.api.Configuration
 import play.api.db.slick.DatabaseConfigProvider
@@ -26,11 +25,10 @@ class HostelsController @Inject()(dbConfig: DatabaseConfigProvider, conf: Config
   }
 
   private def invokeService(params: ClassificationParams) = {
-    import Tables._
     val classifiedDocs =
       for {
         ratedDocs  ← service.retrieveHostelsModel(params.locationId)
-        classifier = new ClassificationService[HostelRow](ratedDocs, conf.getDouble("classification.b").get, params.tags)
+        classifier = new ClassificationService(ratedDocs, conf.getDouble("classification.b").get, params.tags)
       } yield classifier.classify
 
     classifiedDocs.map(Json.toJson(_)).map(Ok(_))
