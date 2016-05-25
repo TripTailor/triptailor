@@ -2,11 +2,13 @@
   background-color: #f4f5f7;
 }
 .brand {
+  position: relative;
   padding: 25px;
   font-family: 'Ubuntu', sans-serif;
   display: inline-block;
   font-weight: 700;
   color: #4b508d;
+  z-index: 1;
 }
 .brand:visited, .brand:hover, .brand:active {
   text-decoration: none;
