@@ -33,8 +33,10 @@ class HostelsRetrievalServiceImpl(dbConfigProvider: DatabaseConfigProvider) exte
         val h    = comp.h
         val a    = comp.a
         val ha   = comp.ha
-        if (res == null)
-          RatedDocument(h, Map(a.name -> RatingMetrics(ha.rating, ha.freq, ha.cfreq)))
+        if (nxt.isEmpty)
+          res
+        else if (res == null)
+          buildDocument(RatedDocument(h, Map(a.name -> RatingMetrics(ha.rating, ha.freq, ha.cfreq))))(nxt.tail)
         else
           buildDocument(res.copy(metrics = res.metrics.updated(a.name, RatingMetrics(ha.rating, ha.freq, ha.cfreq))))(nxt.tail)
       }
