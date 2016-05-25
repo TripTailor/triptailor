@@ -75,7 +75,7 @@ var Results = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(Header, { city: this.city, country: this.country, checkIn: new Date(this.checkIn), checkOut: new Date(this.checkOut), tags: this.tags }),
+        _react2.default.createElement(Header, { city: this.city, country: this.country, checkIn: new Date(this.checkIn), checkOut: new Date(this.checkOut), tags: this.tags, noResults: this.state.results.length }),
         _react2.default.createElement(Hostels, { results: this.state.results })
       );
     }
@@ -118,6 +118,28 @@ var Header = function Header(props) {
         'div',
         { className: 'col-md-7' },
         _react2.default.createElement(TagsInput, { tags: props.tags })
+      ),
+      _react2.default.createElement(
+        'div',
+        { className: 'col-md-5 no-results-container' },
+        _react2.default.createElement(
+          'div',
+          { className: 'no-results' },
+          _react2.default.createElement(
+            'div',
+            null,
+            'Results'
+          ),
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement(
+              'strong',
+              null,
+              props.noResults
+            )
+          )
+        )
       )
     )
   );

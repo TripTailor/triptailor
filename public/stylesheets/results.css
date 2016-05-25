@@ -35,6 +35,15 @@
   font-family: 'Open Sans', sans-serif;
   cursor: default;
 }
+.no-results-container {
+  height: 46px;
+}
+.no-results {
+  font-size: 12px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
 
 .hostels {
   margin-top: 15px;

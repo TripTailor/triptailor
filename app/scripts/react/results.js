@@ -35,7 +35,7 @@ class Results extends React.Component {
   render() {
     return(
       <div>
-        <Header city={this.city} country={this.country} checkIn={new Date(this.checkIn)} checkOut={new Date(this.checkOut)} tags={this.tags} />
+        <Header city={this.city} country={this.country} checkIn={new Date(this.checkIn)} checkOut={new Date(this.checkOut)} tags={this.tags} noResults={this.state.results.length} />
         <Hostels results={this.state.results} />
       </div>
     );
@@ -60,6 +60,12 @@ const Header = (props) => (
     <div className="row tags-row">
       <div className="col-md-7">
         <TagsInput tags={props.tags} />
+      </div>
+      <div className="col-md-5 no-results-container">
+        <div className="no-results">
+          <div>Results</div>
+          <div><strong>{props.noResults}</strong></div>
+        </div>
       </div>
     </div>
   </div>
