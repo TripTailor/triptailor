@@ -31,7 +31,7 @@ class TagsServiceImpl(dbConfigProvider: DatabaseConfigProvider) extends TagsServ
            AND  ha.attribute_id = a.id
            AND  l.id = $locationId
       GROUP BY  a.id
-      ORDER BY  SUM(ha.freq)
+      ORDER BY  SUM(ha.freq) DESC
       LIMIT 45;
     """.as[AttributeRow]
 }

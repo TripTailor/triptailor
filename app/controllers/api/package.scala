@@ -96,11 +96,7 @@ package object api {
 
   private[api] implicit def ratedDocumentWrites[A: Writes]: Writes[RatedDocument[A]] =
     new Writes[RatedDocument[A]] {
-      def writes(rd: RatedDocument[A]): JsValue =
-        Json.obj(
-          "model"   -> rd.model,
-          "metrics" -> rd.metrics
-        )
+      def writes(rd: RatedDocument[A]): JsValue = Json toJson rd.model
     }
 
   private[api] implicit val classifiedTagWrites: Writes[ClassifiedTag] =
