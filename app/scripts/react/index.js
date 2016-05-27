@@ -9,9 +9,6 @@ var TIMEOUT = 200;
 var dateToSubmit = function(date) {
   return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 };
-var formatComponent = function(component) {
-  return component.trim().replace(", ", ",");
-}
 
 const Index = () => (
   <div className="index-container">
@@ -33,7 +30,8 @@ class SearchForm extends React.Component {
       city: "",
       checkIn: util.dateToString(tomorrow),
       checkOut: util.dateToString(toDate),
-      submitCity: "",
+      location: "",
+      locationId: -1,
       submitCheckIn: dateToSubmit(tomorrow),
       submitCheckOut: dateToSubmit(toDate),
       cityHints: [],
@@ -41,7 +39,7 @@ class SearchForm extends React.Component {
     };
   }
   updateCity(e) {
-    this.setState({city: e.target.value, submitCity: formatComponent(e.target.value), error: false}, this.getCityHints.bind(this, e.target));
+    this.setState({city: e.target.value}, this.getCityHints.bind(this, e.target));
   }
   updateCheckIn(date) {
     this.setState({checkIn: date, submitCheckIn: dateToSubmit(new Date(date))});
@@ -49,8 +47,8 @@ class SearchForm extends React.Component {
   updateCheckOut(date) {
     this.setState({checkOut: date, submitCheckOut: dateToSubmit(new Date(date))});
   }
-  selectHint(e) {
-    this.setState({city: $(e.target).text(), submitCity: formatComponent($(e.target).text()), cityHints: [], error: false});
+  selectHint(hint) {
+    this.setState({city: hint.city + ", " + hint.country, locationId: hint.id, location: hint.city + "," + hint.country, cityHints: [], error: false});
   }
   handleBlur(e) {
     this.setState({cityHints: []});
@@ -60,14 +58,14 @@ class SearchForm extends React.Component {
       this.setState({cityHints: []});
   }
   validateForm(e) {
-    if(this.state.submitCity == "") {
+    if(this.state.locationId == -1) {
       this.setState({error: true});
       e.preventDefault();
     }
   }
   getCityHints(input) {
     var value = input.value;
-    var url = jsRoutes.controllers.Assets.versioned("test/autocomplete.json").absoluteURL();
+    var url = "http://localhost:9000/api/locations?q=" + value
     setTimeout(function() {
       if(value.trim().length > 0 && $(input).is(":focus") && value == input.value) {
         $.ajax({
@@ -92,7 +90,7 @@ class SearchForm extends React.Component {
         <div className="title">TripTailor Hostels</div>
         <div className="subtitle">Imagine staying at the hostel you've been looking for</div>
         <div className="hint-copy">Where and when do you want to go?</div>
-        <AutoCompleteInput city={this.state.city} updateCity={this.updateCity.bind(this)} submitCity={this.state.submitCity} hints={this.state.cityHints} selectHint={this.selectHint.bind(this)} handleBlur={this.handleBlur.bind(this)} handleKeyUp={this.handleKeyUp.bind(this)} error={this.state.error} />
+        <AutoCompleteInput city={this.state.city} updateCity={this.updateCity.bind(this)} location={this.state.location} locationId={this.state.locationId} hints={this.state.cityHints} selectHint={this.selectHint.bind(this)} handleBlur={this.handleBlur.bind(this)} handleKeyUp={this.handleKeyUp.bind(this)} error={this.state.error} />
         <DateInput checkIn={this.state.checkIn} updateCheckIn={this.updateCheckIn.bind(this)} checkOut={this.state.checkOut} updateCheckOut={this.updateCheckOut.bind(this)} submitCheckIn={this.state.submitCheckIn} submitCheckOut={this.state.submitCheckOut} cancelBlur={this.cancelBlur} />
         <button type="submit" className="next-button">Next</button>
       </form>
@@ -104,7 +102,8 @@ const AutoCompleteInput = (props) => (
   <div className="auto-complete-input-container">
     <input type="text" className={"auto-complete-input" + (props.error ? " error" : "")} autoComplete="off" placeholder="Pick a city" value={props.city} onChange={props.updateCity} onBlur={props.handleBlur} onKeyUp={props.handleKeyUp} />
     <AutoComplete hints={props.hints} selectHint={props.selectHint} cancelBlur={props.cancelBlur} />
-    <input name="city" type="hidden" value={props.submitCity} />
+    <input name="location-id" type="hidden" value={props.locationId} />
+    <input name="location" type="hidden" value={props.location} />
   </div>
 );
 
@@ -118,7 +117,7 @@ const AutoComplete = (props) => {
       case 0: className += " first-row"; break;
       case props.hints.length - 1: className += " last-row"; break;
     };
-    return <div key={i} className={className} onClick={props.selectHint} onMouseDown={cancelBlur}>{hint}</div>;
+    return <div key={i} className={className} onClick={() => props.selectHint(hint)} onMouseDown={cancelBlur}>{hint.city + ", " + hint.country}</div>;
   });
   return (
     <div className="auto-complete-container">

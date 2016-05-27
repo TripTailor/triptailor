@@ -7,7 +7,7 @@ class Tags extends React.Component {
   constructor() {
     super();
 
-    this.location = decodeURIComponent(util.getQueryValue("city")).split(",");
+    this.location = decodeURIComponent(util.getQueryValue("location")).split(",");
     this.checkIn = util.getQueryValue("check-in");
     this.checkOut = util.getQueryValue("check-out");
     this.state = {

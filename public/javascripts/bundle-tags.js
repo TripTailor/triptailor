@@ -37,7 +37,7 @@ var Tags = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tags).call(this));
 
-    _this.location = decodeURIComponent(util.getQueryValue("city")).split(",");
+    _this.location = decodeURIComponent(util.getQueryValue("location")).split(",");
     _this.checkIn = util.getQueryValue("check-in");
     _this.checkOut = util.getQueryValue("check-out");
     _this.state = {
