@@ -109,6 +109,7 @@ package object api {
     new Writes[ClassifiedDocument[A]] {
       def writes(cd: ClassifiedDocument[A]): JsValue =
         Json.obj(
+          "rating"   -> cd.rating,
           "document" -> cd.doc,
           "ctags"    -> cd.ctags
         )
