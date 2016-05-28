@@ -52,7 +52,7 @@ package object api {
       (__ \ "lat").writeNullable[Short] and
       (__ \ "long").writeNullable[Short] and
       (__ \ "sentiments").writeNullable[JsValue] and
-      (__ \ "attribute").writeNullable[JsValue]
+      (__ \ "attributes").writeNullable[JsValue]
     )(unlift(ReviewRow.unapply))
 
   private[api] implicit val locationWrites: Writes[LocationRow] =
