@@ -53,7 +53,9 @@ package object api {
       (__ \ "long").writeNullable[Short] and
       (__ \ "sentiments").writeNullable[JsValue] and
       (__ \ "attributes").writeNullable[JsValue]
-    )(unlift(ReviewRow.unapply))
+    )(unlift(ReviewRow.unapply)).transform { (json: JsObject) =>
+      json - "sentiment"
+    }
 
   private[api] implicit val locationWrites: Writes[LocationRow] =
     (
