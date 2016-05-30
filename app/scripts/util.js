@@ -15,7 +15,7 @@ const getQueryValue = (variable) => {
 const arrayToString = (arr) => {
   var str = "";
   arr.forEach((elem) => str += elem + "-");
-  return arr.length > 1 ? str.substring(0, str.length - 1) : str;
+  return arr.length > 0 ? str.substring(0, str.length - 1) : str;
 }
 
 const dateToString = (date) => {
