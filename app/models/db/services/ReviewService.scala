@@ -4,14 +4,22 @@ import models.db.schema.Tables
 import play.api.db.slick.DatabaseConfigProvider
 import slick.driver.JdbcProfile
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 trait ReviewService {
   import Tables._
   def retrieveRelevantReviews(hostelIds: Seq[Int], tags: Seq[String]): Future[Seq[ReviewRow]]
 }
 
-class ReviewServiceImpl(dbConfigProvider: DatabaseConfigProvider) extends ReviewService {
+trait FilterAttributesFromReview {
+  import play.api.libs.json._
+
+  def filterAttributesFromTags(tags: Set[String])(attributes: JsValue): JsValue =
+    JsArray(attributes.as[Seq[JsValue]].filter(attribute => tags((attribute \ "attribute_name").as[String])))
+}
+
+class ReviewServiceImpl(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)
+    extends ReviewService with FilterAttributesFromReview {
   import Tables._
 
   val dbConfig = dbConfigProvider.get[JdbcProfile]
@@ -19,11 +27,16 @@ class ReviewServiceImpl(dbConfigProvider: DatabaseConfigProvider) extends Review
   import dbConfig.driver.api._
 
   def retrieveRelevantReviews(hostelIds: Seq[Int], tags: Seq[String]): Future[Seq[ReviewRow]] =
-    dbConfig.db.run(reviewsAction(hostelIds, tags))
+    dbConfig.db.run(reviewsAction(hostelIds, tags).map(filterReviewsAttributes(tags.toSet)))
 
-  private def reviewsAction(hostelIds: Seq[Int], tags: Seq[String]) = {
-    val action =
-      sql"""
+  private def filterReviewsAttributes(tags: Set[String])(reviews: Seq[ReviewRow]) = {
+    def filterReviewAttributes(review: ReviewRow) =
+      review.copy(attributes = review.attributes.map(filterAttributesFromTags(tags)))
+    reviews.map(filterReviewAttributes)
+  }
+
+  private def reviewsAction(hostelIds: Seq[Int], tags: Seq[String]) =
+    sql"""
         SELECT review.*
         FROM review
         INNER JOIN (
@@ -43,8 +56,5 @@ class ReviewServiceImpl(dbConfigProvider: DatabaseConfigProvider) extends Review
         WHERE review.hostel_id = ANY('{#${hostelIds.mkString(",")}}')
         ORDER BY review.hostel_id, (review.sentiments->>max_sentence_nbr)::int DESC;
       """.as[ReviewRow]
-    println(action.statements mkString "\n")
-    action
-  }
 
 }
