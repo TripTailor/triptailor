@@ -7,6 +7,7 @@ class Tags extends React.Component {
   constructor() {
     super();
 
+    this.locationId = util.getQueryValue("location-id");
     this.location = decodeURIComponent(util.getQueryValue("location")).split(",");
     this.checkIn = util.getQueryValue("check-in");
     this.checkOut = util.getQueryValue("check-out");
@@ -33,7 +34,7 @@ class Tags extends React.Component {
     this.setState({selectedTags: selectedTags, submitTags: util.arrayToString(selectedTags)});
   }
   getTagSuggestions() {
-    var url = jsRoutes.controllers.Assets.versioned("test/tags.json").absoluteURL();
+    var url = "http://localhost:9000/api/tags?id=" + this.locationId;
     $.ajax({
       url: url,
       dataType: "json",
@@ -87,7 +88,7 @@ class TagsSelector extends React.Component {
     }
   }
   render() {
-    var buildTag = (tag, i) => <span key={i} className={"tag" + (this.props.selectedTags.indexOf(tag) != -1 ? " selected" : "")} onClick={this.props.selectTag}>{tag}</span>
+    var buildTag = (tag, i) => <span key={i} className={"tag" + (this.props.selectedTags.indexOf(tag.name) != -1 ? " selected" : "")} onClick={this.props.selectTag}>{tag.name}</span>
     var offset = $(window).width() < 510 ? 10: 15;
     var panel1 = this.props.tags.slice(0, offset).map(buildTag);
     var panel2 = this.props.tags.slice(offset, offset * 2).map(buildTag);

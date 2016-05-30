@@ -37,6 +37,7 @@ var Tags = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Tags).call(this));
 
+    _this.locationId = util.getQueryValue("location-id");
     _this.location = decodeURIComponent(util.getQueryValue("location")).split(",");
     _this.checkIn = util.getQueryValue("check-in");
     _this.checkOut = util.getQueryValue("check-out");
@@ -70,7 +71,7 @@ var Tags = function (_React$Component) {
   }, {
     key: 'getTagSuggestions',
     value: function getTagSuggestions() {
-      var url = jsRoutes.controllers.Assets.versioned("test/tags.json").absoluteURL();
+      var url = "http://localhost:9000/api/tags?id=" + this.locationId;
       _jquery2.default.ajax({
         url: url,
         dataType: "json",
@@ -185,8 +186,8 @@ var TagsSelector = function (_React$Component2) {
       var buildTag = function buildTag(tag, i) {
         return _react2.default.createElement(
           'span',
-          { key: i, className: "tag" + (_this3.props.selectedTags.indexOf(tag) != -1 ? " selected" : ""), onClick: _this3.props.selectTag },
-          tag
+          { key: i, className: "tag" + (_this3.props.selectedTags.indexOf(tag.name) != -1 ? " selected" : ""), onClick: _this3.props.selectTag },
+          tag.name
         );
       };
       var offset = (0, _jquery2.default)(window).width() < 510 ? 10 : 15;
