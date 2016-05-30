@@ -23,4 +23,10 @@ const dateToString = (date) => {
   return months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
 };
 
-export { getQueryValue, arrayToString, dateToString };
+const tagsToQuery = (tags) => {
+  var params = "";
+  tags.forEach((tag) => params += "&tags[]=" + tag);
+  return params;
+};
+
+export { getQueryValue, arrayToString, dateToString, tagsToQuery };

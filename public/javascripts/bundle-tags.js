@@ -116,6 +116,7 @@ var Tags = function (_React$Component) {
             'Search'
           )
         ),
+        _react2.default.createElement('input', { name: 'location-id', type: 'hidden', value: this.locationId }),
         _react2.default.createElement('input', { name: 'city', type: 'hidden', value: this.location[0] }),
         _react2.default.createElement('input', { name: 'country', type: 'hidden', value: this.location[1] }),
         _react2.default.createElement('input', { name: 'check-in', type: 'hidden', value: this.checkIn }),
@@ -274,7 +275,7 @@ _reactDom2.default.render(_react2.default.createElement(Tags, null), document.ge
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.dateToString = exports.arrayToString = exports.getQueryValue = undefined;
+exports.tagsToQuery = exports.dateToString = exports.arrayToString = exports.getQueryValue = undefined;
 
 var _jquery = require("jquery");
 
@@ -307,9 +308,18 @@ var dateToString = function dateToString(date) {
   return months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
 };
 
+var tagsToQuery = function tagsToQuery(tags) {
+  var params = "";
+  tags.forEach(function (tag) {
+    return params += "&tags[]=" + tag;
+  });
+  return params;
+};
+
 exports.getQueryValue = getQueryValue;
 exports.arrayToString = arrayToString;
 exports.dateToString = dateToString;
+exports.tagsToQuery = tagsToQuery;
 
 },{"jquery":4}],3:[function(require,module,exports){
 // shim for using process in browser

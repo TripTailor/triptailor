@@ -37,6 +37,7 @@ var Results = function (_React$Component) {
 
     var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Results).call(this));
 
+    _this.locationId = util.getQueryValue("location-id");
     _this.city = decodeURIComponent(util.getQueryValue("city"));
     _this.country = decodeURIComponent(util.getQueryValue("country"));
     _this.checkIn = util.getQueryValue("check-in");
@@ -56,7 +57,7 @@ var Results = function (_React$Component) {
   }, {
     key: 'getHostels',
     value: function getHostels() {
-      var url = jsRoutes.controllers.Assets.versioned("test/hostels.json").absoluteURL();
+      var url = jsRoutes.controllers.api.HostelsController.classify().url + "?location_id=" + this.locationId + util.tagsToQuery(this.tags);
       _jquery2.default.ajax({
         url: url,
         dataType: "json",
@@ -163,7 +164,7 @@ var TagsInput = function TagsInput(props) {
 var Hostels = function Hostels(props) {
   var rows = [];
   for (var i = 0; i < props.results.length; i += 2) {
-    rows.push(_react2.default.createElement(HostelsRow, { key: i / 2, col1: props.results[i].document.model, col2: i + 1 < props.results.length ? props.results[i + 1].document.model : null }));
+    rows.push(_react2.default.createElement(HostelsRow, { key: i / 2, col1: props.results[i].document, col2: i + 1 < props.results.length ? props.results[i + 1].document : null }));
   }return _react2.default.createElement(
     'div',
     { className: 'container-fluid hostels' },
@@ -304,7 +305,7 @@ _reactDom2.default.render(_react2.default.createElement(Results, null), (0, _jqu
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.dateToString = exports.arrayToString = exports.getQueryValue = undefined;
+exports.tagsToQuery = exports.dateToString = exports.arrayToString = exports.getQueryValue = undefined;
 
 var _jquery = require("jquery");
 
@@ -337,9 +338,18 @@ var dateToString = function dateToString(date) {
   return months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
 };
 
+var tagsToQuery = function tagsToQuery(tags) {
+  var params = "";
+  tags.forEach(function (tag) {
+    return params += "&tags[]=" + tag;
+  });
+  return params;
+};
+
 exports.getQueryValue = getQueryValue;
 exports.arrayToString = arrayToString;
 exports.dateToString = dateToString;
+exports.tagsToQuery = tagsToQuery;
 
 },{"jquery":4}],3:[function(require,module,exports){
 // shim for using process in browser

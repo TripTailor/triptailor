@@ -6,6 +6,7 @@ import * as util from '../util';
 class Results extends React.Component { 
   constructor() {
     super();
+    this.locationId = util.getQueryValue("location-id");
     this.city = decodeURIComponent(util.getQueryValue("city"));
     this.country = decodeURIComponent(util.getQueryValue("country"));
     this.checkIn = util.getQueryValue("check-in");
@@ -19,7 +20,7 @@ class Results extends React.Component {
     this.getHostels();
   }
   getHostels() {
-    var url = jsRoutes.controllers.Assets.versioned("test/hostels.json").absoluteURL();
+    var url = jsRoutes.controllers.api.HostelsController.classify().url + "?location_id=" + this.locationId + util.tagsToQuery(this.tags);
     $.ajax({
       url: url,
       dataType: "json",
@@ -81,7 +82,7 @@ const TagsInput = (props) => {
 const Hostels = (props) => {
   var rows = [];
   for(var i = 0; i < props.results.length; i+=2)
-  rows.push(<HostelsRow key={i / 2} col1={props.results[i].document.model} col2={i + 1 < props.results.length ? props.results[i + 1].document.model : null} />);
+  rows.push(<HostelsRow key={i / 2} col1={props.results[i].document} col2={i + 1 < props.results.length ? props.results[i + 1].document : null} />);
   return(
     <div className="container-fluid hostels">{rows}</div>
   );

@@ -59,7 +59,7 @@ class Tags extends React.Component {
           <button type="submit" className="search-button">Search</button>
         </div>
 
-
+        <input name="location-id" type="hidden" value={this.locationId} />
         <input name="city" type="hidden" value={this.location[0]} />
         <input name="country" type="hidden" value={this.location[1]} />
         <input name="check-in" type="hidden" value={this.checkIn} />
