@@ -65,7 +65,7 @@ class SearchForm extends React.Component {
   }
   getCityHints(input) {
     var value = input.value;
-    var url = "http://localhost:9000/api/locations?q=" + value
+    var url = jsRoutes.controllers.api.LocationsController.retrieveLocationHints().url + "?q=" + value;
     setTimeout(function() {
       if(value.trim().length > 0 && $(input).is(":focus") && value == input.value) {
         $.ajax({
@@ -86,7 +86,7 @@ class SearchForm extends React.Component {
   }
   render() {
     return (
-      <form action="/tags" method="get" className="search-form" onSubmit={this.validateForm.bind(this)}>
+      <form action={jsRoutes.controllers.HomeController.tags().url} method="get" className="search-form" onSubmit={this.validateForm.bind(this)}>
         <div className="title">TripTailor Hostels</div>
         <div className="subtitle">Imagine staying at the hostel you've been looking for</div>
         <div className="hint-copy">Where and when do you want to go?</div>

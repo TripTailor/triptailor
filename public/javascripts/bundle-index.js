@@ -117,7 +117,7 @@ var SearchForm = function (_React$Component) {
     key: 'getCityHints',
     value: function getCityHints(input) {
       var value = input.value;
-      var url = "http://localhost:9000/api/locations?q=" + value;
+      var url = jsRoutes.controllers.api.LocationsController.retrieveLocationHints().url + "?q=" + value;
       setTimeout(function () {
         if (value.trim().length > 0 && (0, _jquery2.default)(input).is(":focus") && value == input.value) {
           _jquery2.default.ajax({
@@ -139,7 +139,7 @@ var SearchForm = function (_React$Component) {
     value: function render() {
       return _react2.default.createElement(
         'form',
-        { action: '/tags', method: 'get', className: 'search-form', onSubmit: this.validateForm.bind(this) },
+        { action: jsRoutes.controllers.HomeController.tags().url, method: 'get', className: 'search-form', onSubmit: this.validateForm.bind(this) },
         _react2.default.createElement(
           'div',
           { className: 'title' },

@@ -34,7 +34,7 @@ class Tags extends React.Component {
     this.setState({selectedTags: selectedTags, submitTags: util.arrayToString(selectedTags)});
   }
   getTagSuggestions() {
-    var url = "http://localhost:9000/api/tags?id=" + this.locationId;
+    var url = jsRoutes.controllers.api.TagsController.mostFrequentTags().url + "?id=" + this.locationId;
     $.ajax({
       url: url,
       dataType: "json",
@@ -49,7 +49,7 @@ class Tags extends React.Component {
   }
   render() {
     return (
-      <form action="/search" method="get" className="tags-form">
+      <form action={jsRoutes.controllers.HomeController.search().url} method="get" className="tags-form">
         <InfoHeader city={this.location[0]} country={this.location[1]} checkIn={new Date(this.checkIn)} checkOut={new Date(this.checkOut)} />
         <div className="hint-copy">What are you looking for?</div>
         <div className="help-copy">Select one or more keywords</div>

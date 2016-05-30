@@ -71,7 +71,7 @@ var Tags = function (_React$Component) {
   }, {
     key: 'getTagSuggestions',
     value: function getTagSuggestions() {
-      var url = "http://localhost:9000/api/tags?id=" + this.locationId;
+      var url = jsRoutes.controllers.api.TagsController.mostFrequentTags().url + "?id=" + this.locationId;
       _jquery2.default.ajax({
         url: url,
         dataType: "json",
@@ -89,7 +89,7 @@ var Tags = function (_React$Component) {
     value: function render() {
       return _react2.default.createElement(
         'form',
-        { action: '/search', method: 'get', className: 'tags-form' },
+        { action: jsRoutes.controllers.HomeController.search().url, method: 'get', className: 'tags-form' },
         _react2.default.createElement(InfoHeader, { city: this.location[0], country: this.location[1], checkIn: new Date(this.checkIn), checkOut: new Date(this.checkOut) }),
         _react2.default.createElement(
           'div',

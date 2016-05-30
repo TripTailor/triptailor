@@ -17,7 +17,7 @@ var Header = function Header() {
     { className: 'navbar' },
     _react2.default.createElement(
       'a',
-      { href: '/', className: 'brand' },
+      { href: jsRoutes.controllers.HomeController.index().url, className: 'brand' },
       'TripTailor Hostels'
     )
   );

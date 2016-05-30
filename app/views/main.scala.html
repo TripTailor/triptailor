@@ -21,7 +21,13 @@
 
   <!-- js reverse routing -->
   @helper.javascriptRouter("jsRoutes")(
-    routes.javascript.Assets.versioned
+    routes.javascript.Assets.versioned,
+    routes.javascript.HomeController.index,
+    routes.javascript.HomeController.tags,
+    routes.javascript.HomeController.search,
+    controllers.api.routes.javascript.LocationsController.retrieveLocationHints,
+    controllers.api.routes.javascript.TagsController.mostFrequentTags,
+    controllers.api.routes.javascript.HostelsController.classify
   )
 
   <div id="header"></div>
