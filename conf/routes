@@ -16,6 +16,7 @@ GET     /api/locations              controllers.api.LocationsController.retrieve
 GET     /api/tags                   controllers.api.TagsController.mostFrequentTags
 GET     /api/reviews                controllers.api.ReviewsController.retrieveReviews
 GET     /api/classification         controllers.api.HostelsController.classify
+GET     /api/hostel/reviews         controllers.api.HostelsController.retrieveReviews
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

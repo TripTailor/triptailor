@@ -52,8 +52,10 @@ package object api {
       (__ \ "lat").writeNullable[Short] and
       (__ \ "long").writeNullable[Short] and
       (__ \ "sentiments").writeNullable[JsValue] and
-      (__ \ "attribute").writeNullable[JsValue]
-    )(unlift(ReviewRow.unapply))
+      (__ \ "attributes").writeNullable[JsValue]
+    )(unlift(ReviewRow.unapply)).transform { (json: JsObject) =>
+      json - "sentiment"
+    }
 
   private[api] implicit val locationWrites: Writes[LocationRow] =
     (
@@ -109,6 +111,7 @@ package object api {
     new Writes[ClassifiedDocument[A]] {
       def writes(cd: ClassifiedDocument[A]): JsValue =
         Json.obj(
+          "rating"   -> cd.rating,
           "document" -> cd.doc,
           "ctags"    -> cd.ctags
         )
