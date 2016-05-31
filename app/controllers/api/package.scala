@@ -52,7 +52,7 @@ package object api {
       (__ \ "lat").writeNullable[Short] and
       (__ \ "long").writeNullable[Short] and
       (__ \ "sentiments").writeNullable[JsValue] and
-      (__ \ "attributes").writeNullable[JsValue]
+      (__ \ "tags").writeNullable[JsValue]
     )(unlift(ReviewRow.unapply)).transform { (json: JsObject) =>
       json - "sentiment"
     }
