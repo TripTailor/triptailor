@@ -77,7 +77,7 @@ var Results = function (_React$Component) {
         'div',
         null,
         _react2.default.createElement(Header, { city: this.city, country: this.country, checkIn: new Date(this.checkIn), checkOut: new Date(this.checkOut), tags: this.tags, noResults: this.state.results.length }),
-        _react2.default.createElement(Hostels, { results: this.state.results })
+        _react2.default.createElement(Hostels, { results: this.state.results, checkIn: this.checkIn, checkOut: this.checkOut })
       );
     }
   }]);
@@ -164,7 +164,7 @@ var TagsInput = function TagsInput(props) {
 var Hostels = function Hostels(props) {
   var rows = [];
   for (var i = 0; i < props.results.length; i += 2) {
-    rows.push(_react2.default.createElement(HostelsRow, { key: i / 2, col1: props.results[i].document, col2: i + 1 < props.results.length ? props.results[i + 1].document : null }));
+    rows.push(_react2.default.createElement(HostelsRow, { key: i / 2, col1: props.results[i].document, col2: i + 1 < props.results.length ? props.results[i + 1].document : null, checkIn: props.checkIn, checkOut: props.checkOut }));
   }return _react2.default.createElement(
     'div',
     { className: 'container-fluid hostels' },
@@ -179,12 +179,12 @@ var HostelsRow = function HostelsRow(props) {
     _react2.default.createElement(
       'div',
       { className: 'col-md-6 hostel-col-left' },
-      _react2.default.createElement(Hostel, { name: props.col1.name, url: props.col1.url, images: props.col1.images })
+      _react2.default.createElement(Hostel, { name: props.col1.name, url: props.col1.url, price: props.col1.price, images: props.col1.images, checkIn: props.checkIn, checkOut: props.checkOut })
     ),
     props.col2 ? _react2.default.createElement(
       'div',
       { className: 'col-md-6 hostel-col-right' },
-      _react2.default.createElement(Hostel, { name: props.col2.name, url: props.col2.url, images: props.col2.images })
+      _react2.default.createElement(Hostel, { name: props.col2.name, url: props.col2.url, price: props.col2.price, images: props.col2.images, checkIn: props.checkIn, checkOut: props.checkOut })
     ) : ""
   );
 };
@@ -218,12 +218,20 @@ var Hostel = function (_React$Component2) {
     value: function render() {
       var _this3 = this;
 
+      var url = this.props.url + "?dateFrom=" + this.props.checkIn + "&dateTo=" + this.props.checkOut + "&number_of_guests=1";
       return _react2.default.createElement(
         'div',
         { className: 'hostel' },
         _react2.default.createElement(
           'div',
           { className: 'hostel-image', style: this.props.images.length > 0 ? { backgroundImage: "url('" + this.props.images[this.state.selectedImage] + "')" } : "" },
+          this.props.price ? _react2.default.createElement(
+            'div',
+            { className: 'hostel-price' },
+            '€',
+            this.props.price.toFixed(2)
+          ) : "",
+          _react2.default.createElement('a', { href: url, className: 'hostel-url', target: '_blank' }),
           this.props.images.length > 1 ? _react2.default.createElement(
             'div',
             { ref: function ref(button) {
@@ -238,10 +246,9 @@ var Hostel = function (_React$Component2) {
               }, className: 'image-controller-right', onClick: this.moveImage.bind(this) },
             ">"
           ) : "",
-          _react2.default.createElement('a', { href: this.props.url, className: 'hostel-url' }),
           _react2.default.createElement(
-            'div',
-            { className: 'hostel-name' },
+            'a',
+            { href: url, className: 'hostel-name', target: '_blank' },
             this.props.name
           )
         ),

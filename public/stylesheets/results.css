@@ -61,7 +61,24 @@
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
-  height: 220px;
+  height: 250px;
+}
+.hostel-price {
+  background-color: #202020;
+  color: #fff;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
+  padding: 11px 19px;
+  position: absolute;
+  right: 0;
+  top: 20px;
+}
+.hostel-url {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
 }
 .image-controller-left {
   float: left;
@@ -71,17 +88,15 @@
 }
 .image-controller-left, .image-controller-right {
   font-weight: 700;
-  line-height: 190px;
+  line-height: 220px;
   font-size: 42px;
   padding: 15px;
   cursor: pointer;
+  position: relative;
+  z-index: 1;
 }
-.hostel-url {
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
+.image-controller-left:hover, .image-controller-right:hover {
+  background-color: rgba(0, 0, 0, 0.4);
 }
 .hostel-name {
   position: absolute;
@@ -93,6 +108,9 @@
   color: #fff;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   text-decoration: underline;
+}
+.hostel-name:link, .hostel-name:hover, .hostel-name:active, .hostel-name:visited {
+  color: #fff;
 }
 .hostel-tags {
   padding: 15px 15px 15px 25px;
