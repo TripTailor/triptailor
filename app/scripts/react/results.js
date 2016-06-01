@@ -90,8 +90,8 @@ const Hostels = (props) => {
 
 const HostelsRow = (props) => (
   <div className="row">
-    <div className="col-md-6 hostel-col-left"><Hostel name={props.col1.name} images={props.col1.images} /></div>
-    {props.col2 ? <div className="col-md-6 hostel-col-right"><Hostel name={props.col2.name} images={props.col2.images} /></div> : ""}
+    <div className="col-md-6 hostel-col-left"><Hostel name={props.col1.name} url={props.col1.url} images={props.col1.images} /></div>
+    {props.col2 ? <div className="col-md-6 hostel-col-right"><Hostel name={props.col2.name} url={props.col2.url} images={props.col2.images} /></div> : ""}
   </div>
 );
 
@@ -114,6 +114,7 @@ class Hostel extends React.Component {
         <div className="hostel-image" style={this.props.images.length > 0 ? {backgroundImage: "url('" + this.props.images[this.state.selectedImage] + "')"} : ""}>
           {this.props.images.length > 1 ? <div ref={(button) => this.controllerLeft = button} className="image-controller-left" onClick={this.moveImage.bind(this)}>{"<"}</div> : ""}
           {this.props.images.length > 1 ? <div ref={(button) => this.controllerRight = button} className="image-controller-right" onClick={this.moveImage.bind(this)}>{">"}</div> : ""}
+          <a href={this.props.url} className="hostel-url"></a>
           <div className="hostel-name">{this.props.name}</div>
         </div>
         <div className="container-fluid hostel-tags">

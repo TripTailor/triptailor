@@ -76,6 +76,13 @@
   padding: 15px;
   cursor: pointer;
 }
+.hostel-url {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
 .hostel-name {
   position: absolute;
   left: 28px;

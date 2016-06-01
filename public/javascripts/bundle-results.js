@@ -179,12 +179,12 @@ var HostelsRow = function HostelsRow(props) {
     _react2.default.createElement(
       'div',
       { className: 'col-md-6 hostel-col-left' },
-      _react2.default.createElement(Hostel, { name: props.col1.name, images: props.col1.images })
+      _react2.default.createElement(Hostel, { name: props.col1.name, url: props.col1.url, images: props.col1.images })
     ),
     props.col2 ? _react2.default.createElement(
       'div',
       { className: 'col-md-6 hostel-col-right' },
-      _react2.default.createElement(Hostel, { name: props.col2.name, images: props.col2.images })
+      _react2.default.createElement(Hostel, { name: props.col2.name, url: props.col2.url, images: props.col2.images })
     ) : ""
   );
 };
@@ -238,6 +238,7 @@ var Hostel = function (_React$Component2) {
               }, className: 'image-controller-right', onClick: this.moveImage.bind(this) },
             ">"
           ) : "",
+          _react2.default.createElement('a', { href: this.props.url, className: 'hostel-url' }),
           _react2.default.createElement(
             'div',
             { className: 'hostel-name' },
