@@ -143,9 +143,32 @@ class Hostel extends React.Component {
 
 const TagsRow = (props) => (
   <div className="row">
-    <div className="col-md-6 hostel-tag-col">{props.tag1.name} {props.tag1.scaledRating}</div>
-    {props.tag2 ? <div className="col-md-6 hostel-tag-col">{props.tag2.name} {props.tag2.scaledRating}</div> : ""}
+    <TagColumn tag={props.tag1.name} scaledRating={props.tag1.scaledRating} />
+    {props.tag2 ? <TagColumn tag={props.tag2.name} scaledRating={props.tag2.scaledRating} /> : ""}
   </div>
 );
+
+const TagColumn = (props) => {
+  var scaledRating = Math.ceil(props.scaledRating) - 1;
+  if(scaledRating < 0)
+    scaledRating = 0;
+  if(scaledRating > 5)
+    scaledRating = 5;
+
+  var hearts = [];
+  for(var i = 0; i < scaledRating; i++)
+    hearts.push(<i key={i} className="fa fa-heart fa-1" />);
+  for(var i = 0; i < (5 - scaledRating); i++)
+    hearts.push(<i key={i + scaledRating} className="fa fa-heart-o fa-1" />);
+
+  return (
+    <div className="col-md-6 hostel-tag-col">
+      <div className="row">
+        <div className="col-xs-5">{props.tag}</div>
+        <div className="col-xs-7">{hearts}</div>
+      </div>
+    </div>
+  );
+};
 
 ReactDOM.render(<Results />, $("#content")[0]);

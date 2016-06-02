@@ -119,6 +119,10 @@
 .hostel-tag-col {
   margin-bottom: 10px;
 }
+.fa-heart, .fa-heart-o {
+  color: #f3565b;
+  margin-right: 5px;
+}
 .hostel-reviews {
   height: 200px;
   background-color: #fff;
