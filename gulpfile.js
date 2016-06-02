@@ -20,8 +20,14 @@ gulp.task('jquery-ui', function() {
   return gulp.src(['node_modules/jquery-ui/themes/redmond/*/*', "!node_modules/jquery-ui/themes/redmond/jquery-ui.css", "!node_modules/jquery-ui/themes/redmond/jquery.ui.theme.css"])
   .pipe(gulp.dest('public/stylesheets/jquery-ui/'));
 });
+gulp.task('font-awesome', function() {
+  gulp.src("node_modules/font-awesome/css/font-awesome.min.css")
+  .pipe(gulp.dest('public/stylesheets/'));
+  gulp.src(["node_modules/font-awesome/fonts/fontawesome-webfont.woff2", "node_modules/font-awesome/fonts/fontawesome-webfont.woff", "node_modules/font-awesome/fonts/fontawesome-webfont.ttf"])
+  .pipe(gulp.dest('public/fonts/'));
+});
 
-gulp.task('default', ['watch', 'jquery-ui']);
+gulp.task('default', ['watch', 'jquery-ui', 'font-awesome']);
 
 
 var transform = function(entry) {

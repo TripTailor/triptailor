@@ -9,3 +9,5 @@ target
 node_modules
 public/javascripts/bundle-*
 public/stylesheets/jquery-ui/*
+public/fonts/
+public/stylesheets/font-awesome.min.css
