@@ -104,7 +104,8 @@ package object api {
   private[api] implicit val classifiedTagWrites: Writes[ClassifiedTag] =
     (
       (__ \ "name").write[String] and
-      (__ \ "rating").write[Double]
+      (__ \ "rating").write[Double] and
+      (__ \ "scaledRating").write[Double]
     )(unlift(ClassifiedTag.unapply))
 
   private[api] implicit def hostelDocumentWrites[A: Writes]: Writes[ClassifiedDocument[A]] =

@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import psycopg2
+import math
 
 b = 0.6
 
@@ -35,4 +36,6 @@ for location_row in location_rows:
       rating = (metrics[0] * metrics[1] / metrics[2]) / (1.0 - b + b * (dl / avdl))
       ratings.append(rating)
 
-print (max(ratings) + 1)
+max_rating = max(ratings)
+print "Max rating: " + str(max_rating)
+print "Rating constant: " + str(math.exp(6) / (max_rating + 1))

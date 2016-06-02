@@ -35,7 +35,7 @@ class HostelsController @Inject()(dbConfig: DatabaseConfigProvider, conf: Config
     val classifiedDocs =
       for {
         ratedDocs  ← service.retrieveHostelsModel(params.locationId)
-        classifier = new ClassificationService(ratedDocs, conf.getDouble("classification.b").get, params.tags)
+        classifier = new ClassificationService(ratedDocs, conf.getDouble("classification.b").get, conf.getDouble("classification.ratingConstant").get, params.tags)
       } yield classifier.classify
 
     classifiedDocs.map(Json.toJson(_)).map(Ok(_))
