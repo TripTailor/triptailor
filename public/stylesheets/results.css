@@ -113,11 +113,14 @@
   color: #fff;
 }
 .hostel-tags {
-  padding: 15px 15px 15px 25px;
+  padding: 15px;
   background-color: #f4f5f7;
 }
 .hostel-tags-copy {
   margin-bottom: 25px;
+}
+.hostel-tag-col {
+  margin-bottom: 10px;
 }
 .hostel-reviews {
   height: 200px;

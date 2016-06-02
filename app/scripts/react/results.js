@@ -82,7 +82,7 @@ const TagsInput = (props) => {
 const Hostels = (props) => {
   var rows = [];
   for(var i = 0; i < props.results.length; i+=2)
-  rows.push(<HostelsRow key={i / 2} col1={props.results[i].document} col2={i + 1 < props.results.length ? props.results[i + 1].document : null} checkIn={props.checkIn} checkOut={props.checkOut} />);
+  rows.push(<HostelsRow key={i / 2} col1={props.results[i]} col2={i + 1 < props.results.length ? props.results[i + 1] : null} checkIn={props.checkIn} checkOut={props.checkOut} />);
   return(
     <div className="container-fluid hostels">{rows}</div>
   );
@@ -90,8 +90,8 @@ const Hostels = (props) => {
 
 const HostelsRow = (props) => (
   <div className="row">
-    <div className="col-md-6 hostel-col-left"><Hostel name={props.col1.name} url={props.col1.url} price={props.col1.price} images={props.col1.images} checkIn={props.checkIn} checkOut={props.checkOut} /></div>
-    {props.col2 ? <div className="col-md-6 hostel-col-right"><Hostel name={props.col2.name} url={props.col2.url} price={props.col2.price} images={props.col2.images} checkIn={props.checkIn} checkOut={props.checkOut} /></div> : ""}
+    <div className="col-md-6 hostel-col-left"><Hostel name={props.col1.document.name} url={props.col1.document.url} price={props.col1.document.price} images={props.col1.document.images} ctags={props.col2.ctags} checkIn={props.checkIn} checkOut={props.checkOut} /></div>
+    {props.col2 ? <div className="col-md-6 hostel-col-right"><Hostel name={props.col2.document.name} url={props.col2.document.url} price={props.col2.document.price} images={props.col2.document.images} ctags={props.col2.ctags} checkIn={props.checkIn} checkOut={props.checkOut} /></div> : ""}
   </div>
 );
 
@@ -110,7 +110,12 @@ class Hostel extends React.Component {
   }
   render() {
     var url = this.props.url + "?dateFrom=" + this.props.checkIn + "&dateTo=" + this.props.checkOut + "&number_of_guests=1";
-    return (
+
+    var tagsRows = [];
+    for(var i = 0; i < this.props.ctags.length; i+=2)
+      tagsRows.push(<TagsRow key={i / 2} tag1={this.props.ctags[i]} tag2={i + 1 < this.props.ctags.length ? this.props.ctags[i + 1] : null} />);
+
+      return (
       <div className="hostel">
         <div className="hostel-image" style={this.props.images.length > 0 ? {backgroundImage: "url('" + this.props.images[this.state.selectedImage] + "')"} : ""}>
           {this.props.price ? <div className="hostel-price">€{this.props.price.toFixed(2)}</div> : ""}
@@ -120,15 +125,7 @@ class Hostel extends React.Component {
           <a href={url} className="hostel-name" target="_blank">{this.props.name}</a>
         </div>
         <div className="container-fluid hostel-tags">
-          <div className="hostel-tags-copy">See what people are saying:</div>
-          <div className="row">
-            <div className="col-md-6">location</div>
-            <div className="col-md-6">party</div>
-          </div>
-          <div className="row">
-            <div className="col-md-6">food</div>
-          </div>
-        </div>
+          <div className="hostel-tags-copy">See what people are saying:</div>{tagsRows}</div>
         <div className="hostel-reviews">
           <div className="hostel-reviews-text">The  location  of this hostel is the best; just 3 blocks walking from Empire State and other stuff.</div>
           <div className="hostel-reviews-author">— Thomas Bangalter</div>
@@ -137,5 +134,12 @@ class Hostel extends React.Component {
     );
   }
 }
+
+const TagsRow = (props) => (
+  <div className="row">
+    <div className="col-md-6 hostel-tag-col">{props.tag1.name} {props.tag1.scaledRating}</div>
+    {props.tag2 ? <div className="col-md-6 hostel-tag-col">{props.tag2.name} {props.tag2.scaledRating}</div> : ""}
+  </div>
+);
 
 ReactDOM.render(<Results />, $("#content")[0]);
