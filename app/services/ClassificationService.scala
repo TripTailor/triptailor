@@ -17,16 +17,24 @@ class ClassificationService[A](m: Seq[RatedDocument[A]], b: Double, ratingConsta
   }.sorted
 
   private def classifyDocTags(d: RatedDocument[A], dl: Double, avgdl: Double): Seq[ClassifiedTag] =
-    d.metrics.collect {
-      case (tag, metrics) if tags contains tag => {
-        val rating = (metrics.cfreq * metrics.sentiment / metrics.freq) / (1 - b + b * (dl / avgdl))
-        ClassifiedTag(
-          name   = tag,
-          rating = rating,
-          scaledRating = Math.log(ratingConstant * (rating + 1))
-        )
-      }
-    }.toSeq
+    tags.foldLeft(Seq.empty[ClassifiedTag])((ctags, tag) => {
+      ctags :+ (d.metrics.get(tag) match {
+        case Some(metrics) => {
+          val rating = (metrics.cfreq * metrics.sentiment / metrics.freq) / (1 - b + b * (dl / avgdl))
+          ClassifiedTag(
+            name = tag,
+            rating = rating,
+            scaledRating = Math.log(ratingConstant * (rating + 1))
+          )
+        }
+        case None =>
+          ClassifiedTag(
+            name = tag,
+            rating = 0d,
+            scaledRating = 0d
+           )
+      })
+    })
 
   private def compute_avgdl(tags: Seq[String]): Double =
     m.sumBy(compute_dl) / m.size
