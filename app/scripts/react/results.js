@@ -63,9 +63,15 @@ const Header = (props) => (
         <TagsInput tags={props.tags} />
       </div>
       <div className="col-md-5 no-results-container">
-        <div className="no-results">
-          <div>Results</div>
-          <div><strong>{props.noResults}</strong></div>
+        <div className="row">
+          <div className="col-md-5">
+            <div className="share-copy">Results</div>
+            <div clasName="share-copy"><strong>{props.noResults}</strong></div>
+          </div>
+          <div className="col-md-7">
+            <div className="share-copy">Share</div>
+            <div className="addthis_sharing_toolbox"></div>
+          </div>
         </div>
       </div>
     </div>
