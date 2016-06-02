@@ -46,12 +46,14 @@
 }
 .tag-selector {
   position: relative;
-  height: 248px;
+  height: 310px;
 }
 .tag-selection-panel {
   width: 90%;
   margin-left: 5%;
   position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 }
 .panel2 {
   left: 460px;
