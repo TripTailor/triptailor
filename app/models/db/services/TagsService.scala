@@ -5,6 +5,7 @@ import play.api.db.slick.DatabaseConfigProvider
 import slick.driver.JdbcProfile
 
 import scala.concurrent.Future
+import scala.io.Source
 
 trait TagsService {
   import Tables._
@@ -17,6 +18,8 @@ class TagsServiceImpl(dbConfigProvider: DatabaseConfigProvider) extends TagsServ
   val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig.driver.api._
+  
+  val stopWords = Source.fromFile("stop.txt").getLines.toSeq.map(tag => s"'$tag'").mkString(", ")
 
   def retrieveMostCommonTags(locationId: Int): Future[Seq[AttributeRow]] =
     dbConfig.db.run(retrieveMostCommonTagsAction(locationId))
@@ -30,6 +33,7 @@ class TagsServiceImpl(dbConfigProvider: DatabaseConfigProvider) extends TagsServ
            AND  ha.hostel_id = h.id
            AND  ha.attribute_id = a.id
            AND  l.id = $locationId
+           AND  a.name NOT IN (#$stopWords)
       GROUP BY  a.id
       ORDER BY  SUM(ha.freq) DESC
       LIMIT 45;
