@@ -1,10 +1,16 @@
-.header {
-  margin-top: -70px;
-  padding-top: 14px;
+@media (min-width: 510px) {
+  .header {
+    margin-top: -70px;
+    padding-top: 14px;
+  }
 }
 .city-input {
   width: 100%;
   border-radius: 2px;
+  margin-bottom: 15px;
+}
+.check-in-col {
+  margin-bottom: 15px;
 }
 .check-in {
   width: 50%;
@@ -15,15 +21,17 @@
   border-left: none;
   border-radius: 0 2px 2px 0;
 }
-.tags-row {
-  margin-top: 15px;
-}
 .tags {
   background-color: #fff;
   border-radius: 2px;
   border: solid 1px #e3e3e3;
-  margin-left: 10px;
-  padding: 6px 9.5px;
+  padding: 6px 9.5px 0 9.5px;
+  margin-bottom: 15px;
+}
+@media (min-width: 510px) {
+  .tags {
+    margin-left: 10px;
+  }
 }
 .tag {
   padding: 6px 9px;
@@ -34,24 +42,18 @@
   display: inline-block;
   font-family: 'Open Sans', sans-serif;
   cursor: default;
+  margin-bottom: 6px;
 }
-.no-results {
+.header-extra {
   font-size: 12px;
-}
-.share-copy {
-  font-size: 12px;
+  margin-bottom: 15px;
 }
 
-.hostels {
-  margin-top: 15px;
-}
-.hostel-col-left {
-  padding-left: 0;
-  padding-right: 0;
-}
-.hostel-col-right {
-  padding-right: 0;
-  padding-left: 0;
+@media (min-width: 510px) {
+  .hostel-col {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 .hostel-image {
   position: relative;

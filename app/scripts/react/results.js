@@ -51,25 +51,25 @@ const Header = (props) => (
           <div className="col-md-4 col-md-offset-3">
             <input type="text" className="city-input" readOnly value={props.city + ", " + props.country} />
           </div>
-          <div className="col-md-5">
+          <div className="col-md-5 check-in-col">
             <input type="text" className="check-in" readOnly value={util.dateToString(props.checkIn)} />
             <input type="text" className="check-out" readOnly value={util.dateToString(props.checkOut)} />
           </div>
         </div>
       </div>
     </div>
-    <div className="row tags-row">
+    <div className="row">
       <div className="col-md-7">
         <TagsInput tags={props.tags} />
       </div>
-      <div className="col-md-5 no-results-container">
+      <div className="col-md-5">
         <div className="row">
-          <div className="col-md-5">
-            <div className="share-copy">Results</div>
-            <div clasName="share-copy"><strong>{props.noResults}</strong></div>
+          <div className="col-xs-5 header-extra">
+            <div>Results</div>
+            <div><strong>{props.noResults}</strong></div>
           </div>
-          <div className="col-md-7">
-            <div className="share-copy">Share</div>
+          <div className="col-xs-7 header-extra">
+            <div>Share</div>
             <div className="addthis_sharing_toolbox"></div>
           </div>
         </div>
@@ -90,14 +90,14 @@ const Hostels = (props) => {
   for(var i = 0; i < props.results.length; i+=2)
   rows.push(<HostelsRow key={i / 2} col1={props.results[i]} col2={i + 1 < props.results.length ? props.results[i + 1] : null} checkIn={props.checkIn} checkOut={props.checkOut} />);
   return(
-    <div className="container-fluid hostels">{rows}</div>
+    <div className="container-fluid">{rows}</div>
   );
 };
 
 const HostelsRow = (props) => (
   <div className="row">
-    <div className="col-md-6 hostel-col-left"><Hostel name={props.col1.document.name} url={props.col1.document.url} price={props.col1.document.price} images={props.col1.document.images} ctags={props.col2.ctags} checkIn={props.checkIn} checkOut={props.checkOut} /></div>
-    {props.col2 ? <div className="col-md-6 hostel-col-right"><Hostel name={props.col2.document.name} url={props.col2.document.url} price={props.col2.document.price} images={props.col2.document.images} ctags={props.col2.ctags} checkIn={props.checkIn} checkOut={props.checkOut} /></div> : ""}
+    <div className="col-md-6 hostel-col"><Hostel name={props.col1.document.name} url={props.col1.document.url} price={props.col1.document.price} images={props.col1.document.images} ctags={props.col2.ctags} checkIn={props.checkIn} checkOut={props.checkOut} /></div>
+    {props.col2 ? <div className="col-md-6 hostel-col"><Hostel name={props.col2.document.name} url={props.col2.document.url} price={props.col2.document.price} images={props.col2.document.images} ctags={props.col2.ctags} checkIn={props.checkIn} checkOut={props.checkOut} /></div> : ""}
   </div>
 );
 
