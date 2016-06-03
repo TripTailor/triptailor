@@ -1,0 +1,69 @@
+.header {
+  margin-top: -70px;
+  padding-top: 11px;
+  font-size: 12px;
+  padding-bottom: 10px;
+}
+
+.container-fluid {
+  padding-left: 25px;
+  padding-right: 25px;
+}
+.main-content {
+  background-color: #fff;
+}
+.copy-subheader {
+  color: #4b508d;
+}
+.copy-header {
+  color: #4b508d;
+  font-size: 16px;
+}
+.copy {
+  margin-top: 35px;
+}
+.copy p {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+.ubuntu {
+  font-family: 'Ubuntu', sans-serif;
+}
+.about-triptailor {
+  padding-top: 35px;
+  padding-bottom: 50px;
+}
+
+.about-team {
+  padding-bottom: 50px;
+}
+.team-subheader {
+  border-top: solid 1px #cdcdcd;
+  padding-top: 50px;
+}
+.founder-col {
+  margin-top: 25px;
+}
+.founder-picture {
+  max-width: 100%;
+}
+.founder-name {
+  font-size: 20px;
+  font-weight: bold;
+}
+.founder-subheader {
+  margin-top: 4px;
+  font-weight: bold;
+}
+.founder-copy {
+  margin-top: 25px;
+}
+
+.at-icon-wrapper {
+  width: 25px !important;
+  height: 25px !important;
+}
+.at-icon-wrapper svg {
+  width: 25px !important;
+  height: 25px !important;
+}
