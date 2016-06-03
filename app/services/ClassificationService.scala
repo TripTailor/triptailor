@@ -1,6 +1,6 @@
 package services
 
-import controllers.api.ApiDomain.{ClassifiedDocument, ClassifiedTag, RatedDocument}
+import controllers.api.ApiDomain.{ClassifiedDocument, ClassifiedTag, RatedDocument, RatingMetrics}
 
 class ClassificationService[A](m: Seq[RatedDocument[A]], b: Double, ratingConstant: Double, tags: Seq[String]) {
   import extensions._
@@ -16,25 +16,24 @@ class ClassificationService[A](m: Seq[RatedDocument[A]], b: Double, ratingConsta
     } yield ClassifiedDocument(d, ctags, rating)
   }.sorted
 
-  private def classifyDocTags(d: RatedDocument[A], dl: Double, avgdl: Double): Seq[ClassifiedTag] =
-    tags.foldLeft(Seq.empty[ClassifiedTag])((ctags, tag) => {
-      ctags :+ (d.metrics.get(tag) match {
-        case Some(metrics) => {
-          val rating = (metrics.cfreq * metrics.sentiment / metrics.freq) / (1 - b + b * (dl / avgdl))
-          ClassifiedTag(
-            name = tag,
-            rating = rating,
-            scaledRating = Math.log(ratingConstant * (rating + 1))
-          )
-        }
-        case None =>
-          ClassifiedTag(
-            name = tag,
-            rating = 0d,
-            scaledRating = 0d
-           )
-      })
-    })
+  private def classifyDocTags(d: RatedDocument[A], dl: Double, avgdl: Double): Seq[ClassifiedTag] = {
+    def unratedCtag(tag: String) =
+      ClassifiedTag(name = tag, rating = 0, scaledRating = 0)
+
+    def ratedCtag(tag: String)(metrics: RatingMetrics) = {
+      val rating = (metrics.cfreq * metrics.sentiment / metrics.freq) / (1 - b + b * (dl / avgdl))
+      ClassifiedTag(
+        name         = tag,
+        rating       = rating,
+        scaledRating = Math.log(ratingConstant * (rating + 1))
+      )
+    }
+
+    def toCtag(tag: String) =
+      d.metrics.get(tag).fold(unratedCtag(tag))(ratedCtag(tag))
+
+    tags.map(toCtag)
+  }
 
   private def compute_avgdl(tags: Seq[String]): Double =
     m.sumBy(compute_dl) / m.size
