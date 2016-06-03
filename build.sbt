@@ -18,7 +18,7 @@ val dbDependencies = Seq(
   "com.github.tminglei" %% "slick-pg_play-json" % slickPGV
 )
 
-val scalatestplusV = "1.5.0-RC1"
+val scalatestplusV = "1.5.0"
 val testDependencies = Seq(
   "org.scalatestplus.play" %% "scalatestplus-play" % scalatestplusV % Test
 )
