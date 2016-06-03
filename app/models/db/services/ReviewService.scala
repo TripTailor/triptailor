@@ -14,6 +14,7 @@ trait ReviewService {
 
 trait FilterAttributesFromReview {
   import play.api.libs.json._
+  import collection.mutable
   import Tables._
 
   def filterAttributesFromTags(tags: Set[String])(attributes: JsValue): JsValue =
@@ -21,16 +22,16 @@ trait FilterAttributesFromReview {
 
   def trimSearchesReviews(tags: Set[String])(searchesReviews: Seq[SearchReviews]): Seq[SearchReviews] = {
     @annotation.tailrec
-    def trimSearchReviews(hostelId: Int, tags: Set[String], remaining: Seq[ReviewRow], acc: Seq[ReviewRow]): SearchReviews = {
+    def trimSearchReviews(hostelId: Int, tags: Set[String], remaining: Seq[ReviewRow], acc: mutable.ListBuffer[ReviewRow]): SearchReviews = {
       if (tags.isEmpty || remaining.isEmpty)
-        SearchReviews(hostelId, acc)
+        SearchReviews(hostelId, acc.toSeq)
       else {
         val nxt = remaining.head
         val containing = nxt.attributes.fold(Set.empty[JsValue])(_.as[Set[JsValue]]).map(attribute => (attribute \ "attribute_name").as[String])
         trimSearchReviews(hostelId, tags -- containing, remaining.tail, acc :+ nxt)
       }
     }
-    searchesReviews.map(srs => trimSearchReviews(srs.hostelId, tags, srs.reviews, Seq()))
+    searchesReviews.map(srs => trimSearchReviews(srs.hostelId, tags, srs.reviews, mutable.ListBuffer()))
   }
 }
 
