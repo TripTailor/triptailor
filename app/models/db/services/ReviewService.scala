@@ -3,12 +3,13 @@ package models.db.services
 import models.db.schema.Tables
 import play.api.db.slick.DatabaseConfigProvider
 import slick.driver.JdbcProfile
+import controllers.api.ApiDomain.SearchReviews
 
 import scala.concurrent.{ExecutionContext, Future}
 
 trait ReviewService {
   import Tables._
-  def retrieveRelevantReviews(hostelIds: Seq[Int], tags: Seq[String]): Future[Seq[ReviewRow]]
+  def retrieveRelevantReviews(hostelIds: Seq[Int], tags: Seq[String]): Future[Seq[SearchReviews]]
 }
 
 trait FilterAttributesFromReview {
@@ -26,14 +27,21 @@ class ReviewServiceImpl(dbConfigProvider: DatabaseConfigProvider)(implicit ec: E
 
   import dbConfig.driver.api._
 
-  def retrieveRelevantReviews(hostelIds: Seq[Int], tags: Seq[String]): Future[Seq[ReviewRow]] =
-    dbConfig.db.run(reviewsAction(hostelIds, tags).map(filterReviewsAttributes(tags.toSet)))
+  def retrieveRelevantReviews(hostelIds: Seq[Int], tags: Seq[String]): Future[Seq[SearchReviews]] =
+    dbConfig.db.run(reviewsAction(hostelIds, tags)
+      .map(filterReviewsAttributes(tags.toSet)))
+      .map(structureApiResponse)
 
   private def filterReviewsAttributes(tags: Set[String])(reviews: Seq[ReviewRow]) = {
     def filterReviewAttributes(review: ReviewRow) =
       review.copy(attributes = review.attributes.map(filterAttributesFromTags(tags)))
     reviews.map(filterReviewAttributes)
   }
+
+  private def structureApiResponse(reviews: Seq[ReviewRow]) =
+    reviews.groupBy(_.hostelId).map { case (hostelId, reviews) =>
+      SearchReviews(hostelId, reviews)
+    }.toSeq
 
   private def reviewsAction(hostelIds: Seq[Int], tags: Seq[String]) =
     sql"""

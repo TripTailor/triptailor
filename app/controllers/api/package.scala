@@ -54,7 +54,7 @@ package object api {
       (__ \ "sentiments").writeNullable[JsValue] and
       (__ \ "tags").writeNullable[JsValue]
     )(unlift(ReviewRow.unapply)).transform { (json: JsObject) =>
-      json - "sentiment"
+      json - "sentiment" - "hostelId"
     }
 
   private[api] implicit val locationWrites: Writes[LocationRow] =
@@ -108,7 +108,7 @@ package object api {
       (__ \ "scaledRating").write[Double]
     )(unlift(ClassifiedTag.unapply))
 
-  private[api] implicit def hostelDocumentWrites[A: Writes]: Writes[ClassifiedDocument[A]] =
+  private[api] implicit def documentWrites[A: Writes]: Writes[ClassifiedDocument[A]] =
     new Writes[ClassifiedDocument[A]] {
       def writes(cd: ClassifiedDocument[A]): JsValue =
         Json.obj(
@@ -117,6 +117,12 @@ package object api {
           "ctags"    -> cd.ctags
         )
     }
+
+  private[api] implicit val searchReview: Writes[SearchReviews] =
+    (
+      (__ \ "hostelId").write[Int] and
+      (__ \ "reviews").write[Seq[ReviewRow]]
+    )(unlift(SearchReviews.unapply))
   /** End of API JSON writers **/
 
 }
