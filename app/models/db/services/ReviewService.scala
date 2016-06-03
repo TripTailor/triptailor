@@ -14,9 +14,24 @@ trait ReviewService {
 
 trait FilterAttributesFromReview {
   import play.api.libs.json._
+  import Tables._
 
   def filterAttributesFromTags(tags: Set[String])(attributes: JsValue): JsValue =
     JsArray(attributes.as[Seq[JsValue]].filter(attribute => tags((attribute \ "attribute_name").as[String])))
+
+  def trimSearchesReviews(tags: Set[String])(searchesReviews: Seq[SearchReviews]): Seq[SearchReviews] = {
+    @annotation.tailrec
+    def trimSearchReviews(hostelId: Int, tags: Set[String], remaining: Seq[ReviewRow], acc: Seq[ReviewRow]): SearchReviews = {
+      if (tags.isEmpty || remaining.isEmpty)
+        SearchReviews(hostelId, acc)
+      else {
+        val nxt = remaining.head
+        val containing = nxt.attributes.fold(Set.empty[JsValue])(_.as[Set[JsValue]]).map(attribute => (attribute \ "attribute_name").as[String])
+        trimSearchReviews(hostelId, tags -- containing, remaining.tail, acc :+ nxt)
+      }
+    }
+    searchesReviews.map(srs => trimSearchReviews(srs.hostelId, tags, srs.reviews, Seq()))
+  }
 }
 
 class ReviewServiceImpl(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)
@@ -31,6 +46,7 @@ class ReviewServiceImpl(dbConfigProvider: DatabaseConfigProvider)(implicit ec: E
     dbConfig.db.run(reviewsAction(hostelIds, tags)
       .map(filterReviewsAttributes(tags.toSet)))
       .map(structureApiResponse)
+      .map(trimSearchesReviews(tags.toSet))
 
   private def filterReviewsAttributes(tags: Set[String])(reviews: Seq[ReviewRow]) = {
     def filterReviewAttributes(review: ReviewRow) =
@@ -42,6 +58,7 @@ class ReviewServiceImpl(dbConfigProvider: DatabaseConfigProvider)(implicit ec: E
     reviews.groupBy(_.hostelId).map { case (hostelId, reviews) =>
       SearchReviews(hostelId, reviews)
     }.toSeq
+
 
   private def reviewsAction(hostelIds: Seq[Int], tags: Seq[String]) =
     sql"""
