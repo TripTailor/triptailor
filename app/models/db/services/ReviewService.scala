@@ -28,7 +28,7 @@ trait FilterAttributesFromReview {
       else {
         val nxt = remaining.head
         val containing = nxt.attributes.fold(Set.empty[JsValue])(_.as[Set[JsValue]]).map(attribute => (attribute \ "attribute_name").as[String])
-        trimSearchReviews(hostelId, tags -- containing, remaining.tail, acc :+ nxt)
+        trimSearchReviews(hostelId, tags -- containing, remaining.tail, if ((tags intersect containing).isEmpty) acc else acc :+ nxt)
       }
     }
     searchesReviews.map(srs => trimSearchReviews(srs.hostelId, tags, srs.reviews, mutable.ListBuffer()))
