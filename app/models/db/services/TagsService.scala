@@ -2,6 +2,7 @@ package models.db.services
 
 import models.db.schema.Tables
 import play.api.db.slick.DatabaseConfigProvider
+import services.StopWordsFilterService
 import slick.driver.JdbcProfile
 
 import scala.concurrent.Future
@@ -12,14 +13,16 @@ trait TagsService {
   def retrieveMostCommonTags(locationId: Int): Future[Seq[AttributeRow]]
 }
 
-class TagsServiceImpl(dbConfigProvider: DatabaseConfigProvider) extends TagsService {
+class TagsServiceImpl(dbConfigProvider: DatabaseConfigProvider, stopWordService: StopWordsFilterService)
+    extends TagsService {
+
   import Tables._
 
   val dbConfig = dbConfigProvider.get[JdbcProfile]
 
   import dbConfig.driver.api._
   
-  val stopWords = Source.fromFile("stop.txt").getLines.toSeq.map(tag => s"'$tag'").mkString(", ")
+  val stopWords = stopWordService.quotedStopWordsString
 
   def retrieveMostCommonTags(locationId: Int): Future[Seq[AttributeRow]] =
     dbConfig.db.run(retrieveMostCommonTagsAction(locationId))

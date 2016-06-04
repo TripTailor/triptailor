@@ -2,7 +2,12 @@ package services
 
 import controllers.api.ApiDomain.{ClassifiedDocument, ClassifiedTag, RatedDocument, RatingMetrics}
 
-class ClassificationService[A](m: Seq[RatedDocument[A]], b: Double, ratingConstant: Double, tags: Seq[String]) {
+class ClassificationService[A]
+                           (m: Seq[RatedDocument[A]],
+                            b: Double,
+                            ratingConstant: Double,
+                            tags: Seq[String],
+                            service: StopWordsFilterService) {
   import extensions._
   import ClassificationService._
 
@@ -39,7 +44,7 @@ class ClassificationService[A](m: Seq[RatedDocument[A]], b: Double, ratingConsta
     m.sumBy(compute_dl) / m.size
 
   private def compute_dl(d: RatedDocument[A]): Double =
-    d.metrics.sumBy(_._2.freq)
+    d.metrics.sumByCond(_._2.freq)(metrics => service.stopWords(metrics._1))
 
 }
 
