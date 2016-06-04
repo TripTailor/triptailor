@@ -44,7 +44,7 @@ class ClassificationService[A]
     m.sumBy(compute_dl) / m.size
 
   private def compute_dl(d: RatedDocument[A]): Double =
-    d.metrics.sumByCond(_._2.freq)(metrics => service.stopWords(metrics._1))
+    d.metrics.sumByCond(_._2.freq)(metrics => !service.stopWords(metrics._1))
 
 }
 
