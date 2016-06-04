@@ -8,6 +8,12 @@ package object extensions {
       sum
     }
 
+    def sumByCond[B](f: A => B)(p: A => Boolean)(implicit num: Numeric[B]): B = {
+      var sum = num.zero
+      for (x <- xs if p(x)) sum = num.plus(sum, f(x))
+      sum
+    }
+
   }
 
 }
