@@ -9,7 +9,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait ReviewService {
   import Tables._
-  def retrieveRelevantReviews(hostelIds: Seq[Int], tags: Seq[String]): Future[Seq[SearchReviews]]
+  def retrieveRelevantReviews(hostelIds: Seq[Int], tags: Seq[String]): Future[Map[String,Seq[ReviewRow]]]
 }
 
 trait FilterAttributesFromReview {
@@ -19,20 +19,6 @@ trait FilterAttributesFromReview {
 
   def filterAttributesFromTags(tags: Set[String])(attributes: JsValue): JsValue =
     JsArray(attributes.as[Seq[JsValue]].filter(attribute => tags((attribute \ "attribute_name").as[String])))
-
-  def trimSearchesReviews(tags: Set[String])(searchesReviews: Seq[SearchReviews]): Seq[SearchReviews] = {
-    @annotation.tailrec
-    def trimSearchReviews(hostelId: Int, tags: Set[String], remaining: Seq[ReviewRow], acc: mutable.ListBuffer[ReviewRow]): SearchReviews = {
-      if (tags.isEmpty || remaining.isEmpty)
-        SearchReviews(hostelId, acc.toSeq)
-      else {
-        val nxt = remaining.head
-        val containing = nxt.attributes.fold(Set.empty[JsValue])(_.as[Set[JsValue]]).map(attribute => (attribute \ "attribute_name").as[String])
-        trimSearchReviews(hostelId, tags -- containing, remaining.tail, if ((tags intersect containing).isEmpty) acc else acc :+ nxt)
-      }
-    }
-    searchesReviews.map(srs => trimSearchReviews(srs.hostelId, tags, srs.reviews, mutable.ListBuffer()))
-  }
 
   def trimReviews(tags: Set[String])(reviews: Seq[ReviewRow]) = {
     @annotation.tailrec
@@ -57,20 +43,14 @@ class ReviewServiceImpl(dbConfigProvider: DatabaseConfigProvider)(implicit ec: E
 
   import dbConfig.driver.api._
 
-  def retrieveRelevantReviews(hostelIds: Seq[Int], tags: Seq[String]): Future[Seq[SearchReviews]] =
-    dbConfig.db.run(reviewsAction(hostelIds, tags)
-      .map(filterReviewsAttributes(tags.toSet)))
-      .map(structureApiResponse)
-      .map(trimSearchesReviews(tags.toSet))
-
-  def retrieveRelevantReviews2(hostelIds: Seq[Int], tags: Seq[String]): Future[Map[Int,Seq[ReviewRow]]] =
+  def retrieveRelevantReviews(hostelIds: Seq[Int], tags: Seq[String]): Future[Map[String,Seq[ReviewRow]]] =
     dbConfig.db.run(reviewsAction(hostelIds, tags)
       .map(filterReviewsAttributes(tags.toSet)))
       .map(filterReviews(tags.toSet))
 
   def filterReviews(tags: Set[String])(reviews: Seq[ReviewRow]) =
-    reviews.groupBy(_.hostelId).foldLeft(Map.empty[Int,Seq[ReviewRow]]) { case (filtered, (id, reviews)) =>
-      filtered.updated(id, trimReviews(tags)(reviews))
+    reviews.groupBy(_.hostelId).foldLeft(Map.empty[String,Seq[ReviewRow]]) { case (filtered, (id, reviews)) =>
+      filtered.updated(id.toString, trimReviews(tags)(reviews))
     }
 
   private def filterReviewsAttributes(tags: Set[String])(reviews: Seq[ReviewRow]) = {
