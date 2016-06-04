@@ -33,6 +33,20 @@ trait FilterAttributesFromReview {
     }
     searchesReviews.map(srs => trimSearchReviews(srs.hostelId, tags, srs.reviews, mutable.ListBuffer()))
   }
+
+  def trimReviews(tags: Set[String])(reviews: Seq[ReviewRow]) = {
+    @annotation.tailrec
+    def helper(tags: Set[String], remaining: Seq[ReviewRow], acc: mutable.ListBuffer[ReviewRow]): Seq[ReviewRow] = {
+      if (tags.isEmpty || remaining.isEmpty)
+        acc.toList
+      else {
+        val nxt = remaining.head
+        val containing = nxt.attributes.fold(Set.empty[JsValue])(_.as[Set[JsValue]]).map(attribute => (attribute \ "attribute_name").as[String])
+        helper(tags -- containing, remaining.tail, if ((tags intersect containing).isEmpty) acc else acc :+ nxt)
+      }
+    }
+    helper(tags, reviews, mutable.ListBuffer())
+  }
 }
 
 class ReviewServiceImpl(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)
@@ -48,6 +62,16 @@ class ReviewServiceImpl(dbConfigProvider: DatabaseConfigProvider)(implicit ec: E
       .map(filterReviewsAttributes(tags.toSet)))
       .map(structureApiResponse)
       .map(trimSearchesReviews(tags.toSet))
+
+  def retrieveRelevantReviews2(hostelIds: Seq[Int], tags: Seq[String]): Future[Map[Int,Seq[ReviewRow]]] =
+    dbConfig.db.run(reviewsAction(hostelIds, tags)
+      .map(filterReviewsAttributes(tags.toSet)))
+      .map(filterReviews(tags.toSet))
+
+  def filterReviews(tags: Set[String])(reviews: Seq[ReviewRow]) =
+    reviews.groupBy(_.hostelId).foldLeft(Map.empty[Int,Seq[ReviewRow]]) { case (filtered, (id, reviews)) =>
+      filtered.updated(id, trimReviews(tags)(reviews))
+    }
 
   private def filterReviewsAttributes(tags: Set[String])(reviews: Seq[ReviewRow]) = {
     def filterReviewAttributes(review: ReviewRow) =
