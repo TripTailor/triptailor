@@ -17,7 +17,7 @@ gulp.task('watch', reactTasks, function () {
 });
 
 gulp.task('jquery-ui', function() {
-  return gulp.src(['node_modules/jquery-ui/themes/redmond/*/*', "!node_modules/jquery-ui/themes/redmond/jquery-ui.css", "!node_modules/jquery-ui/themes/redmond/jquery.ui.theme.css"])
+  return gulp.src(['node_modules/jquery-ui/themes/redmond/*/*', "node_modules/jquery-ui/themes/redmond/jquery-ui.min.css"])
   .pipe(gulp.dest('public/stylesheets/jquery-ui/'));
 });
 gulp.task('font-awesome', function() {
