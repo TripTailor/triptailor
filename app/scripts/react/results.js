@@ -96,8 +96,8 @@ const Hostels = (props) => {
 
 const HostelsRow = (props) => (
   <div className="row">
-    <div className="col-md-6 hostel-col"><Hostel name={props.col1.document.name} url={props.col1.document.url} price={props.col1.document.price} images={props.col1.document.images} ctags={props.col2.ctags} checkIn={props.checkIn} checkOut={props.checkOut} /></div>
-    {props.col2 ? <div className="col-md-6 hostel-col"><Hostel name={props.col2.document.name} url={props.col2.document.url} price={props.col2.document.price} images={props.col2.document.images} ctags={props.col2.ctags} checkIn={props.checkIn} checkOut={props.checkOut} /></div> : ""}
+    <div className="col-md-6 hostel-col"><Hostel id={props.col1.document.id} name={props.col1.document.name} url={props.col1.document.url} price={props.col1.document.price} images={props.col1.document.images} ctags={props.col2.ctags} checkIn={props.checkIn} checkOut={props.checkOut} /></div>
+    {props.col2 ? <div className="col-md-6 hostel-col"><Hostel id={props.col2.document.id} name={props.col2.document.name} url={props.col2.document.url} price={props.col2.document.price} images={props.col2.document.images} ctags={props.col2.ctags} checkIn={props.checkIn} checkOut={props.checkOut} /></div> : ""}
   </div>
 );
 
@@ -114,6 +114,14 @@ class Hostel extends React.Component {
       case this.controllerRight: this.setState({selectedImage: this.state.selectedImage + 1 < this.props.images.length ? this.state.selectedImage + 1 : 0}); break;
     }
   }
+  trackHostelClick() {
+    if(mixpanel)
+      mixpanel.track("Hostel Click", {
+        "tags": this.props.ctags,
+        "hostelId": this.props.id,
+        "hostel": this.props.name
+      });
+  }
   render() {
     var url = this.props.url + "?dateFrom=" + this.props.checkIn + "&dateTo=" + this.props.checkOut + "&number_of_guests=1";
 
@@ -125,7 +133,7 @@ class Hostel extends React.Component {
       <div className="hostel">
         <div className="hostel-image" style={this.props.images.length > 0 ? {backgroundImage: "url('" + this.props.images[this.state.selectedImage] + "')"} : ""}>
           {this.props.price ? <div className="hostel-price">€{this.props.price.toFixed(2)}</div> : ""}
-          <a href={url} className="hostel-url" target="_blank"></a>
+          <a href={url} className="hostel-url" target="_blank" onClick={this.trackHostelClick.bind(this)}></a>
           {this.props.images.length > 1 ? <div ref={(button) => this.controllerLeft = button} className="image-controller-left" onClick={this.moveImage.bind(this)}>{"<"}</div> : ""}
           {this.props.images.length > 1 ? <div ref={(button) => this.controllerRight = button} className="image-controller-right" onClick={this.moveImage.bind(this)}>{">"}</div> : ""}
           <a href={url} className="hostel-name" target="_blank">{this.props.name}</a>

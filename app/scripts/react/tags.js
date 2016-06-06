@@ -47,7 +47,7 @@ class Tags extends React.Component {
       }
     });
   }
-  trackSearch(e) {
+  trackSearch() {
     if(mixpanel)
       mixpanel.track("Search", {
         "locationId": this.locationId,
