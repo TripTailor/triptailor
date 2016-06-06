@@ -30,7 +30,7 @@ class ClassificationService[A]
       ClassifiedTag(
         name         = tag,
         rating       = rating,
-        scaledRating = Math.log(ratingConstant * (rating + 1))
+        scaledRating = Math.pow(ratingConstant * rating, 1d / 3d)
       )
     }
 

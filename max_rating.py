@@ -38,4 +38,4 @@ for location_row in location_rows:
 
 max_rating = max(ratings)
 print "Max rating: " + str(max_rating)
-print "Rating constant: " + str(math.exp(6) / (max_rating + 1))
+print "Rating constant: " + str(math.pow(6, 3) / max_rating)
