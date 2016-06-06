@@ -47,9 +47,20 @@ class Tags extends React.Component {
       }
     });
   }
+  trackSearch(e) {
+    if(mixpanel)
+      mixpanel.track("Search", {
+        "locationId": this.locationId,
+        "city": this.location[0],
+        "country": this.location[1],
+        "checkIn": this.checkInt,
+        "checkOut": this.checkOut,
+        "tags": this.state.selectedTags
+      });
+  }
   render() {
     return (
-      <form action={jsRoutes.controllers.HomeController.search().url} method="get" className="tags-form">
+      <form action={jsRoutes.controllers.HomeController.search().url} method="get" className="tags-form" onSubmit={this.trackSearch.bind(this)}>
         <InfoHeader city={this.location[0]} country={this.location[1]} checkIn={new Date(this.checkIn)} checkOut={new Date(this.checkOut)} />
         <div className="hint-copy">What are you looking for?</div>
         <div className="help-copy">Select one or more keywords</div>
