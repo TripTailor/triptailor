@@ -12,6 +12,9 @@ class Results extends React.Component {
     this.checkIn = util.getQueryValue("check-in");
     this.checkOut = util.getQueryValue("check-out");
     this.tags = util.getQueryValue("tags").split("-");
+    var emptyIndex = this.tags.indexOf("");
+    if(emptyIndex >= 0)
+      this.tags.splice(emptyIndex, 1);
     this.state = {
       results: []
     };

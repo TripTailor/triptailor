@@ -27,6 +27,7 @@
   border: solid 1px #e3e3e3;
   padding: 6px 9.5px 0 9.5px;
   margin-bottom: 15px;
+  min-height: 46px;
 }
 @media (min-width: 510px) {
   .tags {

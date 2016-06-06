@@ -64,7 +64,7 @@ class Tags extends React.Component {
         <input name="country" type="hidden" value={this.location[1]} />
         <input name="check-in" type="hidden" value={this.checkIn} />
         <input name="check-out" type="hidden" value={this.checkOut} />
-        <input name="tags" type="hidden" value={this.state.submitTags} />
+        {this.state.selectedTags.length > 0 ? <input name="tags" type="hidden" value={this.state.submitTags} /> : ""}
       </form>
     );
   }
