@@ -90,7 +90,7 @@ const Hostels = (props) => {
   for(var i = 0; i < props.results.length; i+=2)
   rows.push(<HostelsRow key={i / 2} col1={props.results[i]} col2={i + 1 < props.results.length ? props.results[i + 1] : null} checkIn={props.checkIn} checkOut={props.checkOut} />);
   return(
-    <div className="container-fluid">{rows}</div>
+    <div className="container-fluid hostels-container">{rows}</div>
   );
 };
 
@@ -126,8 +126,8 @@ class Hostel extends React.Component {
         <div className="hostel-image" style={this.props.images.length > 0 ? {backgroundImage: "url('" + this.props.images[this.state.selectedImage] + "')"} : ""}>
           {this.props.price ? <div className="hostel-price">€{this.props.price.toFixed(2)}</div> : ""}
           <a href={url} className="hostel-url" target="_blank"></a>
-          {this.props.images.length > 1 ? <div ref={(button) => this.controllerLeft = button} className="image-controller-left" onClick={this.moveImage.bind(this)}>{"<"}</div> : ""}
-          {this.props.images.length > 1 ? <div ref={(button) => this.controllerRight = button} className="image-controller-right" onClick={this.moveImage.bind(this)}>{">"}</div> : ""}
+          {this.props.images.length > 1 ? <div ref={(button) => this.controllerLeft = button} className="image-controller-left" onClick={this.moveImage.bind(this)}><i className="fa fa-angle-left fa-2x" /></div> : ""}
+          {this.props.images.length > 1 ? <div ref={(button) => this.controllerRight = button} className="image-controller-right" onClick={this.moveImage.bind(this)}><i className="fa fa-angle-right fa-2x" /></div> : ""}
           <a href={url} className="hostel-name" target="_blank">{this.props.name}</a>
         </div>
         <div className="container-fluid hostel-tags">
