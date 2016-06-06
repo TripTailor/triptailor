@@ -78,13 +78,21 @@ class TagsSelector extends React.Component {
   constructor(props) {
     super(props);
   }
+  componentDidMount() {
+    $(this.button1).addClass("selected");
+  }
   moveSelector(e) {
     e.preventDefault();
+
+    $(this.button1).removeClass("selected");
+    $(this.button2).removeClass("selected");
+    $(this.button3).removeClass("selected");
+
     var slideTime = 400;
     switch(e.target) {
-      case this.button1: $(this.selector).animate({left: 0}, slideTime); break;
-      case this.button2: $(this.selector).animate({left: -460}, slideTime); break;
-      case this.button3: $(this.selector).animate({left: -920}, slideTime); break;
+      case this.button1: $(this.selector).animate({left: 0}, slideTime); $(this.button1).addClass("selected"); break;
+      case this.button2: $(this.selector).animate({left: -460}, slideTime); $(this.button2).addClass("selected"); break;
+      case this.button3: $(this.selector).animate({left: -920}, slideTime); $(this.button3).addClass("selected"); break;
     }
   }
   render() {
@@ -117,7 +125,7 @@ class TagsSelector extends React.Component {
 
 const SelectedTags = (props) => {
   var tags = props.tags.map((tag, i) => (
-    <span key={i} className="selected-tag" onClick={props.removeTag}>{tag} <span className="close">X</span></span>
+    <span key={i} className="selected-tag" onClick={props.removeTag}>{tag} <span className="close">x</span></span>
   ));
   return <div className="selected-tags">{tags}</div>;
 };
