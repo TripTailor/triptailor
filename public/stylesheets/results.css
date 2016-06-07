@@ -1,3 +1,13 @@
+html, body {
+  height: 100%;
+}
+body {
+  background-color: #fff;
+}
+
+.header {
+  background-color: #f4f5f7;
+}
 @media (min-width: 510px) {
   .header {
     margin-top: -70px;
@@ -53,6 +63,7 @@
 .hostels-container {
   background-color: #fff;
   padding-top: 10px;
+  height: 100%;
 }
 .hostel {
   margin-bottom: 30px;
