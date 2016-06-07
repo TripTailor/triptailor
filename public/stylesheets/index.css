@@ -142,23 +142,10 @@ input {
   outline: none;
 }
 
-.footer {
-  padding: 25px;
-}
 @media (min-height: 570px) {
   .footer {
     position: absolute;
     bottom: 0;
     width: 100%;
   }
-}
-.about-us {
-  float: right;
-  font-family: 'Open Sans', sans-serif;
-  color: #fff;
-  text-decoration: underline;
-}
-.about-us:visited, .about-us:hover, .about-us:active {
-  color: #fff;
-  text-decoration: underline;
 }

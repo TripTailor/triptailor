@@ -10,14 +10,7 @@ var dateToSubmit = function(date) {
   return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 };
 
-const Index = () => (
-  <div className="index-container">
-    <SearchForm />
-    <Footer />
-</div>
-);
-
-class SearchForm extends React.Component {
+class Index extends React.Component {
   constructor() {
     super();
 
@@ -86,14 +79,16 @@ class SearchForm extends React.Component {
   }
   render() {
     return (
-      <form action={jsRoutes.controllers.HomeController.tags().url} method="get" className="search-form" onSubmit={this.validateForm.bind(this)}>
-        <div className="title">TripTailor Hostels</div>
-        <div className="subtitle">Imagine staying at the hostel you've been looking for</div>
-        <div className="hint-copy">Where and when do you want to go?</div>
-        <AutoCompleteInput city={this.state.city} updateCity={this.updateCity.bind(this)} location={this.state.location} locationId={this.state.locationId} hints={this.state.cityHints} selectHint={this.selectHint.bind(this)} handleBlur={this.handleBlur.bind(this)} handleKeyUp={this.handleKeyUp.bind(this)} error={this.state.error} />
-        <DateInput checkIn={this.state.checkIn} updateCheckIn={this.updateCheckIn.bind(this)} checkOut={this.state.checkOut} updateCheckOut={this.updateCheckOut.bind(this)} submitCheckIn={this.state.submitCheckIn} submitCheckOut={this.state.submitCheckOut} cancelBlur={this.cancelBlur} />
-        <button type="submit" className="next-button">Next</button>
-      </form>
+      <div className="index-container">
+       <form action={jsRoutes.controllers.HomeController.tags().url} method="get" className="search-form" onSubmit={this.validateForm.bind(this)}>
+         <div className="title">TripTailor Hostels</div>
+         <div className="subtitle">Imagine staying at the hostel you've been looking for</div>
+         <div className="hint-copy">Where and when do you want to go?</div>
+         <AutoCompleteInput city={this.state.city} updateCity={this.updateCity.bind(this)} location={this.state.location} locationId={this.state.locationId} hints={this.state.cityHints} selectHint={this.selectHint.bind(this)} handleBlur={this.handleBlur.bind(this)} handleKeyUp={this.handleKeyUp.bind(this)} error={this.state.error} />
+         <DateInput checkIn={this.state.checkIn} updateCheckIn={this.updateCheckIn.bind(this)} checkOut={this.state.checkOut} updateCheckOut={this.updateCheckOut.bind(this)} submitCheckIn={this.state.submitCheckIn} submitCheckOut={this.state.submitCheckOut} cancelBlur={this.cancelBlur} />
+         <button type="submit" className="next-button">Next</button>
+       </form>
+     </div>
     );
   }
 }
@@ -171,11 +166,5 @@ class DateInput extends React.Component {
     );
   }
 }
-
-const Footer = () => (
-  <div className="footer">
-    <a href={jsRoutes.controllers.HomeController.aboutUs().url} className="about-us">About Us</a>
-  </div>
-);
 
 ReactDOM.render(<Index />, $("#content")[0]);
