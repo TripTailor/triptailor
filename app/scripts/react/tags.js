@@ -50,7 +50,7 @@ class Tags extends React.Component {
   render() {
     return (
       <form action={jsRoutes.controllers.HomeController.search().url} method="get" className="tags-form">
-        <InfoHeader city={this.location[0]} country={this.location[1]} checkIn={new Date(this.checkIn)} checkOut={new Date(this.checkOut)} />
+        <InfoHeader city={this.location[0]} country={this.location[1]} checkIn={util.queryDateToString(this.checkIn)} checkOut={util.queryDateToString(this.checkOut)} />
         <div className="hint-copy">What are you looking for?</div>
         <div className="help-copy">Select one or more keywords</div>
         <TagsSelector tags={this.state.tags} selectedTags={this.state.selectedTags} selectTag={this.selectTag.bind(this)} removeTag={this.removeTag.bind(this)} />

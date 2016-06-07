@@ -39,7 +39,7 @@ class Results extends React.Component {
   render() {
     return(
       <div>
-        <Header city={this.city} country={this.country} checkIn={new Date(this.checkIn)} checkOut={new Date(this.checkOut)} tags={this.tags} noResults={this.state.results.length} />
+        <Header city={this.city} country={this.country} checkIn={util.queryDateToString(this.checkIn)} checkOut={util.queryDateToString(this.checkOut)} tags={this.tags} noResults={this.state.results.length} />
         <Hostels results={this.state.results} checkIn={this.checkIn} checkOut={this.checkOut} />
       </div>
     );

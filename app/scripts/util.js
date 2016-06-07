@@ -29,4 +29,9 @@ const tagsToQuery = (tags) => {
   return params;
 };
 
-export { getQueryValue, arrayToString, dateToString, tagsToQuery };
+const queryDateToString = (queryDate) => {
+  var date = queryDate.split("-");
+  return new Date(date[2], date[1], date[0]);
+}
+
+export { getQueryValue, arrayToString, dateToString, tagsToQuery, queryDateToString };
