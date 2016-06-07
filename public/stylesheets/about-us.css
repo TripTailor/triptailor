@@ -35,17 +35,27 @@
 }
 
 .about-team {
-  padding-bottom: 50px;
+  padding-bottom: 25px;
 }
 .team-subheader {
   border-top: solid 1px #cdcdcd;
   padding-top: 50px;
 }
-.founder-col {
+.founder-col, .founder-picture-col {
   margin-top: 25px;
+  margin-bottom: 25px;
+}
+.founder-picture-col {
+  text-align: center;
+}
+@media (min-width: 510px) {
+  .founder-picture-col {
+    text-align: left;
+  }
 }
 .founder-picture {
-  max-width: 100%;
+  width: 200px;
+  border-radius: 50%;
 }
 .founder-name {
   font-size: 20px;

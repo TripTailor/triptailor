@@ -50,11 +50,35 @@ const AboutTeam = () => (
     <div className="copy-subheader team-subheader">Who We Are</div>
     <div className="copy-header">Our <strong className="ubuntu">Team</strong></div>
     <div className="row">
-      <div className="col-md-4 founder-col"><img src={jsRoutes.controllers.Assets.versioned("images/luis.png").url} className="founder-picture" /></div>
+      <div className="col-md-4 founder-picture-col"><img src={jsRoutes.controllers.Assets.versioned("images/luis.png").url} className="founder-picture" /></div>
       <div className="col-md-8 founder-col">
         <div className="founder-name">Luis Galeana</div>
         <div className="founder-subheader">Software Engineer & Data Scientist</div>
         <div className="founder-copy">Luis is a Software Engineer from Mexico. He loves exploring new technologies and has plenty of experience with it. He believes that Machine Learning is the new new thing that will disrupt the way we interact with the world. He is constantly looking for House Music venues and Craft Beer.</div>
+      </div>
+    </div>
+    <div className="row">
+      <div className="col-md-4 founder-picture-col"><img src={jsRoutes.controllers.Assets.versioned("images/orianne.jpg").url} className="founder-picture" /></div>
+      <div className="col-md-8 founder-col">
+        <div className="founder-name">Orianne Gambino</div>
+        <div className="founder-subheader">Business Developer</div>
+        <div className="founder-copy">Orianne is a French business developer that loves to come up with original solutions. Her passion for discovering the world combined with her extensive experience in the hospitality industry gives her a great understanding of travelers' hassles. Always traveling, she loves to settle in colorful destinations and explore local treasures.</div>
+      </div>
+    </div>
+    <div className="row">
+      <div className="col-md-4 founder-picture-col"><img src={jsRoutes.controllers.Assets.versioned("images/heaney.jpg").url} className="founder-picture" /></div>
+      <div className="col-md-8 founder-col">
+        <div className="founder-name">Samuel Heaney</div>
+        <div className="founder-subheader">Software Engineer</div>
+        <div className="founder-copy">Samuel is an American Mexican Software Engineer interested in bridging technology and people. He seeks out projects which push thinking outside the box. When not coding or playing around with new tech, he’s an avid football fanatic and enjoys a good pint of dark beer.</div>
+      </div>
+    </div>
+    <div className="row">
+      <div className="col-md-4 founder-picture-col"><img src={jsRoutes.controllers.Assets.versioned("images/cheky.jpg").url} className="founder-picture" /></div>
+      <div className="col-md-8 founder-col">
+        <div className="founder-name">Serguei Orozco</div>
+        <div className="founder-subheader">Interaction Designer</div>
+        <div className="founder-copy">Serguei is an Interaction Designer from Mexico. He has been working with User Experience for a long time. He knows that understanding the user is what makes an application differentiate. You can usually find him traveling the world and looking for the most authentic and local experience in every place he visits.</div>
       </div>
     </div>
   </div>
