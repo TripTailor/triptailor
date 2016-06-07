@@ -1,11 +1,12 @@
 .footer {
   padding: 25px;
+  text-align: right;
 }
 .about-us {
-  float: right;
   font-family: 'Open Sans', sans-serif;
   color: #fff;
   text-decoration: underline;
+  display: inline-block;
 }
 .about-us:visited, .about-us:hover, .about-us:active {
   color: #fff;
