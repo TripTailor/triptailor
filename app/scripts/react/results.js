@@ -119,6 +119,14 @@ class Hostel extends React.Component {
       case this.controllerRight: this.setState({selectedImage: this.state.selectedImage + 1 < this.props.images.length ? this.state.selectedImage + 1 : 0}); break;
     }
   }
+  trackHostelClick() {
+    if(mixpanel)
+      mixpanel.track("Hostel Click", {
+        "tags": this.props.ctags,
+        "hostelId": this.props.id,
+        "hostel": this.props.name
+      });
+  }
   render() {
     var url = this.props.url + "?dateFrom=" + this.props.checkIn + "&dateTo=" + this.props.checkOut + "&number_of_guests=1";
 
@@ -130,7 +138,7 @@ class Hostel extends React.Component {
       <div className="hostel">
         <div className="hostel-image" style={this.props.images.length > 0 ? {backgroundImage: "url('" + this.props.images[this.state.selectedImage] + "')"} : ""}>
           {this.props.price ? <div className="hostel-price">€{this.props.price.toFixed(2)}</div> : ""}
-          <a href={url} className="hostel-url" target="_blank"></a>
+          <a href={url} className="hostel-url" target="_blank" onClick={this.trackHostelClick.bind(this)}></a>
           {this.props.images.length > 1 ? <div ref={(button) => this.controllerLeft = button} className="image-controller-left" onClick={this.moveImage.bind(this)}><i className="fa fa-angle-left fa-2x" /></div> : ""}
           {this.props.images.length > 1 ? <div ref={(button) => this.controllerRight = button} className="image-controller-right" onClick={this.moveImage.bind(this)}><i className="fa fa-angle-right fa-2x" /></div> : ""}
           <a href={url} className="hostel-name" target="_blank">{this.props.name}</a>
