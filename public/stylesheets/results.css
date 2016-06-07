@@ -8,7 +8,7 @@ body {
 .header {
   background-color: #f4f5f7;
 }
-@media (min-width: 510px) {
+@media (min-width: 570px) {
   .header {
     margin-top: -70px;
     padding-top: 14px;
@@ -39,7 +39,7 @@ body {
   margin-bottom: 15px;
   min-height: 46px;
 }
-@media (min-width: 510px) {
+@media (min-width: 570px) {
   .tags {
     margin-left: 10px;
   }

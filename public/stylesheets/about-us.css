@@ -48,7 +48,7 @@
 .founder-picture-col {
   text-align: center;
 }
-@media (min-width: 510px) {
+@media (min-width: 570px) {
   .founder-picture-col {
     text-align: left;
   }
