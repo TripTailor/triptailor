@@ -142,16 +142,13 @@ input {
   outline: none;
 }
 
+.footer {
+  background-color: transparent;
+}
 @media (min-height: 570px) {
   .footer {
     position: absolute;
     bottom: 0;
     width: 100%;
   }
-}
-.about-us {
-  color: #fff;
-}
-.about-us:visited, .about-us:hover, .about-us:active {
-  color: #fff;
 }

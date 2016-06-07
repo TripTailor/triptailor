@@ -174,10 +174,19 @@
   }
 }
 
+.footer {
+  background-color: transparent;
+}
 @media (min-height: 670px) {
   .footer {
     position: absolute;
     bottom: 0;
     width: 100%;
   }
+}
+.about-us {
+  color: #808080;
+}
+.about-us:visited, .about-us:hover, .about-us:active {
+  color: #808080;
 }
