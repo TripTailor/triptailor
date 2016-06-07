@@ -31,7 +31,7 @@ const tagsToQuery = (tags) => {
 
 const queryDateToString = (queryDate) => {
   var date = queryDate.split("-");
-  return new Date(date[2], date[1], date[0]);
+  return new Date(date[0], date[1], date[2]);
 }
 
 export { getQueryValue, arrayToString, dateToString, tagsToQuery, queryDateToString };
