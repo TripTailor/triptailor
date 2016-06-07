@@ -136,7 +136,9 @@ class Hostel extends React.Component {
           <a href={url} className="hostel-name" target="_blank">{this.props.name}</a>
         </div>
         <div className="container-fluid hostel-tags">
-          <div className="hostel-tags-copy">See what people are saying:</div>{tagsRows}</div>
+          <div className="hostel-tags-copy">{this.props.ctags.length > 0 ? "See what people are saying:" : "Pick some keywords to see what people are saying"}</div>
+          {tagsRows}
+        </div>
         {/* <Reviews /> */}
       </div>
     );
