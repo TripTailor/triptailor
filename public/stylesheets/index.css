@@ -149,3 +149,9 @@ input {
     width: 100%;
   }
 }
+.about-us {
+  color: #fff;
+}
+.about-us:visited, .about-us:hover, .about-us:active {
+  color: #fff;
+}

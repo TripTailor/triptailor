@@ -4,11 +4,11 @@
 }
 .about-us {
   font-family: 'Open Sans', sans-serif;
-  color: #fff;
   text-decoration: underline;
   display: inline-block;
+  color: #808080;
 }
 .about-us:visited, .about-us:hover, .about-us:active {
-  color: #fff;
+  color: #808080;
   text-decoration: underline;
 }
