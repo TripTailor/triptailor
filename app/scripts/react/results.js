@@ -137,10 +137,7 @@ class Hostel extends React.Component {
         </div>
         <div className="container-fluid hostel-tags">
           <div className="hostel-tags-copy">See what people are saying:</div>{tagsRows}</div>
-        <div className="hostel-reviews">
-          <div className="hostel-reviews-text">The  location  of this hostel is the best; just 3 blocks walking from Empire State and other stuff.</div>
-          <div className="hostel-reviews-author">— Thomas Bangalter</div>
-        </div>
+        {/* <Reviews /> */}
       </div>
     );
   }
@@ -175,5 +172,12 @@ const TagColumn = (props) => {
     </div>
   );
 };
+
+const Reviews = () => (
+  <div className="hostel-reviews">
+    <div className="hostel-reviews-text">The  location  of this hostel is the best; just 3 blocks walking from Empire State and other stuff.</div>
+    <div className="hostel-reviews-author">— Thomas Bangalter</div>
+  </div>
+);
 
 ReactDOM.render(<Results />, $("#content")[0]);
