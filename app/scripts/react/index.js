@@ -174,7 +174,7 @@ class DateInput extends React.Component {
 
 const Footer = () => (
   <div className="footer">
-    <a className="about-us">About Us</a>
+    <a href={jsRoutes.controllers.HomeController.aboutUs().url} className="about-us">About Us</a>
   </div>
 );
 

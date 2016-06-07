@@ -29,4 +29,8 @@ class HomeController @Inject() extends Controller {
     Ok(views.html.results())
   }
 
+  def aboutUs = Action { implicit request =>
+    Ok(views.html.aboutUs())
+  }
+
 }

@@ -4,7 +4,7 @@ var babelify = require('babelify');
 var source = require('vinyl-source-stream');
 var $ = require('jquery');
 
-var reactTasks = ['header', 'index', 'tags', 'results'];
+var reactTasks = ['header', 'index', 'tags', 'results', 'about-us'];
 
 reactTasks.forEach(function(task, i, arr) {
   gulp.task(task, function() {
