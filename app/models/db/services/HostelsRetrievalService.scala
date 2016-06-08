@@ -23,7 +23,12 @@ class HostelsRetrievalServiceImpl(dbConfigProvider: DatabaseConfigProvider) exte
   import dbConfig.driver.api._
 
   def retrieveHostelsModel(locationId: Int): Future[Seq[RatedDocument[HostelRow]]] =
-    dbConfig.db.run(loadHostelsComponentsQuery(locationId).result.map(buildHostelDocuments))
+    dbConfig.db.run {
+      for {
+        hs   ← loadHostelsQuery(locationId).result
+        docs ← DBIO.sequence(hs.map(h => loadHostelAttributesQuery(h.id).result.map(buildHostelDocument(h))))
+      } yield docs
+    }
 
   // TODO: Define implicit slick.lifted.Rep[java.sql.Date] => slick.lifted.Ordered
   def retrieveHostelReviews(hostelId: Int): Future[Seq[ReviewRow]] =
@@ -35,13 +40,18 @@ class HostelsRetrievalServiceImpl(dbConfigProvider: DatabaseConfigProvider) exte
     ).map(reverseReviews)
 
   /** Slick Query[T] returning methods **/
-  private def loadHostelsComponentsQuery(locationId: Int) =
+  private def loadHostelsQuery(locationId: Int) =
     for {
-      l  ← Location         if l.id === locationId
-      h  ← Hostel           if h.locationId === l.id
-      ha ← HostelAttribute  if ha.hostelId === h.id
-      a  ← Attribute        if a.id === ha.attributeId
-    } yield (h, a, ha) <> (HostelDocumentComponent.tupled, HostelDocumentComponent.unapply)
+      l ← Location if l.id === locationId
+      h ← Hostel   if l.id === h.locationId
+    } yield h
+
+  private def loadHostelAttributesQuery(hostelId: Int) =
+    for {
+      ha      ← HostelAttribute                if ha.hostelId === hostelId
+      a       ← Attribute                      if a.id        === ha.attributeId
+      metrics = (ha.rating, ha.freq, ha.cfreq) <> (RatingMetrics.tupled, RatingMetrics.unapply)
+    } yield (a.name, metrics) <> (HostelAttributeComponent.tupled, HostelAttributeComponent.unapply)
 
   private def loadHostelReviewsQuery(hostelId: Int) =
     for {
@@ -51,29 +61,22 @@ class HostelsRetrievalServiceImpl(dbConfigProvider: DatabaseConfigProvider) exte
   /** End of Slick Query[T] returning methods **/
 
   /** Slick DBIOAction composers **/
-  private def buildHostelDocuments(rows: Seq[HostelDocumentComponent]): Seq[RatedDocument[HostelRow]] = {
+  private def buildHostelDocument(h: HostelRow)(components: Seq[HostelAttributeComponent]) = {
     @annotation.tailrec
-    def buildDocument(res: RatedDocument[HostelRow])(nxt: Seq[HostelDocumentComponent]): RatedDocument[HostelRow] =
+    def buildDocument(res: RatedDocument[HostelRow])(nxt: Seq[HostelAttributeComponent]): RatedDocument[HostelRow] =
       if (nxt.isEmpty)
         res
       else {
         val comp = nxt.head
-        val h    = comp.h
-        val a    = comp.a
-        val ha   = comp.ha
-        if (nxt.isEmpty)
-          res
-        else if (res == null)
-          buildDocument(RatedDocument(h, Map(a.name -> RatingMetrics(ha.rating, ha.freq, ha.cfreq))))(nxt.tail)
-        else
-          buildDocument(res.copy(metrics = res.metrics.updated(a.name, RatingMetrics(ha.rating, ha.freq, ha.cfreq))))(nxt.tail)
+        buildDocument(res.copy(metrics = res.metrics.updated(comp.name, comp.metrics)))(nxt.tail)
       }
-    rows.groupBy(_.h.id).values.map(buildDocument(null)).toSeq
+
+    buildDocument(RatedDocument(h, Map()))(components)
   }
 
   private def reverseReviews(rows: Seq[ReviewRow]) = rows.reverse
   /** End of Slick DBIOAction composers **/
 
-  private[this] case class HostelDocumentComponent(h: HostelRow, a: AttributeRow, ha: HostelAttributeRow)
+  private[this] case class HostelAttributeComponent(name: String, metrics: RatingMetrics)
 
 }
