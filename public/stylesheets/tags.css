@@ -130,6 +130,21 @@
   margin-top: 35px;
   margin-bottom: 20px;
 }
+@media (min-width: 510px) {
+  .buttons-container {
+    position: relative;
+    width: 460px;
+    left: 50%;
+    margin-left: -230px;
+  }
+}
+@media (min-height: 670px) {
+  .buttons-container {
+    position: absolute;
+    bottom: 70px;
+    margin-bottom: 0;
+  }
+}
 .back-button {
   width: 47.5%;
   height: 45px;
@@ -145,6 +160,11 @@
   color: #fff;
   text-decoration: none;
 }
+@media (min-width: 510px) {
+  .back-button {
+    width: 225px;
+  }
+}
 .search-button {
   margin-left: 2.5%;
   width: 47.5%;
@@ -157,17 +177,6 @@
   outline: none;
 }
 @media (min-width: 510px) {
-  .buttons-container {
-    position: absolute;
-    width: 460px;
-    bottom: 70px;
-    left: 50%;
-    margin-left: -230px;
-    margin-bottom: 0;
-  }
-  .back-button {
-    width: 225px;
-  }
   .search-button {
     margin-left: 10px;
     width: 225px;
