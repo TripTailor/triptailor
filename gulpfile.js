@@ -27,8 +27,7 @@ gulp.task('font-awesome', function() {
   .pipe(gulp.dest('public/fonts/'));
 });
 
-gulp.task('default', ['watch', 'jquery-ui', 'font-awesome']);
-
+gulp.task('default', ['set-dev', 'watch', 'jquery-ui', 'font-awesome']);
 
 var transform = function(entry) {
   return browserify({entries: 'app/scripts/react/' + entry})
@@ -41,3 +40,12 @@ var transform = function(entry) {
   .pipe(source('bundle-' + entry))
   .pipe(gulp.dest('public/javascripts/'));
 };
+
+gulp.task('set-dev', function() {
+  return process.env.NODE_ENV = 'development';
+});
+gulp.task('set-prod', function() {
+  return process.env.NODE_ENV = 'production';
+});
+gulp.task('build', reactTasks);
+gulp.task('production', ['set-prod', 'build']);
