@@ -78,6 +78,7 @@ class ReviewServiceImpl(dbConfigProvider: DatabaseConfigProvider)(implicit ec: E
               FROM (
                 SELECT id, jsonb_array_elements(attributes) review_attributes
                 FROM review
+                WHERE review.hostel_id = ANY('{#${hostelIds.mkString(",")}}')
               ) attributes_proj
               WHERE review_attributes->>'attribute_name' = ANY('{#${tags.mkString(",")}}')
             ) _
