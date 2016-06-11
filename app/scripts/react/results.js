@@ -91,9 +91,16 @@ const TagsInput = (props) => {
 const Hostels = (props) => {
   var rows = [];
   for(var i = 0; i < props.results.length; i+=2)
-  rows.push(<HostelsRow key={i / 2} col1={props.results[i]} col2={i + 1 < props.results.length ? props.results[i + 1] : null} checkIn={props.checkIn} checkOut={props.checkOut} />);
-  return(
-    <div className="container-fluid hostels-container">{rows}</div>
+    rows.push(<HostelsRow key={i / 2} col1={props.results[i]} col2={i + 1 < props.results.length ? props.results[i + 1] : null} checkIn={props.checkIn} checkOut={props.checkOut} />);
+  return (
+    <div>
+    {rows.length > 0 ?
+    <div className="container-fluid hostels-container">{rows}</div> :
+    <div className="container-fluid hostels-container loader">
+      <div><strong>Analysing Hostelworld reviews</strong></div>
+      <img className="loader-gif" src={jsRoutes.controllers.Assets.versioned("images/loader.gif").url} />
+    </div>}
+    </div>
   );
 };
 
@@ -144,7 +151,7 @@ class Hostel extends React.Component {
           <a href={url} className="hostel-name" target="_blank">{this.props.name}</a>
         </div>
         <div className="container-fluid hostel-tags">
-          <div className="hostel-tags-copy">{this.props.ctags.length > 0 ? "See what people are saying:" : "Pick some keywords to see what people are saying"}</div>
+          <div className="hostel-tags-copy">{this.props.ctags.length > 0 ? "This is what the reviews say:" : "Pick some keywords to see what the reviews say"}</div>
           {tagsRows}
         </div>
         {/* <Reviews /> */}
