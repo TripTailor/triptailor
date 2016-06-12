@@ -16,7 +16,8 @@ class Results extends React.Component {
     if(emptyIndex >= 0)
       this.tags.splice(emptyIndex, 1);
     this.state = {
-      results: []
+      results: [],
+      maxes: {}
     };
   }
   componentWillMount() {
@@ -29,18 +30,28 @@ class Results extends React.Component {
       dataType: "json",
       type: "GET",
       success: function(data) {
-        this.setState({results: data});
+        this.setState({results: data}, this.getMaxRatings);
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(url, status, err);
       }
     });
   }
+  getMaxRatings() {
+    var maxes = [];
+    this.state.results.forEach((result) => {
+      if(maxes.length < result.ctags.length)
+        maxes = result.ctags.map((ctag) => ctag.rating);
+      else
+        maxes = maxes = result.ctags.map((ctag, i) => ctag.rating > maxes[i] ? ctag.rating : maxes[i]);
+    });
+    this.setState({maxes: maxes});
+  }
   render() {
     return(
       <div className="results">
         <Header city={this.city} country={this.country} checkIn={util.queryDateToString(this.checkIn)} checkOut={util.queryDateToString(this.checkOut)} tags={this.tags} noResults={this.state.results.length} />
-        <Hostels results={this.state.results} checkIn={this.checkIn} checkOut={this.checkOut} />
+        <Hostels results={this.state.results} checkIn={this.checkIn} checkOut={this.checkOut} maxes={this.state.maxes} />
       </div>
     );
   }
@@ -91,7 +102,7 @@ const TagsInput = (props) => {
 const Hostels = (props) => {
   var rows = [];
   for(var i = 0; i < props.results.length; i+=2)
-    rows.push(<HostelsRow key={i / 2} col1={props.results[i]} col2={i + 1 < props.results.length ? props.results[i + 1] : null} checkIn={props.checkIn} checkOut={props.checkOut} />);
+    rows.push(<HostelsRow key={i / 2} col1={props.results[i]} col2={i + 1 < props.results.length ? props.results[i + 1] : null} checkIn={props.checkIn} checkOut={props.checkOut} maxes={props.maxes} />);
   return (
     <div>
     {rows.length > 0 ?
@@ -106,8 +117,8 @@ const Hostels = (props) => {
 
 const HostelsRow = (props) => (
   <div className="row">
-    <div className="col-md-6 hostel-col"><Hostel name={props.col1.document.name} url={props.col1.document.url} price={props.col1.document.price} images={props.col1.document.images} ctags={props.col1.ctags} checkIn={props.checkIn} checkOut={props.checkOut} /></div>
-    {props.col2 ? <div className="col-md-6 hostel-col"><Hostel name={props.col2.document.name} url={props.col2.document.url} price={props.col2.document.price} images={props.col2.document.images} ctags={props.col2.ctags} checkIn={props.checkIn} checkOut={props.checkOut} /></div> : ""}
+    <div className="col-md-6 hostel-col"><Hostel name={props.col1.document.name} url={props.col1.document.url} price={props.col1.document.price} images={props.col1.document.images} ctags={props.col1.ctags} checkIn={props.checkIn} checkOut={props.checkOut} maxes={props.maxes} /></div>
+    {props.col2 ? <div className="col-md-6 hostel-col"><Hostel name={props.col2.document.name} url={props.col2.document.url} price={props.col2.document.price} images={props.col2.document.images} ctags={props.col2.ctags} checkIn={props.checkIn} checkOut={props.checkOut} maxes={props.maxes} /></div> : ""}
   </div>
 );
 
@@ -120,7 +131,6 @@ class Hostel extends React.Component {
   }
   moveImage(e) {
     var target = e.target == this.controllerLeft || e.target == this.controllerRight ? e.target : e.target.parentNode;
-    console.log(target);
     switch(target) {
       case this.controllerLeft: this.setState({selectedImage: this.state.selectedImage - 1 >= 0 ? this.state.selectedImage - 1 : this.props.images.length - 1}); break;
       case this.controllerRight: this.setState({selectedImage: this.state.selectedImage + 1 < this.props.images.length ? this.state.selectedImage + 1 : 0}); break;
@@ -139,7 +149,7 @@ class Hostel extends React.Component {
 
     var tagsRows = [];
     for(var i = 0; i < this.props.ctags.length; i+=2)
-      tagsRows.push(<TagsRow key={i / 2} tag1={this.props.ctags[i]} tag2={i + 1 < this.props.ctags.length ? this.props.ctags[i + 1] : null} />);
+      tagsRows.push(<TagsRow key={i / 2} tag1={this.props.ctags[i]} tag2={i + 1 < this.props.ctags.length ? this.props.ctags[i + 1] : null} max1={this.props.maxes[i]} max2={i + 1 < this.props.ctags.length ? this.props.maxes[i + 1] : null} />);
 
       return (
       <div className="hostel">
@@ -162,13 +172,14 @@ class Hostel extends React.Component {
 
 const TagsRow = (props) => (
   <div className="row">
-    <TagColumn tag={props.tag1.name} scaledRating={props.tag1.scaledRating} />
-    {props.tag2 ? <TagColumn tag={props.tag2.name} scaledRating={props.tag2.scaledRating} /> : ""}
+    <TagColumn tag={props.tag1.name} rating={props.tag1.rating} max={props.max1} />
+    {props.tag2 ? <TagColumn tag={props.tag2.name} rating={props.tag2.rating} max={props.max2} /> : ""}
   </div>
 );
 
 const TagColumn = (props) => {
-  var scaledRating = Math.ceil(props.scaledRating) - 1;
+  var ratingConstant = Math.pow(6, 2) / parseInt(props.max);
+  var scaledRating = Math.ceil(Math.pow(ratingConstant * props.rating, 1.0 / 2.0)) - 1;
   if(scaledRating < 0)
     scaledRating = 0;
   if(scaledRating > 5)
