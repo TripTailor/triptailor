@@ -117,8 +117,8 @@ const Hostels = (props) => {
 
 const HostelsRow = (props) => (
   <div className="row">
-    <div className="col-md-6 hostel-col"><Hostel i={props.i} name={props.col1.document.name} url={props.col1.document.url} price={props.col1.document.price} images={props.col1.document.images} ctags={props.col1.ctags} checkIn={props.checkIn} checkOut={props.checkOut} maxes={props.maxes} /></div>
-    {props.col2 ? <div className="col-md-6 hostel-col"><Hostel i={1} name={props.col2.document.name} url={props.col2.document.url} price={props.col2.document.price} images={props.col2.document.images} ctags={props.col2.ctags} checkIn={props.checkIn} checkOut={props.checkOut} maxes={props.maxes} /></div> : ""}
+    <div className="col-md-6 hostel-col"><Hostel i={props.i} name={props.col1.document.name} url={props.col1.document.url} price={props.col1.document.price} images={props.col1.document.images} ctags={props.col1.ctags} checkIn={props.checkIn} checkOut={props.checkOut} maxes={props.maxes} noReviews={props.col1.document.noReviews} /></div>
+    {props.col2 ? <div className="col-md-6 hostel-col"><Hostel i={1} name={props.col2.document.name} url={props.col2.document.url} price={props.col2.document.price} images={props.col2.document.images} ctags={props.col2.ctags} checkIn={props.checkIn} checkOut={props.checkOut} maxes={props.maxes} noReviews={props.col2.document.noReviews} /></div> : ""}
   </div>
 );
 
@@ -162,7 +162,7 @@ class Hostel extends React.Component {
           <a href={url} className="hostel-name" target="_blank">{this.props.name}</a>
         </div>
         <div className="container-fluid hostel-tags">
-          <div className="hostel-tags-copy">{this.props.ctags.length > 0 ? "Summary of the reviews:" : "Pick some keywords to see what the reviews say"}</div>
+          <div className="hostel-tags-copy">{this.props.ctags.length > 0 ? "Summary of the " + this.props.noReviews + " reviews:" : "Pick some keywords to see what the reviews say"}</div>
           {tagsRows}
         </div>
         {/* <Reviews /> */}
@@ -179,8 +179,7 @@ const TagsRow = (props) => (
 );
 
 const TagColumn = (props) => {
-  var ratingConstant = Math.pow(6, 2) / parseInt(props.max);
-  var scaledRating = Math.ceil(Math.pow(ratingConstant * props.rating, 1.0 / 2.0)) - 1;
+  var scaledRating = Math.ceil(props.rating * 6 / parseInt(props.max)) - 1;
   if(scaledRating < 0)
     scaledRating = 0;
   if(scaledRating > 5)
