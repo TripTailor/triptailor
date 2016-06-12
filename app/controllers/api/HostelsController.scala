@@ -41,11 +41,10 @@ class HostelsController @Inject()(dbConfig: DatabaseConfigProvider, env: Environ
             ratedDocs,
             conf.getDouble("classification.b").get,
             conf.getDouble("classification.ratingConstant").get,
-            params.tags,
             stopWordsService
           )
         }
-      } yield classifier.classify
+      } yield classifier.classify(params.tags)
 
     classifiedDocs.map(Json.toJson(_)).map(Ok(_))
   }

@@ -6,22 +6,21 @@ class ClassificationService[A]
                            (m: Seq[RatedDocument[A]],
                             b: Double,
                             ratingConstant: Double,
-                            tags: Seq[String],
                             service: StopWordsFilterService) {
   import extensions._
   import ClassificationService._
 
-  def classify: Seq[ClassifiedDocument[A]] = {
+  def classify(tags: Seq[String]): Seq[ClassifiedDocument[A]] = {
     val avgdl = compute_avgdl(tags)
     for {
       d      ← m
       dl     = compute_dl(d)
-      ctags  = classifyDocTags(d, dl, avgdl)
+      ctags  = classifyDocTags(d, tags, dl, avgdl)
       rating = ctags.sumBy(_.rating)
     } yield ClassifiedDocument(d, ctags, rating)
   }.sorted
 
-  private def classifyDocTags(d: RatedDocument[A], dl: Double, avgdl: Double): Seq[ClassifiedTag] = {
+  private def classifyDocTags(d: RatedDocument[A], tags: Seq[String], dl: Double, avgdl: Double): Seq[ClassifiedTag] = {
     def unratedCtag(tag: String) =
       ClassifiedTag(name = tag, rating = 0, scaledRating = 0)
 
