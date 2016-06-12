@@ -117,12 +117,6 @@ package object api {
           "ctags"    -> cd.ctags
         )
     }
-
-  private[api] implicit val searchReview: Writes[SearchReviews] =
-    (
-      (__ \ "hostelId").write[Int] and
-      (__ \ "reviews").write[Seq[ReviewRow]]
-    )(unlift(SearchReviews.unapply))
   /** End of API JSON writers **/
 
 }

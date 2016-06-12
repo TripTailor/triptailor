@@ -8,6 +8,4 @@ object ApiDomain {
 
   case class RatedDocument[A](model: A, metrics: Map[String, RatingMetrics])
   case class RatingMetrics(sentiment: Double, freq: Double, cfreq: Double)
-
-  case class SearchReviews(hostelId: Int, reviews: Seq[ReviewRow])
 }

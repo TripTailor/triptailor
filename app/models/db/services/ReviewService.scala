@@ -3,7 +3,6 @@ package models.db.services
 import models.db.schema.Tables
 import play.api.db.slick.DatabaseConfigProvider
 import slick.driver.JdbcProfile
-import controllers.api.ApiDomain.SearchReviews
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -58,12 +57,6 @@ class ReviewServiceImpl(dbConfigProvider: DatabaseConfigProvider)(implicit ec: E
       review.copy(attributes = review.attributes.map(filterAttributesFromTags(tags)))
     reviews.map(filterReviewAttributes)
   }
-
-  private def structureApiResponse(reviews: Seq[ReviewRow]) =
-    reviews.groupBy(_.hostelId).map { case (hostelId, reviews) =>
-      SearchReviews(hostelId, reviews)
-    }.toSeq
-
 
   private def reviewsAction(hostelIds: Seq[Int], tags: Seq[String]) =
     sql"""
