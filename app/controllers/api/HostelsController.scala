@@ -47,7 +47,6 @@ class HostelsController @Inject()(dbConfig: DatabaseConfigProvider, env: Environ
           new ClassificationService(
             ratedDocs,
             conf.getDouble("classification.b").get,
-            conf.getDouble("classification.ratingConstant").get,
             stopWordsService
           )
         }
@@ -64,7 +63,6 @@ class HostelsController @Inject()(dbConfig: DatabaseConfigProvider, env: Environ
           new ClassificationService(
             ratedDocs,
             conf.getDouble("classification.b").get,
-            conf.getDouble("classification.ratingConstant").get,
             stopWordsService
           )
         }

@@ -6,8 +6,10 @@ object ApiDomain {
   case class ClassifiedDocument[A](doc: RatedDocument[A], ctags: Seq[ClassifiedTag], rating: Double)
   case class ClassifiedTag(name: String, rating: Double, scaledRating: Double)
 
-  case class RatedDocument[A](model: A, metrics: Map[String, RatingMetrics])
+  case class RatedDocument[A](model: A, metrics: Map[String, RatingMetricsWithMaxRating])
   case class RatingMetrics(sentiment: Double, freq: Double, cfreq: Double)
+
+  case class RatingMetricsWithMaxRating(m: RatingMetrics, maxRating: Double)
 
   case class SearchReviews(hostelId: Int, reviews: Seq[ReviewRow])
 }

@@ -1,11 +1,10 @@
 package services
 
-import controllers.api.ApiDomain.{ClassifiedDocument, ClassifiedTag, RatedDocument, RatingMetrics}
+import controllers.api.ApiDomain._
 
 class ClassificationService[A]
                            (m: Seq[RatedDocument[A]],
                             b: Double,
-                            ratingConstant: Double,
                             service: StopWordsFilterService) {
   import extensions._
   import ClassificationService._
@@ -29,12 +28,12 @@ class ClassificationService[A]
     def unratedCtag(tag: String) =
       ClassifiedTag(name = tag, rating = 0, scaledRating = 0)
 
-    def ratedCtag(tag: String)(metrics: RatingMetrics) = {
-      val rating = (metrics.cfreq * metrics.sentiment / metrics.freq) / (1 - b + b * (dl / avgdl))
+    def ratedCtag(tag: String)(metrics: RatingMetricsWithMaxRating) = {
+      val rating = (metrics.m.cfreq * metrics.m.sentiment / metrics.m.freq) / (1 - b + b * (dl / avgdl))
       ClassifiedTag(
         name         = tag,
         rating       = rating,
-        scaledRating = Math.pow(ratingConstant * rating, 1d / 3d)
+        scaledRating = Math.pow(metrics.maxRating * rating, 1d / 3d)
       )
     }
 
@@ -48,7 +47,7 @@ class ClassificationService[A]
     m.sumBy(compute_dl) / m.size
 
   private def compute_dl(d: RatedDocument[A]): Double =
-    d.metrics.sumByCond(_._2.freq)(metrics => !service.stopWords(metrics._1))
+    d.metrics.sumByCond(_._2.m.freq)(metrics => !service.stopWords(metrics._1))
 
 }
 
