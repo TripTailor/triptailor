@@ -102,7 +102,7 @@ const TagsInput = (props) => {
 const Hostels = (props) => {
   var rows = [];
   for(var i = 0; i < props.results.length; i+=2)
-    rows.push(<HostelsRow key={i / 2} col1={props.results[i]} col2={i + 1 < props.results.length ? props.results[i + 1] : null} checkIn={props.checkIn} checkOut={props.checkOut} maxes={props.maxes} />);
+    rows.push(<HostelsRow key={i / 2} i={i / 2} col1={props.results[i]} col2={i + 1 < props.results.length ? props.results[i + 1] : null} checkIn={props.checkIn} checkOut={props.checkOut} maxes={props.maxes} />);
   return (
     <div>
     {rows.length > 0 ?
@@ -117,8 +117,8 @@ const Hostels = (props) => {
 
 const HostelsRow = (props) => (
   <div className="row">
-    <div className="col-md-6 hostel-col"><Hostel name={props.col1.document.name} url={props.col1.document.url} price={props.col1.document.price} images={props.col1.document.images} ctags={props.col1.ctags} checkIn={props.checkIn} checkOut={props.checkOut} maxes={props.maxes} /></div>
-    {props.col2 ? <div className="col-md-6 hostel-col"><Hostel name={props.col2.document.name} url={props.col2.document.url} price={props.col2.document.price} images={props.col2.document.images} ctags={props.col2.ctags} checkIn={props.checkIn} checkOut={props.checkOut} maxes={props.maxes} /></div> : ""}
+    <div className="col-md-6 hostel-col"><Hostel i={props.i} name={props.col1.document.name} url={props.col1.document.url} price={props.col1.document.price} images={props.col1.document.images} ctags={props.col1.ctags} checkIn={props.checkIn} checkOut={props.checkOut} maxes={props.maxes} /></div>
+    {props.col2 ? <div className="col-md-6 hostel-col"><Hostel i={1} name={props.col2.document.name} url={props.col2.document.url} price={props.col2.document.price} images={props.col2.document.images} ctags={props.col2.ctags} checkIn={props.checkIn} checkOut={props.checkOut} maxes={props.maxes} /></div> : ""}
   </div>
 );
 
@@ -154,6 +154,7 @@ class Hostel extends React.Component {
       return (
       <div className="hostel">
         <div className="hostel-image" style={this.props.images.length > 0 ? {backgroundImage: "url('" + this.props.images[this.state.selectedImage] + "')"} : ""}>
+          {this.props.i == 0 ? <div className="hostel-flag">Best match for you</div> : ""}
           {this.props.price ? <div className="hostel-price">€{this.props.price.toFixed(2)}</div> : ""}
           <a href={url} className="hostel-url" target="_blank" onClick={this.trackHostelClick.bind(this)}></a>
           {this.props.images.length > 1 ? <div ref={(button) => this.controllerLeft = button} className="image-controller-left" onClick={this.moveImage.bind(this)}><i className="fa fa-angle-left fa-2x" /></div> : ""}
