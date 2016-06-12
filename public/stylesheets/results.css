@@ -70,7 +70,7 @@ body {
   padding-top: 50px;
   padding-bottom: 50px;
   text-align: center;
-  font-size: 18px;
+  font-size: 36px;
 }
 .loader-gif {
   margin-top: 10px;
@@ -143,6 +143,7 @@ body {
 }
 .hostel-tags-copy {
   margin-bottom: 25px;
+  font-size: 20px;
 }
 .hostel-tag-col {
   margin-bottom: 10px;

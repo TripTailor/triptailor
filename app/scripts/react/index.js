@@ -82,7 +82,7 @@ class Index extends React.Component {
       <div className="index-container">
        <form action={jsRoutes.controllers.HomeController.tags().url} method="get" className="search-form" onSubmit={this.validateForm.bind(this)}>
          <div className="title">TripTailor Hostels</div>
-         <div className="subtitle">Imagine staying at the hostel you've been looking for</div>
+         <div className="subtitle">We read reviews for you, so you don't have to</div>
          <div className="hint-copy">Where and when do you want to go?</div>
          <AutoCompleteInput city={this.state.city} updateCity={this.updateCity.bind(this)} location={this.state.location} locationId={this.state.locationId} hints={this.state.cityHints} selectHint={this.selectHint.bind(this)} handleBlur={this.handleBlur.bind(this)} handleKeyUp={this.handleKeyUp.bind(this)} error={this.state.error} />
          <DateInput checkIn={this.state.checkIn} updateCheckIn={this.updateCheckIn.bind(this)} checkOut={this.state.checkOut} updateCheckOut={this.updateCheckOut.bind(this)} submitCheckIn={this.state.submitCheckIn} submitCheckOut={this.state.submitCheckOut} cancelBlur={this.cancelBlur} />
