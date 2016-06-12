@@ -12,7 +12,8 @@ GET     /about-us                   controllers.HomeController.aboutUs
 GET     /api/locations              controllers.api.LocationsController.retrieveLocationHints
 GET     /api/tags                   controllers.api.TagsController.mostFrequentTags
 GET     /api/reviews                controllers.api.ReviewsController.retrieveReviews
-GET     /api/classification         controllers.api.HostelsController.classify
+GET     /api/classify               controllers.api.HostelsController.classify
+GET     /api/classifyAll            controllers.api.HostelsController.classifyAll
 GET     /api/hostel/reviews         controllers.api.HostelsController.retrieveReviews
 
 # Map static resources from the /public folder to the /assets URL path

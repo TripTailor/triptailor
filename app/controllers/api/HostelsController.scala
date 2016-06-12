@@ -21,7 +21,14 @@ class HostelsController @Inject()(dbConfig: DatabaseConfigProvider, env: Environ
   def classify = Action.async { implicit request =>
     classificationParams.bindFromRequest.fold(
       hasErrors = incorrectServiceCall,
-      success   = invokeClassificationService
+      success   = invokeClassifyService
+    )
+  }
+
+  def classifyAll = Action.async { implicit request =>
+    recordIdParams.bindFromRequest.fold(
+      hasErrors = incorrectServiceCall,
+      success   = invokeClassifyAllService
     )
   }
 
@@ -32,7 +39,7 @@ class HostelsController @Inject()(dbConfig: DatabaseConfigProvider, env: Environ
     )
   }
 
-  private def invokeClassificationService(params: ClassificationParams) = {
+  private def invokeClassifyService(params: ClassificationParams) = {
     val classifiedDocs =
       for {
         ratedDocs  ← service.retrieveHostelsModel(params.locationId)
@@ -45,6 +52,23 @@ class HostelsController @Inject()(dbConfig: DatabaseConfigProvider, env: Environ
           )
         }
       } yield classifier.classify(params.tags)
+
+    classifiedDocs.map(Json.toJson(_)).map(Ok(_))
+  }
+
+  private def invokeClassifyAllService(params: RecordIdParams) = {
+    val classifiedDocs =
+      for {
+        ratedDocs  ← service.retrieveHostelsModel(params.recordId)
+        classifier = {
+          new ClassificationService(
+            ratedDocs,
+            conf.getDouble("classification.b").get,
+            conf.getDouble("classification.ratingConstant").get,
+            stopWordsService
+          )
+        }
+      } yield classifier.classifyAll
 
     classifiedDocs.map(Json.toJson(_)).map(Ok(_))
   }

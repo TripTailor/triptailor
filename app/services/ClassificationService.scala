@@ -10,6 +10,11 @@ class ClassificationService[A]
   import extensions._
   import ClassificationService._
 
+  def classifyAll: Seq[ClassifiedDocument[A]] = {
+    val tags = m.foldLeft(Set.empty[String])(_ ++ _.metrics.keySet).toSeq
+    classify(tags)
+  }
+
   def classify(tags: Seq[String]): Seq[ClassifiedDocument[A]] = {
     val avgdl = compute_avgdl(tags)
     for {
