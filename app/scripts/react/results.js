@@ -209,10 +209,10 @@ class Hostel extends React.Component {
           {this.props.images.length > 1 ? <div ref={(button) => this.controllerRight = button} className="image-controller-right" onClick={this.moveImage.bind(this)}><i className="fa fa-angle-right fa-2x" /></div> : ""}
           <a href={url} className="hostel-name" target="_blank">{this.props.name}</a>
         </div>
-        <div className="container-fluid hostel-tags">
+        {/* <div className="container-fluid hostel-tags">
            <div className="hostel-tags-copy">{this.props.ctags.length > 0 ? "This is what the reviews say:" : "Pick some keywords to see what     the reviews say"}</div>
            {tagsRows}
-         </div>
+           </div> */}
         <Reviews reviews={this.props.reviews} />
         </div>
     );
