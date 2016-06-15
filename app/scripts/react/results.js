@@ -120,7 +120,6 @@ class Hostel extends React.Component {
   }
   moveImage(e) {
     var target = e.target == this.controllerLeft || e.target == this.controllerRight ? e.target : e.target.parentNode;
-    console.log(target);
     switch(target) {
       case this.controllerLeft: this.setState({selectedImage: this.state.selectedImage - 1 >= 0 ? this.state.selectedImage - 1 : this.props.images.length - 1}); break;
       case this.controllerRight: this.setState({selectedImage: this.state.selectedImage + 1 < this.props.images.length ? this.state.selectedImage + 1 : 0}); break;

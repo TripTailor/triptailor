@@ -1,6 +1,6 @@
 package models.db.services
 
-import controllers.api.ApiDomain.{RatedDocument, RatingMetrics}
+import controllers.api.ApiDomain.{RatedDocument, RatingMetrics, RatingMetricsWithMaxRating}
 import models.db.schema.Tables
 import play.api.db.slick.DatabaseConfigProvider
 import slick.driver.JdbcProfile
@@ -25,8 +25,9 @@ class HostelsRetrievalServiceImpl(dbConfigProvider: DatabaseConfigProvider) exte
   def retrieveHostelsModel(locationId: Int): Future[Seq[RatedDocument[HostelRow]]] =
     dbConfig.db.run {
       for {
+        als  ← loadLocationAttributesQuery(locationId).result.map(groupLocationAttributes)
         hs   ← loadHostelsQuery(locationId).result
-        docs ← DBIO.sequence(hs.map(h => loadHostelAttributesQuery(h.id).result.map(buildHostelDocument(h))))
+        docs ← DBIO.sequence(hs.map(h => loadHostelAttributesQuery(h.id).result.map(buildHostelDocument(h, als))))
       } yield docs
     }
 
@@ -46,12 +47,17 @@ class HostelsRetrievalServiceImpl(dbConfigProvider: DatabaseConfigProvider) exte
       h ← Hostel   if l.id === h.locationId
     } yield h
 
+  private def loadLocationAttributesQuery(locationId: Int) =
+    for {
+      al ← AttributeLocation if al.locationId === locationId
+    } yield al
+
   private def loadHostelAttributesQuery(hostelId: Int) =
     for {
       ha      ← HostelAttribute                if ha.hostelId === hostelId
       a       ← Attribute                      if a.id        === ha.attributeId
       metrics = (ha.rating, ha.freq, ha.cfreq) <> (RatingMetrics.tupled, RatingMetrics.unapply)
-    } yield (a.name, metrics) <> (HostelAttributeComponent.tupled, HostelAttributeComponent.unapply)
+    } yield (a.id, a.name, metrics) <> (HostelAttributeComponent.tupled, HostelAttributeComponent.unapply)
 
   private def loadHostelReviewsQuery(hostelId: Int) =
     for {
@@ -61,22 +67,27 @@ class HostelsRetrievalServiceImpl(dbConfigProvider: DatabaseConfigProvider) exte
   /** End of Slick Query[T] returning methods **/
 
   /** Slick DBIOAction composers **/
-  private def buildHostelDocument(h: HostelRow)(components: Seq[HostelAttributeComponent]) = {
+  private def buildHostelDocument(h: HostelRow, locationAttributes: Map[Int,Double])
+                                 (components: Seq[HostelAttributeComponent]) = {
     @annotation.tailrec
     def buildDocument(res: RatedDocument[HostelRow])(nxt: Seq[HostelAttributeComponent]): RatedDocument[HostelRow] =
       if (nxt.isEmpty)
         res
       else {
         val comp = nxt.head
-        buildDocument(res.copy(metrics = res.metrics.updated(comp.name, comp.metrics)))(nxt.tail)
+        val metrics = res.metrics.updated(comp.name, RatingMetricsWithMaxRating(comp.metrics, locationAttributes(comp.id)))
+        buildDocument(res.copy(metrics = metrics))(nxt.tail)
       }
 
     buildDocument(RatedDocument(h, Map()))(components)
   }
 
+  private def groupLocationAttributes(al: Seq[AttributeLocationRow]) =
+    al.groupBy(_.attributeId).mapValues(_.head.locationRating)
+
   private def reverseReviews(rows: Seq[ReviewRow]) = rows.reverse
   /** End of Slick DBIOAction composers **/
 
-  private[this] case class HostelAttributeComponent(name: String, metrics: RatingMetrics)
+  private[this] case class HostelAttributeComponent(id: Int, name: String, metrics: RatingMetrics)
 
 }
