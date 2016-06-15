@@ -32,7 +32,7 @@ class Results extends React.Component {
       dataType: "json",
       type: "GET",
       success: function(data) {
-        this.getTopResults(data);
+        this.getResultsReviews(data);
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(url, status, err);
@@ -57,19 +57,18 @@ class Results extends React.Component {
         results.splice(results.indexOf(result), 1);
       }
     });
-    this.setState({results: results, top: top, topTags: topRatings}, this.getResultsReviews);
+    this.setState({results: results, top: top, topTags: topRatings});
   }
-  getResultsReviews() {
-    var url = jsRoutes.controllers.api.ReviewsController.retrieveReviews().url + "?" + util.arrayToQuery(this.tags, "tags").substring(1) + util.arrayToQuery(this.state.results.map((result) => result.document.hostelId), "hostel_ids");
+  getResultsReviews(results) {
+    var url = jsRoutes.controllers.api.ReviewsController.retrieveReviews().url + "?" + util.arrayToQuery(this.tags, "tags").substring(1) + util.arrayToQuery(results.map((result) => result.document.hostelId), "hostel_ids");
     $.ajax({
       url: url,
       dataType: "json",
       type: "GET",
       success: function(data) {
-        var results = this.state.results.slice();
         for(var i = 0; i < results.length; i++)
           results[i]["reviews"] = data[results[i].document.hostelId];
-        this.setState({results: results});
+        this.getTopResults(results);
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(url, status, err);
@@ -156,8 +155,8 @@ const Hostels = (props) => {
 
 const HostelsRow = (props) => (
   <div className="row">
-    <div className="col-md-6 hostel-col"><Hostel name={props.col1.document.name} url={props.col1.document.url} price={props.col1.document.price} images={props.col1.document.images} ctags={props.col1.ctags} checkIn={props.checkIn} checkOut={props.checkOut} top={props.top} topTags={props.topTags} /></div>
-    {props.col2 ? <div className="col-md-6 hostel-col"><Hostel name={props.col2.document.name} url={props.col2.document.url} price={props.col2.document.price} images={props.col2.document.images} ctags={props.col2.ctags} checkIn={props.checkIn} checkOut={props.checkOut} top={false} topTags={props.topTags} /></div> : ""}
+    <div className="col-md-6 hostel-col"><Hostel name={props.col1.document.name} url={props.col1.document.url} price={props.col1.document.price} images={props.col1.document.images} ctags={props.col1.ctags} checkIn={props.checkIn} checkOut={props.checkOut} top={props.top} topTags={props.topTags} reviews={props.col1.reviews} /></div>
+    {props.col2 ? <div className="col-md-6 hostel-col"><Hostel name={props.col2.document.name} url={props.col2.document.url} price={props.col2.document.price} images={props.col2.document.images} ctags={props.col2.ctags} checkIn={props.checkIn} checkOut={props.checkOut} top={false} topTags={props.topTags} reviews={props.col2.reviews} /></div> : ""}
   </div>
 );
 
@@ -205,11 +204,7 @@ class Hostel extends React.Component {
           {this.props.images.length > 1 ? <div ref={(button) => this.controllerRight = button} className="image-controller-right" onClick={this.moveImage.bind(this)}><i className="fa fa-angle-right fa-2x" /></div> : ""}
           <a href={url} className="hostel-name" target="_blank">{this.props.name}</a>
         </div>
-        <div className="container-fluid hostel-tags">
-          <div className="hostel-tags-copy">{this.props.ctags.length > 0 ? "This is what the reviews say:" : "Pick some keywords to see what the reviews say"}</div>
-          {tagsRows}
-        </div>
-        {/* <Reviews /> */}
+        <Reviews reviews={this.props.reviews} />
         </div>
     );
   }
@@ -245,11 +240,33 @@ const TagColumn = (props) => {
   );
 };
 
-const Reviews = () => (
-  <div className="hostel-reviews">
-    <div className="hostel-reviews-text">The  location  of this hostel is the best; just 3 blocks walking from Empire State and other stuff.</div>
-    <div className="hostel-reviews-author">— Thomas Bangalter</div>
-  </div>
-);
+const Reviews = (props) => {
+  const updatePositions = (i, start) => {
+    for(var j = i; j < props.reviews[0].tags.length; j++) {
+      var positions = props.reviews[0].tags[j].positions;
+      for(var k = 0; k < positions.length; k++) {
+        if(start < positions[k].start) {
+          positions[k].start += 17;
+          positions[k].end += 17;
+        }
+      }
+    }
+  };
+
+  var text = props.reviews[0].text;
+  for(var i = 0; i < props.reviews[0].tags.length; i++) {
+    var tag = props.reviews[0].tags[i];
+    for(var j = 0; j < tag.positions.length; j++) {
+      text = text.slice(0, tag.positions[j].start) + "<strong>" + text.slice(tag.positions[j].start, tag.positions[j].end) + "</strong>" + text.slice(tag.positions[j].end, text.length);
+      updatePositions(i, tag.positions[j].start);
+    }
+  }
+  return (
+    <div className="hostel-reviews">
+      <div className="hostel-reviews-text" dangerouslySetInnerHTML={{__html: text}}></div>
+      <div className="hostel-reviews-author">— {props.reviews[0].reviewer}</div>
+    </div>
+  );
+};
 
 ReactDOM.render(<Results />, $("#content")[0]);

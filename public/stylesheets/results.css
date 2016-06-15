@@ -163,9 +163,16 @@ body {
   margin-right: 5px;
 }
 .hostel-reviews {
-  height: 200px;
   background-color: #fff;
   padding: 30px;
+}
+.hostel-reviews-text {
+  font-style: italic;
+}
+.hostel-reviews-text strong {
+  font-style: italic;
+  background-color: #686c9e;
+  color: #fff;
 }
 .hostel-reviews-author {
   text-align: right;
