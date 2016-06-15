@@ -86,6 +86,17 @@ body {
   background-size: cover;
   height: 250px;
 }
+.hostel-label {
+  background-color: #202020;
+  color: #fff;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bold;
+  padding: 11px 19px;
+  position: absolute;
+  top: 20px;
+  z-index: 2;
+  max-width: 200px;
+}
 .hostel-price {
   background-color: #202020;
   color: #fff;
