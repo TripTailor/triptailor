@@ -17,7 +17,9 @@ class Results extends React.Component {
       this.tags.splice(emptyIndex, 1);
     this.state = {
       results: [],
-      top: []
+      top: [],
+      topTags: [],
+      show: 0
     };
   }
   componentWillMount() {
@@ -30,30 +32,41 @@ class Results extends React.Component {
       dataType: "json",
       type: "GET",
       success: function(data) {
-        this.setState({results: data});
+        this.getTopResults(data);
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(url, status, err);
       }
     });
   }
-  getTopResults() {
-    var top = [];
-    var topTags = this.tags.map((tag) => 0);
-    this.state.results.forEach((result, i) => {
-      for(var j = 0; j < result.ctags.length; j++)
-        if(result.ctags[j].rating > topTags[j]) {
-          topTags[j] = result.ctags[j].rating;
-          top[j] = i;
+  getTopResults(results) {
+    var topTags = [];
+    var topRatings = this.tags.map((tag) => [tag, 0]);
+    results.forEach((result) => {
+      for(var i = 0; i < result.ctags.length; i++)
+        if(result.ctags[i].rating > topRatings[i][1]) {
+          topRatings[i] = [result.ctags[i].name, result.ctags[i].rating];
+          topTags[i] = result;
         }
     });
-    this.setState({top: top});
+    var top = [results[0]];
+    results.splice(0, 1);
+    topTags.forEach((result) => {
+      if(top.indexOf(result) < 0) {
+        top.push(result)
+        results.splice(results.indexOf(result), 1);
+      }
+    });
+    this.setState({results: results, top: top});
+  }
+  showMore() {
+    this.setState({show: this.state.show + 6});
   }
   render() {
     return(
       <div className="results">
         <Header city={this.city} country={this.country} checkIn={util.queryDateToString(this.checkIn)} checkOut={util.queryDateToString(this.checkOut)} tags={this.tags} noResults={this.state.results.length} />
-        <Hostels results={this.state.results} checkIn={this.checkIn} checkOut={this.checkOut} />
+        <Hostels top={this.state.top} results={this.state.results} checkIn={this.checkIn} checkOut={this.checkOut} show={this.state.show} showMore={this.showMore.bind(this)} />
       </div>
     );
   }
@@ -102,17 +115,24 @@ const TagsInput = (props) => {
 };
 
 const Hostels = (props) => {
+  var topRows = [];
+  for(var i = 0; i < props.top.length; i+=2)
+    topRows.push(<HostelsRow key={i / 2} col1={props.top[i]} col2={i + 1 < props.top.length ? props.top[i + 1] : null} checkIn={props.checkIn} checkOut={props.checkOut} />);
   var rows = [];
-  for(var i = 0; i < props.results.length; i+=2)
+  for(var i = 0; i < props.results.length && i < props.show; i+=2)
     rows.push(<HostelsRow key={i / 2} col1={props.results[i]} col2={i + 1 < props.results.length ? props.results[i + 1] : null} checkIn={props.checkIn} checkOut={props.checkOut} />);
   return (
-    <div>
-    {rows.length > 0 ?
-    <div className="container-fluid hostels-container">{rows}</div> :
-    <div className="container-fluid hostels-container loader">
-      <div><strong>Analysing Hostelworld reviews</strong></div>
-      <img className="loader-gif" src={jsRoutes.controllers.Assets.versioned("images/loader.gif").url} />
-    </div>}
+    <div className="container-fluid">
+      {topRows.length > 0 ?
+      <div>
+        <div className="hostels-container">{topRows}</div>
+        {rows.length > 0 ? <div className="hostels-container">{rows}</div> : ""}
+      </div> :
+      <div className="hostels-container loader">
+        <div><strong>Analysing Hostelworld reviews</strong></div>
+        <img className="loader-gif" src={jsRoutes.controllers.Assets.versioned("images/loader.gif").url} />
+      </div>}
+      {props.show < props.results.length ? <button className="show-more" onClick={props.showMore}>Show 6 more results</button> : ""}
     </div>
   );
 };

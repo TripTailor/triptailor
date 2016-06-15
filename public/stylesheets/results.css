@@ -159,6 +159,17 @@ body {
 .hostel-reviews-author {
   text-align: right;
 }
+.show-more {
+  width: 100%;
+  height: 45px;
+  border-radius: 2px;
+  background-color: #48abcb;
+  box-shadow: 0 2px 0 0 #398296;
+  border: none;
+  margin-bottom: 50px;
+  color: #fff;
+  outline: none;
+}
 
 .at-icon-wrapper {
   width: 25px !important;
