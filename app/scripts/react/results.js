@@ -57,6 +57,11 @@ class Results extends React.Component {
         results.splice(results.indexOf(result), 1);
       }
     });
+    for(var i = top.length; i < 6 && i < results.length; i++) {
+      top.push(results[0]);
+      results.splice(0, 1);
+    }
+    top.sort((a, b) => a.rating > b.rating ? -1 : 1);
     this.setState({results: results, top: top, topTags: topRatings});
   }
   getResultsReviews(results) {
