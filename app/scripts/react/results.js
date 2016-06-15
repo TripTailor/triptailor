@@ -143,11 +143,16 @@ const Hostels = (props) => {
   for(var i = 0; i < props.results.length && i < props.show; i+=2)
     rows.push(<HostelsRow key={i / 2} col1={props.results[i]} col2={i + 1 < props.results.length ? props.results[i + 1] : null} checkIn={props.checkIn} checkOut={props.checkOut} top={false} topTags={props.topTags} />);
   return (
-    <div className="container-fluid">
+    <div className="container-fluid hostels-container">
       {topRows.length > 0 ?
       <div>
-        <div className="hostels-container">{topRows}</div>
-        {rows.length > 0 ? <div className="hostels-container">{rows}</div> : ""}
+        <div className="hostels-header">Top recommendations for you</div>
+        <div>{topRows}</div>
+        {rows.length > 0 ?
+        <div>
+          <div className="hostels-header">Other results</div>
+          <div>{rows}</div>
+        </div>: ""}
       </div> :
       <div className="hostels-container loader">
         <div><strong>Analysing Hostelworld reviews</strong></div>

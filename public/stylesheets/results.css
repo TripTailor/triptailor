@@ -60,9 +60,14 @@ body {
   margin-bottom: 15px;
 }
 
+.hostels-header {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  font-size: 24px;
+  font-weight: bold;
+}
 .hostels-container {
   background-color: #fff;
-  padding-top: 10px;
   height: 100%;
   padding-bottom: 35px;
 }
@@ -199,6 +204,7 @@ body {
   background-color: #48abcb;
   box-shadow: 0 2px 0 0 #398296;
   border: none;
+  margin-top: 30px;
   margin-bottom: 50px;
   color: #fff;
   outline: none;
