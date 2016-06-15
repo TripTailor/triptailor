@@ -16,7 +16,8 @@ class Results extends React.Component {
     if(emptyIndex >= 0)
       this.tags.splice(emptyIndex, 1);
     this.state = {
-      results: []
+      results: [],
+      top: []
     };
   }
   componentWillMount() {
@@ -35,6 +36,18 @@ class Results extends React.Component {
         console.error(url, status, err);
       }
     });
+  }
+  getTopResults() {
+    var top = [];
+    var topTags = this.tags.map((tag) => 0);
+    this.state.results.forEach((result, i) => {
+      for(var j = 0; j < result.ctags.length; j++)
+        if(result.ctags[j].rating > topTags[j]) {
+          topTags[j] = result.ctags[j].rating;
+          top[j] = i;
+        }
+    });
+    this.setState({top: top});
   }
   render() {
     return(
