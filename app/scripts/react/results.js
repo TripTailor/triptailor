@@ -256,26 +256,28 @@ class Reviews extends React.Component {
     }
   }
   render() {
+    var reviews = $.extend(true, {}, this.props.reviews);
     const updatePositions = (i, start) => {
-      for(var j = i; j < this.props.reviews[this.state.index].tags.length; j++) {
-        var positions = this.props.reviews[this.state.index].tags[j].positions;
+      for(var j = i; j < reviews[this.state.index].tags.length; j++) {
+        var positions = reviews[this.state.index].tags[j].positions;
         for(var k = 0; k < positions.length; k++) {
           if(start < positions[k].start) {
-            positions[k].start += 17;
-            positions[k].end += 17;
+            positions[k].start += 13;
+            positions[k].end += 13;
           }
         }
       }
     };
 
-    var text = this.props.reviews[this.state.index].text;
-    for(var i = 0; i < this.props.reviews[this.state.index].tags.length; i++) {
-      var tag = this.props.reviews[this.state.index].tags[i];
-      for(var j = 0; j < tag.positions.length; j++) {
-        text = text.slice(0, tag.positions[j].start) + "<strong>" + text.slice(tag.positions[j].start, tag.positions[j].end) + "</strong>" + text.slice(tag.positions[j].end, text.length);
-        updatePositions(i, tag.positions[j].start);
+    var text = reviews[this.state.index].text;
+    for(var i = 0; i < reviews[this.state.index].tags.length; i++) {
+      var positions = reviews[this.state.index].tags[i].positions;
+      for(var j = 0; j < positions.length; j++) {
+        text = text.slice(0, positions[j].start) + "<span>" + text.slice(positions[j].start, positions[j].end) + "</span>" + text.slice(positions[j].end, text.length);
+        updatePositions(i, positions[j].start);
       }
     }
+    console.log(text);
     return (
       <div className="hostel-reviews">
         {this.props.reviews.length > 1 ? <div ref={(button) => this.controllerLeft = button} className="review-controller-left" onClick={this.moveReview.bind(this)}><i className="fa fa-angle-left fa-2x" /></div> : ""}

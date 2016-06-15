@@ -185,8 +185,7 @@ body {
 .hostel-reviews-text {
   font-style: italic;
 }
-.hostel-reviews-text strong {
-  font-style: italic;
+.hostel-reviews-text span {
   background-color: #686c9e;
   color: #fff;
 }
