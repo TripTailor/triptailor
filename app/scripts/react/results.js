@@ -240,33 +240,53 @@ const TagColumn = (props) => {
   );
 };
 
-const Reviews = (props) => {
-  const updatePositions = (i, start) => {
-    for(var j = i; j < props.reviews[0].tags.length; j++) {
-      var positions = props.reviews[0].tags[j].positions;
-      for(var k = 0; k < positions.length; k++) {
-        if(start < positions[k].start) {
-          positions[k].start += 17;
-          positions[k].end += 17;
-        }
-      }
-    }
-  };
+class Reviews extends React.Component {
+  constructor () {
+    super();
 
-  var text = props.reviews[0].text;
-  for(var i = 0; i < props.reviews[0].tags.length; i++) {
-    var tag = props.reviews[0].tags[i];
-    for(var j = 0; j < tag.positions.length; j++) {
-      text = text.slice(0, tag.positions[j].start) + "<strong>" + text.slice(tag.positions[j].start, tag.positions[j].end) + "</strong>" + text.slice(tag.positions[j].end, text.length);
-      updatePositions(i, tag.positions[j].start);
+    this.state = {
+      index: 0
+    };
+  }
+  moveReview(e) {
+    var target = e.target == this.controllerLeft || e.target == this.controllerRight ? e.target : e.target.parentNode;
+    switch(target) {
+      case this.controllerLeft: this.setState({index: this.state.index - 1 >= 0 ? this.state.index - 1 : this.props.reviews.length - 1}); break;
+      case this.controllerRight: this.setState({index: this.state.index + 1 < this.props.reviews.length ? this.state.index + 1 : 0}); break;
     }
   }
-  return (
-    <div className="hostel-reviews">
-      <div className="hostel-reviews-text" dangerouslySetInnerHTML={{__html: text}}></div>
-      <div className="hostel-reviews-author">— {props.reviews[0].reviewer}</div>
-    </div>
-  );
-};
+  render() {
+    const updatePositions = (i, start) => {
+      for(var j = i; j < this.props.reviews[this.state.index].tags.length; j++) {
+        var positions = this.props.reviews[this.state.index].tags[j].positions;
+        for(var k = 0; k < positions.length; k++) {
+          if(start < positions[k].start) {
+            positions[k].start += 17;
+            positions[k].end += 17;
+          }
+        }
+      }
+    };
+
+    var text = this.props.reviews[this.state.index].text;
+    for(var i = 0; i < this.props.reviews[this.state.index].tags.length; i++) {
+      var tag = this.props.reviews[this.state.index].tags[i];
+      for(var j = 0; j < tag.positions.length; j++) {
+        text = text.slice(0, tag.positions[j].start) + "<strong>" + text.slice(tag.positions[j].start, tag.positions[j].end) + "</strong>" + text.slice(tag.positions[j].end, text.length);
+        updatePositions(i, tag.positions[j].start);
+      }
+    }
+    return (
+      <div className="hostel-reviews">
+        {this.props.reviews.length > 1 ? <div ref={(button) => this.controllerLeft = button} className="review-controller-left" onClick={this.moveReview.bind(this)}><i className="fa fa-angle-left fa-2x" /></div> : ""}
+        {this.props.reviews.length > 1 ? <div ref={(button) => this.controllerRight = button} className="review-controller-right" onClick={this.moveReview.bind(this)}><i className="fa fa-angle-right fa-2x" /></div> : ""}
+        <div className="review-container">
+          <div className="hostel-reviews-text" dangerouslySetInnerHTML={{__html: text}}></div>
+          <div className="hostel-reviews-author">— {this.props.reviews[this.state.index].reviewer}</div>
+        </div>
+      </div>
+    );
+  }
+}
 
 ReactDOM.render(<Results />, $("#content")[0]);

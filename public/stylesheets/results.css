@@ -166,6 +166,22 @@ body {
   background-color: #fff;
   padding: 30px;
 }
+.review-controller-left {
+  float: left;
+}
+.review-controller-right {
+  float: right;
+}
+.review-controller-left, .review-controller-right {
+  font-weight: 700;
+  padding: 15px;
+  cursor: pointer;
+  font-size: 18px;
+}
+.review-container {
+  margin-left: 45px;
+  margin-right: 45px;
+}
 .hostel-reviews-text {
   font-style: italic;
 }
