@@ -6,10 +6,10 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 scalaVersion := "2.11.8"
 
-val playSlickV = "1.1.1"
+val playSlickV = "2.0.0"
 val pgV = "9.4-1201-jdbc41"
 val slickV = "3.1.1"
-val slickPGV = "0.12.0"
+val slickPGV = "0.14.3"
 val dbDependencies = Seq(
   "org.postgresql" % "postgresql" % pgV,
   "com.typesafe.play" %% "play-slick" % playSlickV,
