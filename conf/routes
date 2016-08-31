@@ -17,5 +17,4 @@ GET     /api/classifyAll            controllers.api.HostelsController.classifyAl
 GET     /api/hostel/reviews         controllers.api.HostelsController.retrieveReviews
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /favicon.ico                controllers.Assets.at(path="/public", file="images/favicon.ico")
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
