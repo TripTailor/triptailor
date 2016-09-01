@@ -291,7 +291,6 @@ class Reviews extends React.Component {
         updatePositions(i, positions[j].start);
       }
     }
-    console.log(text);
     return (
       <div className="hostel-reviews">
         {this.props.reviews.length > 1 ? <div ref={(button) => this.controllerLeft = button} className="review-controller-left" onClick={this.moveReview.bind(this)}><i className="fa fa-angle-left fa-2x" /></div> : ""}
