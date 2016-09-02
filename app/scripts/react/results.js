@@ -17,9 +17,7 @@ class Results extends React.Component {
       this.tags.splice(emptyIndex, 1);
     this.state = {
       results: [],
-      top: [],
-      topTags: [],
-      show: 0
+      show: 6
     };
   }
   componentWillMount() {
@@ -39,31 +37,6 @@ class Results extends React.Component {
       }
     });
   }
-  getTopResults(results) {
-    var topTags = [];
-    var topRatings = this.tags.map((tag) =>  0);
-    results.forEach((result) => {
-      for(var i = 0; i < result.ctags.length; i++)
-        if(result.ctags[i].rating > topRatings[i]) {
-          topRatings[i] = result.ctags[i].rating;
-          topTags[i] = result;
-        }
-    });
-    var top = [results[0]];
-    results.splice(0, 1);
-    topTags.forEach((result) => {
-      if(top.indexOf(result) < 0) {
-        top.push(result)
-        results.splice(results.indexOf(result), 1);
-      }
-    });
-    for(var i = top.length; i < 6 && i < results.length; i++) {
-      top.push(results[0]);
-      results.splice(0, 1);
-    }
-    top.sort((a, b) => a.rating > b.rating ? -1 : 1);
-    this.setState({results: results, top: top, topTags: topRatings});
-  }
   getResultsReviews(results) {
     var url = jsRoutes.controllers.api.ReviewsController.retrieveReviews().url + "?" + util.arrayToQuery(this.tags, "tags").substring(1) + util.arrayToQuery(results.map((result) => result.document.hostelId), "hostel_ids");
     $.ajax({
@@ -73,7 +46,7 @@ class Results extends React.Component {
       success: function(data) {
         for(var i = 0; i < results.length; i++)
           results[i]["reviews"] = data[results[i].document.hostelId];
-        this.getTopResults(results);
+        this.setState({results: results});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(url, status, err);
@@ -87,7 +60,7 @@ class Results extends React.Component {
     return(
       <div className="results">
         <Header city={this.city} country={this.country} checkIn={util.queryDateToString(this.checkIn)} checkOut={util.queryDateToString(this.checkOut)} tags={this.tags} noResults={this.state.results.length} />
-        <Hostels top={this.state.top} results={this.state.results} checkIn={this.checkIn} checkOut={this.checkOut} show={this.state.show} showMore={this.showMore.bind(this)} topTags={this.state.topTags} />
+        <Hostels results={this.state.results} checkIn={this.checkIn} checkOut={this.checkOut} show={this.state.show} showMore={this.showMore.bind(this)} />
       </div>
     );
   }
@@ -136,23 +109,15 @@ const TagsInput = (props) => {
 };
 
 const Hostels = (props) => {
-  var topRows = [];
-  for(var i = 0; i < props.top.length; i+=2)
-    topRows.push(<HostelsRow key={i / 2} col1={props.top[i]} col2={i + 1 < props.top.length ? props.top[i + 1] : null} checkIn={props.checkIn} checkOut={props.checkOut} top={i == 0} topTags={props.topTags} />);
   var rows = [];
   for(var i = 0; i < props.results.length && i < props.show; i+=2)
-    rows.push(<HostelsRow key={i / 2} col1={props.results[i]} col2={i + 1 < props.results.length ? props.results[i + 1] : null} checkIn={props.checkIn} checkOut={props.checkOut} top={false} topTags={props.topTags} />);
+    rows.push(<HostelsRow key={i / 2} col1={props.results[i]} col2={i + 1 < props.results.length ? props.results[i + 1] : null} checkIn={props.checkIn} checkOut={props.checkOut} />);
   return (
     <div className="container-fluid hostels-container">
-      {topRows.length > 0 ?
+      {rows.length > 0 ?
       <div>
         <div className="hostels-header">Top recommendations for you</div>
-        <div>{topRows}</div>
-        {rows.length > 0 ?
-        <div>
-          <div className="hostels-header">Other results</div>
-          <div>{rows}</div>
-        </div>: ""}
+        <div>{rows}</div>
       </div> :
       <div className="hostels-container loader">
         <div><strong>Analysing Hostelworld reviews</strong></div>
@@ -165,8 +130,8 @@ const Hostels = (props) => {
 
 const HostelsRow = (props) => (
   <div className="row">
-    <div className="col-md-6 hostel-col"><Hostel name={props.col1.document.name} url={props.col1.document.url} price={props.col1.document.price} images={props.col1.document.images} ctags={props.col1.ctags} checkIn={props.checkIn} checkOut={props.checkOut} top={props.top} topTags={props.topTags} reviews={props.col1.reviews} /></div>
-    {props.col2 ? <div className="col-md-6 hostel-col"><Hostel name={props.col2.document.name} url={props.col2.document.url} price={props.col2.document.price} images={props.col2.document.images} ctags={props.col2.ctags} checkIn={props.checkIn} checkOut={props.checkOut} top={false} topTags={props.topTags} reviews={props.col2.reviews} /></div> : ""}
+    <div className="col-md-6 hostel-col"><Hostel name={props.col1.document.name} url={props.col1.document.url} price={props.col1.document.price} images={props.col1.document.images} ctags={props.col1.ctags} checkIn={props.checkIn} checkOut={props.checkOut} reviews={props.col1.reviews} /></div>
+    {props.col2 ? <div className="col-md-6 hostel-col"><Hostel name={props.col2.document.name} url={props.col2.document.url} price={props.col2.document.price} images={props.col2.document.images} ctags={props.col2.ctags} checkIn={props.checkIn} checkOut={props.checkOut} reviews={props.col2.reviews} /></div> : ""}
   </div>
 );
 
@@ -196,18 +161,12 @@ class Hostel extends React.Component {
     var url = this.props.url + "?dateFrom=" + this.props.checkIn + "&dateTo=" + this.props.checkOut + "&number_of_guests=1";
 
     var tagsRows = [];
-    var label = this.props.top ? "Best match & best for " : "Best for ";
     for(var i = 0; i < this.props.ctags.length; i+=2)
       tagsRows.push(<TagsRow key={i / 2} tag1={this.props.ctags[i]} tag2={i + 1 < this.props.ctags.length ? this.props.ctags[i + 1] : null} />);
-    for(var i = 0; i < this.props.ctags.length; i++)
-      if(this.props.ctags[i].rating == this.props.topTags[i])
-        label += this.props.ctags[i].name + " & ";
-    label = label.substring(0, label.length - 3);
 
     return (
       <div className="hostel">
         <div className="hostel-image" style={this.props.images.length > 0 ? {backgroundImage: "url('" + this.props.images[this.state.selectedImage] + "')"} : ""}>
-          {label != "Best f" ? <div className="hostel-label">{label}</div> : ""}
           {this.props.price ? <div className="hostel-price">€{this.props.price.toFixed(2)}</div> : ""}
           <a href={url} className="hostel-url" target="_blank" onClick={this.trackHostelClick.bind(this)}></a>
           {this.props.images.length > 1 ? <div ref={(button) => this.controllerLeft = button} className="image-controller-left" onClick={this.moveImage.bind(this)}><i className="fa fa-angle-left fa-2x" /></div> : ""}
