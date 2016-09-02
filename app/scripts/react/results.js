@@ -177,7 +177,7 @@ class Hostel extends React.Component {
            <div className="hostel-tags-copy">{this.props.ctags.length > 0 ? "This is what the reviews say:" : "Pick some keywords to see what     the reviews say"}</div>
            {tagsRows}
            </div> */}
-        <Reviews reviews={this.props.reviews} />
+        {this.props.reviews && this.props.reviews.length > 0 ? <Reviews reviews={this.props.reviews} /> : ""}
         </div>
     );
   }
