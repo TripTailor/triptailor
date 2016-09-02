@@ -30,23 +30,24 @@ class Results extends React.Component {
       dataType: "json",
       type: "GET",
       success: function(data) {
-        this.getResultsReviews(data);
+        this.getResultsReviews(data, 0, 6);
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(url, status, err);
       }
     });
   }
-  getResultsReviews(results) {
-    var url = jsRoutes.controllers.api.ReviewsController.retrieveReviews().url + "?" + util.arrayToQuery(this.tags, "tags").substring(1) + util.arrayToQuery(results.map((result) => result.document.hostelId), "hostel_ids");
+  getResultsReviews(results, start, limit) {
+    var end = Math.min(results.length, limit);
+    var url = jsRoutes.controllers.api.ReviewsController.retrieveReviews().url + "?" + util.arrayToQuery(this.tags, "tags").substring(1) + util.arrayToQuery(results.slice(start, end).map((result) => result.document.hostelId), "hostel_ids");
     $.ajax({
       url: url,
       dataType: "json",
       type: "GET",
       success: function(data) {
-        for(var i = 0; i < results.length; i++)
+        for(var i = start; i < end; i++)
           results[i]["reviews"] = data[results[i].document.hostelId];
-        this.setState({results: results});
+        this.setState({results: results, show: end});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(url, status, err);
@@ -54,7 +55,9 @@ class Results extends React.Component {
     });
   }
   showMore() {
-    this.setState({show: this.state.show + 6});
+    var start = this.state.show;
+    var end = start + 6;
+    this.getResultsReviews(this.state.results, start, end);
   }
   render() {
     return(
