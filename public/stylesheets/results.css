@@ -177,6 +177,9 @@ body {
 .review-controller-right {
   float: right;
 }
+.review-controller-left:hover, .review-controller-right:hover {
+  background-color: #e0e0eb;
+}
 .review-controller-left, .review-controller-right {
   font-weight: 700;
   padding: 15px;
