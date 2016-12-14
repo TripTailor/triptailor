@@ -12,10 +12,12 @@ import services.{StopWordsFilterService, StopWordsFilterServiceImpl}
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class TagsController @Inject()(dbConfig: DatabaseConfigProvider, env: Environment, conf: Configuration)
+class TagsController @Inject()(dbConfig: DatabaseConfigProvider,
+                               env: Environment,
+                               conf: Configuration,
+                               stopWordsService: StopWordsFilterService)
                               (implicit ec: ExecutionContext) extends BaseApiController{
 
-  private val stopWordsService: StopWordsFilterService = new StopWordsFilterServiceImpl(env, conf)
   private val service: TagsService = new TagsServiceImpl(dbConfig, stopWordsService)
 
   def mostFrequentTags = Action.async { implicit request =>

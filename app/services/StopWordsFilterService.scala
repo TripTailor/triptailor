@@ -1,5 +1,7 @@
 package services
 
+import javax.inject.{Inject, Singleton}
+
 import play.api.{Configuration, Environment}
 
 import scala.io.Source
@@ -9,7 +11,8 @@ trait StopWordsFilterService {
   def quotedStopWordsString: String = stopWords.mkString("'", "', '", "'")
 }
 
-class StopWordsFilterServiceImpl(env: Environment, conf: Configuration) extends StopWordsFilterService {
+@Singleton
+class StopWordsFilterServiceImpl @Inject()(env: Environment, conf: Configuration) extends StopWordsFilterService {
   private val fileName      = conf.getString("stopWords").get
   private val stopWordsFile = Source.fromInputStream(env.classLoader.getResourceAsStream(fileName))
 

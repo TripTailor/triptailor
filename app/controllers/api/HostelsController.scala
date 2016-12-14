@@ -12,10 +12,12 @@ import services.{ClassificationService, StopWordsFilterService, StopWordsFilterS
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class HostelsController @Inject()(dbConfig: DatabaseConfigProvider, env: Environment, conf: Configuration)
+class HostelsController @Inject()(dbConfig: DatabaseConfigProvider,
+                                  env: Environment,
+                                  conf: Configuration,
+                                  stopWordsService: StopWordsFilterService)
                                  (implicit ec: ExecutionContext) extends BaseApiController {
 
-  private val stopWordsService: StopWordsFilterService = new StopWordsFilterServiceImpl(env, conf)
   private val service: HostelsRetrievalService = new HostelsRetrievalServiceImpl(dbConfig)
 
   def classify = Action.async { implicit request =>
