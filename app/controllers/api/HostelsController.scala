@@ -2,23 +2,19 @@ package controllers.api
 
 import javax.inject.{Inject, Singleton}
 
-import models.db.services.{HostelsRetrievalService, HostelsRetrievalServiceImpl}
-import play.api.{Configuration, Environment}
-import play.api.db.slick.DatabaseConfigProvider
+import models.db.services.HostelsRetrievalService
+import play.api.Configuration
 import play.api.libs.json.Json
 import play.api.mvc.Action
-import services.{ClassificationService, StopWordsFilterService, StopWordsFilterServiceImpl}
+import services.{ClassificationService, StopWordsFilterService}
 
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class HostelsController @Inject()(dbConfig: DatabaseConfigProvider,
-                                  env: Environment,
-                                  conf: Configuration,
+class HostelsController @Inject()(conf: Configuration,
+                                  hostelsRetrievalService: HostelsRetrievalService,
                                   stopWordsService: StopWordsFilterService)
                                  (implicit ec: ExecutionContext) extends BaseApiController {
-
-  private val service: HostelsRetrievalService = new HostelsRetrievalServiceImpl(dbConfig)
 
   def classify = Action.async { implicit request =>
     classificationParams.bindFromRequest.fold(
@@ -44,7 +40,7 @@ class HostelsController @Inject()(dbConfig: DatabaseConfigProvider,
   private def invokeClassifyService(params: ClassificationParams) = {
     val classifiedDocs =
       for {
-        ratedDocs  ← service.retrieveHostelsModel(params.locationId)
+        ratedDocs  ← hostelsRetrievalService.retrieveHostelsModel(params.locationId)
         classifier = {
           new ClassificationService(
             ratedDocs,
@@ -60,7 +56,7 @@ class HostelsController @Inject()(dbConfig: DatabaseConfigProvider,
   private def invokeClassifyAllService(params: RecordIdParams) = {
     val classifiedDocs =
       for {
-        ratedDocs  ← service.retrieveHostelsModel(params.recordId)
+        ratedDocs  ← hostelsRetrievalService.retrieveHostelsModel(params.recordId)
         classifier = {
           new ClassificationService(
             ratedDocs,
@@ -74,6 +70,6 @@ class HostelsController @Inject()(dbConfig: DatabaseConfigProvider,
   }
 
   private def invokeHostelReviewsService(params: RecordIdParams) =
-    service.retrieveHostelReviews(params.recordId).map(Json.toJson(_)).map(Ok(_))
+    hostelsRetrievalService.retrieveHostelReviews(params.recordId).map(Json.toJson(_)).map(Ok(_))
 
 }

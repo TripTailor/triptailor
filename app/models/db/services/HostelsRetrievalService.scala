@@ -1,5 +1,7 @@
 package models.db.services
 
+import javax.inject.{Inject, Singleton}
+
 import controllers.api.ApiDomain.{RatedDocument, RatingMetrics, RatingMetricsWithMaxRating}
 import models.db.schema.Tables
 import play.api.db.slick.DatabaseConfigProvider
@@ -13,9 +15,11 @@ trait HostelsRetrievalService {
   def retrieveHostelReviews(hostelId: Int): Future[Seq[ReviewRow]]
 }
 
-class HostelsRetrievalServiceImpl(dbConfigProvider: DatabaseConfigProvider) extends HostelsRetrievalService {
-  import scala.concurrent.ExecutionContext.Implicits.global
+@Singleton
+class HostelsRetrievalServiceImpl @Inject()(dbConfigProvider: DatabaseConfigProvider) extends HostelsRetrievalService {
   import Tables._
+
+  import scala.concurrent.ExecutionContext.Implicits.global
 
   private val defaultYear = new java.sql.Date(Integer.MIN_VALUE)
   val dbConfig = dbConfigProvider.get[JdbcProfile]
