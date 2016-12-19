@@ -1,19 +1,21 @@
 package models.db.services
 
+import javax.inject.{Inject, Singleton}
+
 import models.db.schema.Tables
 import play.api.db.slick.DatabaseConfigProvider
 import services.StopWordsFilterService
 import slick.driver.JdbcProfile
 
 import scala.concurrent.Future
-import scala.io.Source
 
 trait TagsService {
   import Tables._
   def retrieveMostCommonTags(locationId: Int): Future[Seq[AttributeRow]]
 }
 
-class TagsServiceImpl(dbConfigProvider: DatabaseConfigProvider, stopWordService: StopWordsFilterService)
+@Singleton
+class TagsServiceImpl @Inject()(dbConfigProvider: DatabaseConfigProvider, stopWordService: StopWordsFilterService)
     extends TagsService {
 
   import Tables._

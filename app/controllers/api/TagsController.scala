@@ -2,23 +2,17 @@ package controllers.api
 
 import javax.inject.{Inject, Singleton}
 
-import models.db.services.{TagsService, TagsServiceImpl}
-import play.api.{Configuration, Environment}
-import play.api.db.slick.DatabaseConfigProvider
+import models.db.services.TagsService
 import play.api.libs.json.Json
 import play.api.mvc.Action
-import services.{StopWordsFilterService, StopWordsFilterServiceImpl}
+import services.StopWordsFilterService
 
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class TagsController @Inject()(dbConfig: DatabaseConfigProvider,
-                               env: Environment,
-                               conf: Configuration,
-                               stopWordsService: StopWordsFilterService)
-                              (implicit ec: ExecutionContext) extends BaseApiController{
-
-  private val service: TagsService = new TagsServiceImpl(dbConfig, stopWordsService)
+class TagsController @Inject()(stopWordsService: StopWordsFilterService,
+                               tagsService: TagsService)
+                              (implicit ec: ExecutionContext) extends BaseApiController {
 
   def mostFrequentTags = Action.async { implicit request =>
     recordIdParams.bindFromRequest.fold(
@@ -28,5 +22,5 @@ class TagsController @Inject()(dbConfig: DatabaseConfigProvider,
   }
 
   private def invokeService(params: RecordIdParams) =
-    service.retrieveMostCommonTags(params.recordId).map(Json.toJson(_)).map(Ok(_))
+    tagsService.retrieveMostCommonTags(params.recordId).map(Json.toJson(_)).map(Ok(_))
 }
