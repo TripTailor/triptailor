@@ -1,18 +1,20 @@
 package models.db.services
 
+import javax.inject.{Inject, Singleton}
+
 import models.db.schema.Tables
 import play.api.db.slick.DatabaseConfigProvider
 import slick.driver.JdbcProfile
 
 import scala.concurrent.Future
 
-
 trait LocationHintsService {
   import Tables._
   def retrieveLocationHints(query: String): Future[Seq[LocationRow]]
 }
 
-class LocationHintsServiceImpl(dbConfigProvider: DatabaseConfigProvider) extends LocationHintsService {
+@Singleton
+class LocationHintsServiceImpl @Inject()(dbConfigProvider: DatabaseConfigProvider) extends LocationHintsService {
   import Tables._
 
   val dbConfig = dbConfigProvider.get[JdbcProfile]
