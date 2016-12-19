@@ -1,5 +1,7 @@
 package models.db.services
 
+import javax.inject.{Inject, Singleton}
+
 import models.db.schema.Tables
 import play.api.db.slick.DatabaseConfigProvider
 import slick.driver.JdbcProfile
@@ -34,7 +36,8 @@ trait FilterAttributesFromReview {
   }
 }
 
-class ReviewServiceImpl(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)
+@Singleton
+class ReviewServiceImpl @Inject()(dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext)
     extends ReviewService with FilterAttributesFromReview {
   import Tables._
 
