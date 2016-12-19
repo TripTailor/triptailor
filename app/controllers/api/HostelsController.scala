@@ -2,6 +2,8 @@ package controllers.api
 
 import javax.inject.{Inject, Singleton}
 
+import controllers.api.ApiDomain.ClassifiedDocument
+import models.db.schema.Tables
 import models.db.services.HostelsRetrievalService
 import play.api.Configuration
 import play.api.libs.json.Json
@@ -16,17 +18,20 @@ class HostelsController @Inject()(conf: Configuration,
                                   stopWordsService: StopWordsFilterService)
                                  (implicit ec: ExecutionContext) extends BaseApiController {
 
+  type H = Tables.HostelRow
+
   def classify = Action.async { implicit request =>
     classificationParams.bindFromRequest.fold(
       hasErrors = incorrectServiceCall,
-      success   = invokeClassifyService
+      success   = params => invokeClassificationService(params.locationId)(_.classify(params.tags))
     )
+
   }
 
   def classifyAll = Action.async { implicit request =>
     recordIdParams.bindFromRequest.fold(
       hasErrors = incorrectServiceCall,
-      success   = invokeClassifyAllService
+      success   = params => invokeClassificationService(params.recordId)(_.classifyAll)
     )
   }
 
@@ -37,34 +42,18 @@ class HostelsController @Inject()(conf: Configuration,
     )
   }
 
-  private def invokeClassifyService(params: ClassificationParams) = {
+  private def invokeClassificationService(recordId: Int)
+                                         (classify: ClassificationService[H] => Seq[ClassifiedDocument[H]]) = {
     val classifiedDocs =
       for {
-        ratedDocs  ← hostelsRetrievalService.retrieveHostelsModel(params.locationId)
-        classifier = {
+        ratedDocs  ← hostelsRetrievalService.retrieveHostelsModel(recordId)
+        classifier =
           new ClassificationService(
             ratedDocs,
             conf.getDouble("classification.b").get,
             stopWordsService
           )
-        }
-      } yield classifier.classify(params.tags)
-
-    classifiedDocs.map(Json.toJson(_)).map(Ok(_))
-  }
-
-  private def invokeClassifyAllService(params: RecordIdParams) = {
-    val classifiedDocs =
-      for {
-        ratedDocs  ← hostelsRetrievalService.retrieveHostelsModel(params.recordId)
-        classifier = {
-          new ClassificationService(
-            ratedDocs,
-            conf.getDouble("classification.b").get,
-            stopWordsService
-          )
-        }
-      } yield classifier.classifyAll
+      } yield classify(classifier)
 
     classifiedDocs.map(Json.toJson(_)).map(Ok(_))
   }

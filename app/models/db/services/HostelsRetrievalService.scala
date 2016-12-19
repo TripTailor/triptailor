@@ -35,7 +35,6 @@ class HostelsRetrievalServiceImpl @Inject()(dbConfigProvider: DatabaseConfigProv
       } yield docs
     }
 
-  // TODO: Define implicit slick.lifted.Rep[java.sql.Date] => slick.lifted.Ordered
   def retrieveHostelReviews(hostelId: Int): Future[Seq[ReviewRow]] =
     dbConfig.db.run(
       loadHostelReviewsQuery(hostelId)
