@@ -44,7 +44,7 @@ val consoleCmds =
     | import Play.current
     | implicit val ec = scala.concurrent.ExecutionContext.global
     | import Tables._
-    | val dbConfig = DatabaseConfigProvider.get[JdbcProfile]
+    | val dbConfig = DatabaseConfigProvider.get[JdbcProfile](app)
     | import dbConfig.driver.api._
     | val db = dbConfig.db
   """.stripMargin
